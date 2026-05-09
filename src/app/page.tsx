@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -17,6 +16,7 @@ import {
 } from "lucide-react";
 
 import SiteFooter from "@/components/navigation/site-footer";
+import WaitlistModal from "@/components/waitlist/waitlist-modal";
 
 const APP_ICON_SRC = "/brand/karpilo-loadiq-icon.png";
 
@@ -28,6 +28,10 @@ type CountdownStatus = "pending" | "active";
 type CountdownState = {
   status: CountdownStatus;
   total: number;
+};
+
+type FounderPromoCardProps = {
+  onReserve: () => void;
 };
 
 const fadeUp = {
@@ -58,6 +62,29 @@ const founderBenefits = [
   "Lifetime discounted rate",
   "Founding operator badge",
   "Direct development feedback access",
+];
+
+const featureCards = [
+  {
+    icon: Route,
+    title: "Deadhead Intelligence",
+    text: "Expose unpaid miles before they wreck the week.",
+  },
+  {
+    icon: Fuel,
+    title: "Fuel Exposure",
+    text: "See fuel pressure before accepting the rate.",
+  },
+  {
+    icon: BarChart3,
+    title: "Margin Control",
+    text: "Turn gross revenue into real profit visibility.",
+  },
+  {
+    icon: Gauge,
+    title: "Dispatch Discipline",
+    text: "Make fast go/no-go decisions with clean math.",
+  },
 ];
 
 function getCountdownStartDate() {
@@ -144,9 +171,11 @@ function ComingSoonCard() {
   });
 
   useEffect(() => {
-    const timer = window.setInterval(() => {
+    const updateCountdown = () => {
       setCountdown(getCountdownState());
-    }, 1000);
+    };
+
+    const timer = window.setInterval(updateCountdown, 1000);
 
     return () => window.clearInterval(timer);
   }, []);
@@ -230,7 +259,7 @@ function ComingSoonCard() {
   );
 }
 
-function FounderPromoCard() {
+function FounderPromoCard({ onReserve }: FounderPromoCardProps) {
   return (
     <motion.section
       id="cta"
@@ -258,13 +287,14 @@ function FounderPromoCard() {
               Limited launch incentive for the first 25 subscribers.
             </p>
 
-            <Link
-              href="/contact"
+            <button
+              type="button"
+              onClick={onReserve}
               className="group mt-8 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-red-600 via-red-500 to-red-700 px-8 py-4 text-sm font-black uppercase tracking-[0.18em] text-white shadow-[0_0_38px_rgba(239,68,68,0.42)] transition hover:scale-[1.02] hover:shadow-[0_0_52px_rgba(239,68,68,0.62)]"
             >
               Reserve Your Spot
               <ArrowRight className="ml-3 h-5 w-5 transition group-hover:translate-x-1" />
-            </Link>
+            </button>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -404,6 +434,8 @@ function HeroSection() {
 }
 
 export default function Page() {
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
+
   return (
     <div className="min-h-screen overflow-hidden bg-[#020617] text-white">
       <TelemetryBackground />
@@ -412,28 +444,7 @@ export default function Page() {
 
       <section className="relative z-10 mx-auto max-w-7xl px-6 py-20 sm:px-8">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            {
-              icon: Route,
-              title: "Deadhead Intelligence",
-              text: "Expose unpaid miles before they wreck the week.",
-            },
-            {
-              icon: Fuel,
-              title: "Fuel Exposure",
-              text: "See fuel pressure before accepting the rate.",
-            },
-            {
-              icon: BarChart3,
-              title: "Margin Control",
-              text: "Turn gross revenue into real profit visibility.",
-            },
-            {
-              icon: Gauge,
-              title: "Dispatch Discipline",
-              text: "Make fast go/no-go decisions with clean math.",
-            },
-          ].map((item) => {
+          {featureCards.map((item) => {
             const Icon = item.icon;
 
             return (
@@ -477,7 +488,12 @@ export default function Page() {
         </div>
       </section>
 
-      <FounderPromoCard />
+      <FounderPromoCard onReserve={() => setWaitlistOpen(true)} />
+
+      <WaitlistModal
+        open={waitlistOpen}
+        onClose={() => setWaitlistOpen(false)}
+      />
 
       <SiteFooter />
     </div>
