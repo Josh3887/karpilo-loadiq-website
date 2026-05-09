@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, MessageSquare, Send, Truck } from "lucide-react";
+
+type FormStatus = "idle" | "loading" | "success" | "error";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -9,6 +12,58 @@ const fadeUp = {
 };
 
 export default function ContactPage() {
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [error, setError] = useState("");
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const payload = {
+      name: String(formData.get("name") || "").trim(),
+      email: String(formData.get("email") || "").trim().toLowerCase(),
+      role: String(formData.get("role") || "").trim(),
+      message: String(formData.get("message") || "").trim(),
+      source: "contact-page",
+    };
+
+    if (!payload.name || !payload.email || !payload.message) {
+      setStatus("error");
+      setError("Name, email, and message are required.");
+      return;
+    }
+
+    setStatus("loading");
+    setError("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const text = await response.text();
+      const result = text ? JSON.parse(text) : {};
+
+      if (!response.ok || result.success !== true) {
+        setStatus("error");
+        setError(result.error || "Unable to submit inquiry. Try again.");
+        return;
+      }
+
+      form.reset();
+      setStatus("success");
+    } catch {
+      setStatus("error");
+      setError("Unable to submit inquiry. Try again.");
+    }
+  }
+
   return (
     <main className="min-h-screen overflow-hidden bg-[#020617] text-white">
       <div className="pointer-events-none fixed inset-0">
@@ -35,12 +90,10 @@ export default function ContactPage() {
           <div className="mt-10 space-y-4">
             <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#0B1120]/80 p-5">
               <Truck className="h-6 w-6 text-sky-300" />
-
               <div>
                 <p className="font-semibold text-white">
                   Karpilo Endeavor Technologies LLC
                 </p>
-
                 <a
                   href="https://www.karpiloendeavortechnologies.com"
                   className="text-slate-300 transition hover:text-sky-300"
@@ -52,12 +105,10 @@ export default function ContactPage() {
 
             <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#0B1120]/80 p-5">
               <Mail className="h-6 w-6 text-red-300" />
-
               <div>
                 <p className="font-semibold text-white">
                   Launch & Operator Contact
                 </p>
-
                 <a
                   href="mailto:karpiloloadiq@karpiloendeavortechnologies.com"
                   className="break-all text-slate-300 transition hover:text-red-300"
@@ -80,63 +131,80 @@ export default function ContactPage() {
           </h2>
 
           <p className="mt-3 leading-7 text-slate-400">
-            This form is ready for wiring to email, Supabase, or a waitlist
-            table.
+            Send a launch question, fleet feedback, partnership inquiry, or
+            early access request.
           </p>
 
-          <form className="mt-8 space-y-5">
-            <div>
-              <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-400">
-                Name
-              </label>
-              <input
-                type="text"
-                placeholder="Your name"
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition placeholder:text-slate-600 focus:border-sky-300/50"
-              />
+          {status === "success" ? (
+            <div className="mt-8 rounded-2xl border border-sky-300/20 bg-sky-400/10 p-5">
+              <p className="font-bold text-sky-200">
+                Inquiry received. Karpilo LoadIQ has your message.
+              </p>
             </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+              <div>
+                <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-400">
+                  Name
+                </label>
+                <input
+                  name="name"
+                  type="text"
+                  placeholder="Your name"
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition placeholder:text-slate-600 focus:border-sky-300/50"
+                />
+              </div>
 
-            <div>
-              <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-400">
-                Email
-              </label>
-              <input
-                type="email"
-                placeholder="you@company.com"
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition placeholder:text-slate-600 focus:border-sky-300/50"
-              />
-            </div>
+              <div>
+                <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-400">
+                  Email
+                </label>
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="you@company.com"
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition placeholder:text-slate-600 focus:border-sky-300/50"
+                />
+              </div>
 
-            <div>
-              <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-400">
-                Role / Fleet Size
-              </label>
-              <input
-                type="text"
-                placeholder="Owner-operator, dispatcher, 1 truck, 5 trucks..."
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition placeholder:text-slate-600 focus:border-sky-300/50"
-              />
-            </div>
+              <div>
+                <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-400">
+                  Role / Fleet Size
+                </label>
+                <input
+                  name="role"
+                  type="text"
+                  placeholder="Owner-operator, dispatcher, 1 truck, 5 trucks..."
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition placeholder:text-slate-600 focus:border-sky-300/50"
+                />
+              </div>
 
-            <div>
-              <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-400">
-                Message
-              </label>
-              <textarea
-                placeholder="Tell us what you want LoadIQ to help you calculate."
-                rows={6}
-                className="mt-2 w-full resize-none rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition placeholder:text-slate-600 focus:border-sky-300/50"
-              />
-            </div>
+              <div>
+                <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-400">
+                  Message
+                </label>
+                <textarea
+                  name="message"
+                  placeholder="Tell us what you want LoadIQ to help you calculate."
+                  rows={6}
+                  className="mt-2 w-full resize-none rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition placeholder:text-slate-600 focus:border-sky-300/50"
+                />
+              </div>
 
-            <button
-              type="button"
-              className="group inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-red-600 via-red-500 to-red-700 px-8 py-4 text-sm font-black uppercase tracking-[0.18em] text-white shadow-[0_0_38px_rgba(239,68,68,0.42)] transition hover:scale-[1.01]"
-            >
-              Submit Inquiry
-              <Send className="ml-3 h-5 w-5 transition group-hover:translate-x-1" />
-            </button>
-          </form>
+              {error && (
+                <p className="text-sm font-bold text-red-300">{error}</p>
+              )}
+
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="group inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-red-600 via-red-500 to-red-700 px-8 py-4 text-sm font-black uppercase tracking-[0.18em] text-white shadow-[0_0_38px_rgba(239,68,68,0.42)] transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {status === "loading" ? "Submitting..." : "Submit Inquiry"}
+                <Send className="ml-3 h-5 w-5 transition group-hover:translate-x-1" />
+              </button>
+            </form>
+          )}
         </motion.div>
       </section>
     </main>
