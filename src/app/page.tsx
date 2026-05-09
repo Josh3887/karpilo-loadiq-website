@@ -1,22 +1,34 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
+  BadgeCheck,
   BarChart3,
-  Calculator,
   CheckCircle2,
-  ChevronRight,
-  CircleDollarSign,
+  Clock,
   Fuel,
   Gauge,
-  MapPinned,
   Radar,
   Route,
-  ShieldCheck,
-  Truck,
-  Zap,
 } from "lucide-react";
+
+import SiteFooter from "@/components/navigation/site-footer";
+
+const APP_ICON_SRC = "/brand/karpilo-loadiq-icon.png";
+
+const COUNTDOWN_START_AT_MST = "2026-05-09T08:00:00-07:00";
+const COUNTDOWN_DAYS = 45;
+
+type CountdownStatus = "pending" | "active";
+
+type CountdownState = {
+  status: CountdownStatus;
+  total: number;
+};
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -32,369 +44,442 @@ const stagger = {
   },
 };
 
-const features = [
-  {
-    icon: Calculator,
-    title: "True Load Profitability",
-    description:
-      "Calculate fuel, deadhead, overhead, accessorials, operating cost, RPM, and margin before accepting the load.",
-  },
-  {
-    icon: Fuel,
-    title: "Fuel & Cost Awareness",
-    description:
-      "See how fuel burn, route conditions, distance, and empty miles affect your real take-home number.",
-  },
-  {
-    icon: Route,
-    title: "Deadhead Intelligence",
-    description:
-      "Expose unpaid miles before they destroy the week. Make empty miles pay through smarter load decisions.",
-  },
-  {
-    icon: BarChart3,
-    title: "Margin Clarity",
-    description:
-      "Stop guessing. View gross, net, RPM, cost-per-mile, and profit spread in one operational cockpit.",
-  },
-  {
-    icon: Gauge,
-    title: "Dispatch Decision Support",
-    description:
-      "Built for fast go/no-go decisions when brokers are calling, clocks are running, and margins are thin.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Carrier Discipline",
-    description:
-      "Turn every load into a measured decision instead of a gamble dressed up as revenue.",
-  },
+const metrics = [
+  { label: "Deadhead", value: "DH" },
+  { label: "Margin", value: "NET" },
+  { label: "Fuel Exposure", value: "FUEL" },
+  { label: "Rate Analysis", value: "RPM" },
 ];
 
-const stats = [
-  { value: "CPM", label: "Operating cost visibility" },
-  { value: "RPM", label: "Rate-per-mile clarity" },
-  { value: "Net", label: "Real load profit" },
-  { value: "DH", label: "Deadhead exposure" },
+const founderBenefits = [
+  "Locked-in founder pricing",
+  "Early access before public release",
+  "Priority feature voting",
+  "Lifetime discounted rate",
+  "Founding operator badge",
+  "Direct development feedback access",
 ];
 
-const painPoints = [
-  "Gross revenue makes bad loads look good.",
-  "Deadhead gets ignored until the settlement is already damaged.",
-  "Fuel, insurance, maintenance, ELD, taxes, and overhead rarely hit the same screen.",
-  "Dispatch decisions are often made under pressure with incomplete math.",
-];
+function getCountdownStartDate() {
+  return new Date(COUNTDOWN_START_AT_MST);
+}
 
-function SectionShell({
-  children,
-  className = "",
-  id,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  id?: string;
-}) {
+function getLaunchTargetDate() {
+  const start = getCountdownStartDate();
+  const target = new Date(start);
+  target.setDate(target.getDate() + COUNTDOWN_DAYS);
+  return target;
+}
+
+function getCountdownState(): CountdownState {
+  const now = Date.now();
+  const start = getCountdownStartDate().getTime();
+  const target = getLaunchTargetDate().getTime();
+
+  if (now < start) {
+    return {
+      status: "pending",
+      total: start - now,
+    };
+  }
+
+  return {
+    status: "active",
+    total: Math.max(target - now, 0),
+  };
+}
+
+function splitTime(total: number) {
+  return {
+    days: Math.floor(total / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((total / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((total / (1000 * 60)) % 60),
+    seconds: Math.floor((total / 1000) % 60),
+  };
+}
+
+function TelemetryBackground() {
   return (
-    <section id={id} className={`relative mx-auto w-full max-w-7xl px-6 sm:px-8 ${className}`}>
-      {children}
-    </section>
+    <div className="pointer-events-none fixed inset-0 overflow-hidden bg-[#020617]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(56,189,248,0.22),transparent_34%),radial-gradient(circle_at_78%_20%,rgba(239,68,68,0.16),transparent_30%),linear-gradient(to_bottom,rgba(2,6,23,0.2),#020617_82%)]" />
+
+      <div className="absolute inset-0 opacity-[0.18] bg-[linear-gradient(rgba(209,213,219,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(209,213,219,0.16)_1px,transparent_1px)] bg-[size:72px_72px]" />
+
+      <motion.div
+        className="absolute left-[-10%] top-[30%] h-px w-[120%] bg-gradient-to-r from-transparent via-red-500/60 to-transparent"
+        animate={{ x: ["-20%", "20%"], opacity: [0.1, 0.8, 0.1] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+      />
+    </div>
   );
 }
 
-function GlowCard({
-  children,
-  className = "",
+function AnimatedMetricPill({
+  label,
+  value,
 }: {
-  children: React.ReactNode;
-  className?: string;
+  label: string;
+  value: string;
 }) {
   return (
-    <div
-      className={`relative overflow-hidden rounded-3xl border border-sky-400/15 bg-slate-950/70 shadow-2xl shadow-sky-950/30 backdrop-blur-xl ${className}`}
+    <motion.div
+      variants={fadeUp}
+      className="rounded-full border border-sky-300/20 bg-[#0B1120]/80 px-4 py-2 shadow-[0_0_24px_rgba(56,189,248,0.14)] backdrop-blur"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_36%),radial-gradient(circle_at_bottom_right,rgba(239,68,68,0.10),transparent_32%)]" />
-      <div className="relative">{children}</div>
-    </div>
+      <span className="font-mono text-xs font-black text-sky-300">
+        {value}
+      </span>
+
+      <span className="ml-2 text-xs uppercase tracking-[0.18em] text-slate-400">
+        {label}
+      </span>
+    </motion.div>
   );
 }
 
-function TelemetryLine() {
+function ComingSoonCard() {
+  const [countdown, setCountdown] = useState<CountdownState>({
+    status: "pending",
+    total: 0,
+  });
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setCountdown(getCountdownState());
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const remaining = splitTime(countdown.total);
+
+  const countdownItems = [
+    { label: "Days", value: remaining.days },
+    { label: "Hours", value: remaining.hours },
+    { label: "Minutes", value: remaining.minutes },
+    { label: "Seconds", value: remaining.seconds },
+  ];
+
   return (
-    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.35em] text-sky-200/70">
-      <span className="h-2 w-2 rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,0.9)]" />
-      <span>Live profitability command layer</span>
-    </div>
+    <motion.div
+      variants={fadeUp}
+      className="relative overflow-hidden rounded-3xl border border-red-500/35 bg-[#0B1120]/85 p-5 shadow-[0_0_44px_rgba(239,68,68,0.16)] sm:p-6"
+      suppressHydrationWarning
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.16),transparent_36%),radial-gradient(circle_at_bottom_left,rgba(56,189,248,0.14),transparent_34%)]" />
+
+      <div className="relative">
+        <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-red-400/40 bg-red-500/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-red-200">
+          <Clock className="h-4 w-4" />
+          Launching Soon
+        </div>
+
+        <h3 className="text-xl font-black tracking-[-0.04em] text-white sm:text-2xl">
+          {countdown.status === "active"
+            ? "45-Day Launch Countdown"
+            : "Countdown Begins Tomorrow"}
+        </h3>
+
+        <p className="mt-2 text-sm font-black uppercase tracking-[0.14em] text-sky-300">
+          {countdown.status === "active"
+            ? "Launch clock active"
+            : "Begins at 8:00 AM MST"}
+        </p>
+
+        <p className="mt-4 leading-7 text-slate-300">
+          Built from the road for operators who need dispatch intelligence
+          before the load is accepted.
+        </p>
+
+        <div className="mt-6 grid grid-cols-4 gap-2">
+          {countdownItems.map((item) => (
+            <div
+              key={item.label}
+              className="flex h-[78px] min-w-0 flex-col items-center justify-center rounded-xl border border-white/10 bg-black/30 px-1 text-center sm:h-[86px] sm:rounded-2xl"
+            >
+              <p className="font-mono text-xl font-black leading-none text-sky-200 sm:text-3xl">
+                {String(item.value).padStart(2, "0")}
+              </p>
+
+              <p className="mt-2 text-[7px] font-bold uppercase tracking-[0.08em] text-slate-500 sm:text-[9px]">
+                {item.label}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3">
+            <p className="text-xs uppercase tracking-[0.16em] text-slate-500">
+              App Store
+            </p>
+
+            <p className="mt-1 font-bold text-slate-200">Coming Soon</p>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3">
+            <p className="text-xs uppercase tracking-[0.16em] text-slate-500">
+              Google Play
+            </p>
+
+            <p className="mt-1 font-bold text-slate-200">Coming Soon</p>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function FounderPromoCard() {
+  return (
+    <motion.section
+      id="cta"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={fadeUp}
+      className="relative z-10 mx-auto max-w-7xl px-6 pb-24 sm:px-8"
+    >
+      <div className="relative overflow-hidden rounded-[2rem] border border-red-500/30 bg-[#0B1120]/90 p-8 shadow-[0_0_70px_rgba(239,68,68,0.18)] sm:p-10 lg:p-12">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(56,189,248,0.18),transparent_35%),radial-gradient(circle_at_90%_20%,rgba(239,68,68,0.18),transparent_32%)]" />
+
+        <div className="relative grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <div>
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-300/30 bg-sky-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-sky-200">
+              <BadgeCheck className="h-4 w-4" />
+              First 25 Subscribers
+            </div>
+
+            <h2 className="text-4xl font-black tracking-[-0.05em] text-white sm:text-5xl">
+              Founding Operator Access
+            </h2>
+
+            <p className="mt-5 max-w-xl text-lg leading-8 text-slate-300">
+              Limited launch incentive for the first 25 subscribers.
+            </p>
+
+            <Link
+              href="/contact"
+              className="group mt-8 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-red-600 via-red-500 to-red-700 px-8 py-4 text-sm font-black uppercase tracking-[0.18em] text-white shadow-[0_0_38px_rgba(239,68,68,0.42)] transition hover:scale-[1.02] hover:shadow-[0_0_52px_rgba(239,68,68,0.62)]"
+            >
+              Reserve Your Spot
+              <ArrowRight className="ml-3 h-5 w-5 transition group-hover:translate-x-1" />
+            </Link>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            {founderBenefits.map((benefit) => (
+              <div
+                key={benefit}
+                className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.035] p-4"
+              >
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-sky-300" />
+                <p className="font-semibold text-slate-200">{benefit}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.section>
+  );
+}
+
+function HeroSection() {
+  return (
+    <section className="relative z-10 mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-12 px-6 pb-16 pt-10 sm:px-8 lg:grid-cols-[0.9fr_1.1fr]">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={stagger}
+        className="relative"
+      >
+        <motion.div
+          variants={fadeUp}
+          className="relative mx-auto flex aspect-square max-w-[420px] items-center justify-center rounded-[3rem] border border-red-500/35 bg-black/40 p-8 shadow-[0_0_80px_rgba(56,189,248,0.22)]"
+        >
+          <div className="absolute inset-0 rounded-[3rem] bg-[linear-gradient(120deg,transparent,rgba(209,213,219,0.16),transparent)]" />
+
+          <motion.div
+            className="absolute inset-0 rounded-[3rem] bg-gradient-to-r from-transparent via-white/15 to-transparent"
+            animate={{ x: ["-120%", "120%"] }}
+            transition={{
+              duration: 3.8,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+
+          <div className="relative z-10 h-full w-full overflow-hidden rounded-[2.2rem] shadow-[0_0_50px_rgba(239,68,68,0.24)]">
+            <Image
+              src={APP_ICON_SRC}
+              alt="Karpilo LoadIQ app icon"
+              fill
+              priority
+              className="object-cover"
+            />
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={stagger}
+          className="mt-6 flex flex-wrap justify-center gap-3"
+        >
+          {metrics.map((metric) => (
+            <AnimatedMetricPill key={metric.label} {...metric} />
+          ))}
+        </motion.div>
+      </motion.div>
+
+      <motion.div initial="hidden" animate="visible" variants={stagger}>
+        <motion.div
+          variants={fadeUp}
+          className="mb-5 inline-flex items-center gap-3 text-xs uppercase tracking-[0.34em] text-sky-200/80"
+        >
+          <span className="h-2 w-2 rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,0.9)]" />
+          Tactical load profitability system
+        </motion.div>
+
+        <motion.h1
+          variants={fadeUp}
+          className="text-5xl font-black tracking-[-0.065em] text-white sm:text-6xl lg:text-7xl"
+        >
+          Karpilo LoadIQ{" "}
+          <span className="whitespace-nowrap text-sky-300">(K-LIQ)</span>
+        </motion.h1>
+
+        <motion.p
+          variants={fadeUp}
+          className="mt-6 text-2xl font-bold tracking-[-0.03em] text-slate-100 sm:text-3xl"
+        >
+          Know if the load is worth it before the wheels turn.
+        </motion.p>
+
+        <motion.p
+          variants={fadeUp}
+          className="mt-6 max-w-2xl text-lg leading-8 text-slate-300"
+        >
+          Karpilo LoadIQ helps owner-operators and carriers expose deadhead,
+          fuel cost, overhead, RPM, operating cost, margin, fuel exposure,
+          dispatch intelligence, rate analysis, and true load profitability
+          before accepting freight.
+        </motion.p>
+
+        <motion.div
+          variants={fadeUp}
+          className="mt-8 grid gap-4 sm:grid-cols-2"
+        >
+          <ComingSoonCard />
+
+          <div className="rounded-3xl border border-sky-300/20 bg-[#0B1120]/85 p-6 shadow-[0_0_40px_rgba(56,189,248,0.14)]">
+            <Radar className="mb-5 h-8 w-8 text-sky-300" />
+
+            <h3 className="text-2xl font-black tracking-[-0.04em] text-white">
+              Operational Cockpit
+            </h3>
+
+            <div className="mt-5 space-y-3">
+              {[
+                ["Deadhead Exposure", "Live"],
+                ["Fuel Cost", "Calculated"],
+                ["Operating Cost", "Tracked"],
+                ["Rate Analysis", "Measured"],
+              ].map(([label, value]) => (
+                <div
+                  key={label}
+                  className="flex justify-between rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3"
+                >
+                  <span className="text-sm text-slate-400">{label}</span>
+
+                  <span className="font-mono text-sm font-black text-sky-200">
+                    {value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+    </section>
   );
 }
 
 export default function Page() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#030712] text-white">
-      <div className="pointer-events-none fixed inset-0">
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(2,6,23,0.3),#030712_78%),radial-gradient(circle_at_20%_5%,rgba(14,165,233,0.22),transparent_34%),radial-gradient(circle_at_80%_12%,rgba(239,68,68,0.12),transparent_28%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-size-[72px_72px] opacity-20" />
-      </div>
+    <div className="min-h-screen overflow-hidden bg-[#020617] text-white">
+      <TelemetryBackground />
 
-      <header className="relative z-20 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-6 sm:px-8">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-sky-300/20 bg-slate-900 shadow-[0_0_28px_rgba(14,165,233,0.25)]">
-            <Truck className="h-5 w-5 text-sky-300" />
-          </div>
-          <div>
-            <p className="text-sm font-semibold tracking-[0.28em] text-sky-100">KARPILO</p>
-            <p className="text-xs uppercase tracking-[0.32em] text-slate-500">LoadIQ</p>
-          </div>
-        </div>
+      <HeroSection />
 
-        <a
-          href="#cta"
-          className="hidden rounded-full border border-sky-300/20 bg-sky-400/10 px-5 py-2.5 text-sm font-semibold text-sky-100 transition hover:border-sky-300/50 hover:bg-sky-400/20 sm:inline-flex"
-        >
-          Start Calculating
-        </a>
-      </header>
-
-      <SectionShell className="relative z-10 pb-20 pt-10 sm:pb-28 lg:pt-20">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={stagger}
-          className="grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr]"
-        >
-          <motion.div variants={fadeUp}>
-            <TelemetryLine />
-
-            <h1 className="mt-8 max-w-5xl text-5xl font-black tracking-[-0.06em] text-white sm:text-6xl lg:text-7xl">
-              Know the load is profitable before the wheels turn.
-            </h1>
-
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
-              Karpilo LoadIQ helps owner-operators and carriers determine true load profitability
-              by exposing deadhead, overhead, fuel, margins, RPM, and operating cost before the
-              dispatch decision is made.
-            </p>
-
-            <div className="mt-9 flex flex-col gap-4 sm:flex-row">
-              <a
-                href="#cta"
-                className="group inline-flex items-center justify-center rounded-full bg-sky-300 px-7 py-4 text-sm font-black uppercase tracking-[0.18em] text-slate-950 shadow-[0_0_40px_rgba(56,189,248,0.35)] transition hover:bg-white"
-              >
-                Run the numbers
-                <ArrowRight className="ml-3 h-4 w-4 transition group-hover:translate-x-1" />
-              </a>
-              <a
-                href="#features"
-                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/3 px-7 py-4 text-sm font-bold uppercase tracking-[0.18em] text-slate-200 transition hover:border-sky-300/40 hover:bg-sky-300/10"
-              >
-                View platform
-              </a>
-            </div>
-          </motion.div>
-
-          <motion.div variants={fadeUp}>
-            <GlowCard className="p-5 sm:p-6">
-              <div className="rounded-2xl border border-white/10 bg-slate-950/80 p-5">
-                <div className="mb-6 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Load Scan</p>
-                    <h2 className="mt-2 text-2xl font-black tracking-tight">Profitability Cockpit</h2>
-                  </div>
-                  <Radar className="h-7 w-7 text-sky-300" />
-                </div>
-
-                <div className="space-y-4">
-                  {[
-                    ["Linehaul", "$2,850"],
-                    ["Deadhead Exposure", "184 mi"],
-                    ["Fuel Cost", "$641"],
-                    ["Operating Cost", "$1.82/mi"],
-                    ["Projected Net", "$1,043"],
-                  ].map(([label, value]) => (
-                    <div
-                      key={label}
-                      className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3"
-                    >
-                      <span className="text-sm text-slate-400">{label}</span>
-                      <span className="font-mono text-sm font-bold text-sky-100">{value}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-5 rounded-2xl border border-sky-300/20 bg-sky-300/10 p-4">
-                  <div className="flex items-center gap-3">
-                    <Zap className="h-5 w-5 text-sky-300" />
-                    <p className="text-sm font-bold text-sky-100">Decision: Accept with margin discipline</p>
-                  </div>
-                </div>
-              </div>
-            </GlowCard>
-          </motion.div>
-        </motion.div>
-      </SectionShell>
-
-      <SectionShell className="relative z-10 py-16">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-120px" }}
-          variants={stagger}
-          className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]"
-        >
-          <motion.div variants={fadeUp}>
-            <p className="text-sm font-bold uppercase tracking-[0.32em] text-red-300">Industry Pain</p>
-            <h2 className="mt-4 text-4xl font-black tracking-[-0.04em] sm:text-5xl">
-              Revenue does not mean profit.
-            </h2>
-          </motion.div>
-
-          <motion.div variants={stagger} className="grid gap-4 sm:grid-cols-2">
-            {painPoints.map((point) => (
-              <motion.div
-                key={point}
-                variants={fadeUp}
-                className="rounded-3xl border border-white/10 bg-white/[0.035] p-6"
-              >
-                <CheckCircle2 className="mb-4 h-5 w-5 text-red-300" />
-                <p className="leading-7 text-slate-300">{point}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.div>
-      </SectionShell>
-
-      <SectionShell id="features" className="relative z-10 py-20">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm font-bold uppercase tracking-[0.32em] text-sky-300">Core System</p>
-          <h2 className="mt-4 text-4xl font-black tracking-[-0.04em] sm:text-5xl">
-            Built for the operator making the call.
-          </h2>
-        </div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-120px" }}
-          variants={stagger}
-          className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          {features.map((feature) => {
-            const Icon = feature.icon;
+      <section className="relative z-10 mx-auto max-w-7xl px-6 py-20 sm:px-8">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              icon: Route,
+              title: "Deadhead Intelligence",
+              text: "Expose unpaid miles before they wreck the week.",
+            },
+            {
+              icon: Fuel,
+              title: "Fuel Exposure",
+              text: "See fuel pressure before accepting the rate.",
+            },
+            {
+              icon: BarChart3,
+              title: "Margin Control",
+              text: "Turn gross revenue into real profit visibility.",
+            },
+            {
+              icon: Gauge,
+              title: "Dispatch Discipline",
+              text: "Make fast go/no-go decisions with clean math.",
+            },
+          ].map((item) => {
+            const Icon = item.icon;
 
             return (
-              <motion.div key={feature.title} variants={fadeUp}>
-                <GlowCard className="h-full p-6">
-                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl border border-sky-300/20 bg-sky-300/10">
-                    <Icon className="h-6 w-6 text-sky-300" />
-                  </div>
-                  <h3 className="text-xl font-black tracking-tight">{feature.title}</h3>
-                  <p className="mt-3 leading-7 text-slate-400">{feature.description}</p>
-                </GlowCard>
-              </motion.div>
+              <div
+                key={item.title}
+                className="rounded-3xl border border-white/10 bg-[#0B1120]/80 p-6 shadow-[0_0_34px_rgba(56,189,248,0.08)]"
+              >
+                <Icon className="mb-5 h-7 w-7 text-sky-300" />
+
+                <h3 className="text-xl font-black tracking-[-0.03em] text-white">
+                  {item.title}
+                </h3>
+
+                <p className="mt-3 leading-7 text-slate-400">{item.text}</p>
+              </div>
             );
           })}
-        </motion.div>
-      </SectionShell>
+        </div>
+      </section>
 
-      <SectionShell className="relative z-10 py-20">
-        <GlowCard className="p-8 sm:p-10 lg:p-12">
+      <section className="relative z-10 mx-auto max-w-7xl px-6 py-16 sm:px-8">
+        <div className="rounded-[2rem] border border-sky-300/20 bg-[#0B1120]/85 p-8 shadow-[0_0_60px_rgba(56,189,248,0.12)] sm:p-10 lg:p-12">
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <div>
-              <p className="text-sm font-bold uppercase tracking-[0.32em] text-sky-300">
+              <p className="text-sm font-black uppercase tracking-[0.32em] text-red-300">
                 Built from the road
               </p>
-              <h2 className="mt-4 text-4xl font-black tracking-[-0.04em] sm:text-5xl">
-                Not built in a boardroom.
+
+              <h2 className="mt-4 text-4xl font-black tracking-[-0.05em] sm:text-5xl">
+                Not another clean little SaaS toy.
               </h2>
             </div>
 
-            <div className="space-y-5 text-lg leading-8 text-slate-300">
-              <p>
-                Karpilo LoadIQ is shaped around the real pressure of trucking: broker calls,
-                fuel swings, deadhead traps, tight clocks, thin margins, and the discipline it
-                takes to keep a truck profitable.
-              </p>
-              <p>
-                This is dispatch intelligence for people who understand that a load is not good
-                because it pays. A load is good when the math survives the road.
-              </p>
-            </div>
-          </div>
-        </GlowCard>
-      </SectionShell>
-
-      <SectionShell className="relative z-10 py-20">
-        <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.32em] text-sky-300">
-              Profitability Intelligence
-            </p>
-            <h2 className="mt-4 text-4xl font-black tracking-[-0.04em] sm:text-5xl">
-              See the load beneath the load.
-            </h2>
-            <p className="mt-6 text-lg leading-8 text-slate-300">
-              LoadIQ turns scattered cost inputs into one clean operating picture, helping carriers
-              defend margin before fuel, deadhead, maintenance, and overhead quietly eat the week.
+            <p className="text-lg leading-8 text-slate-300">
+              LoadIQ is built for the real pressure of trucking: broker calls,
+              thin margins, fuel swings, deadhead traps, maintenance reserves,
+              overhead, and dispatch decisions that have to be made before the
+              truck moves.
             </p>
           </div>
-
-          <div className="space-y-4">
-            {[
-              "Compare loaded miles against total operational miles.",
-              "Expose deadhead before accepting weak freight.",
-              "Convert overhead into real cost-per-mile pressure.",
-              "Protect margin with dispatch-grade profitability visibility.",
-            ].map((item) => (
-              <div
-                key={item}
-                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.035] p-5"
-              >
-                <ChevronRight className="h-5 w-5 text-sky-300" />
-                <p className="font-medium text-slate-200">{item}</p>
-              </div>
-            ))}
-          </div>
         </div>
-      </SectionShell>
+      </section>
 
-      <SectionShell className="relative z-10 py-20">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat) => (
-            <GlowCard key={stat.label} className="p-7 text-center">
-              <p className="font-mono text-4xl font-black text-sky-200">{stat.value}</p>
-              <p className="mt-3 text-sm uppercase tracking-[0.22em] text-slate-400">{stat.label}</p>
-            </GlowCard>
-          ))}
-        </div>
-      </SectionShell>
+      <FounderPromoCard />
 
-      <SectionShell className="relative z-10 py-20">
-        <div id="cta" className="overflow-hidden rounded-4xl border border-sky-300/20 bg-sky-300/10 p-8 shadow-[0_0_70px_rgba(14,165,233,0.20)] sm:p-12 lg:p-16">
-          <div className="mx-auto max-w-4xl text-center">
-            <MapPinned className="mx-auto mb-6 h-10 w-10 text-sky-300" />
-            <h2 className="text-4xl font-black tracking-[-0.04em] sm:text-5xl">
-              Stop accepting loads blind.
-            </h2>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-              Run the freight through the numbers first. Protect the truck, the week, the margin,
-              and the business behind the wheel.
-            </p>
-            <a
-              href="#"
-              className="mt-9 inline-flex items-center justify-center rounded-full bg-white px-8 py-4 text-sm font-black uppercase tracking-[0.18em] text-slate-950 transition hover:bg-sky-200"
-            >
-              Launch LoadIQ
-              <CircleDollarSign className="ml-3 h-5 w-5" />
-            </a>
-          </div>
-        </div>
-      </SectionShell>
-
-      <footer className="relative z-10 border-t border-white/10 px-6 py-10 sm:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Karpilo LoadIQ. Built by the mile from the road.</p>
-          <p className="uppercase tracking-[0.26em]">Profitability • Dispatch • Intelligence</p>
-        </div>
-      </footer>
-    </main>
+      <SiteFooter />
+    </div>
   );
 }
