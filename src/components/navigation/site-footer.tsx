@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 
+import { PRODUCT_DISCLAIMER_SNIPPET } from "@/config/product-features";
+
 const footerLinks = {
   navigation: [
     { label: "Home", href: "/" },
@@ -11,6 +13,8 @@ const footerLinks = {
   legal: [
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms & Conditions", href: "/terms" },
+    { label: "Copyright", href: "/copyright" },
+    { label: "Notice", href: "/notice" },
   ],
 };
 
@@ -27,6 +31,10 @@ export default function SiteFooter() {
 
           <p className="mt-4 leading-7 text-slate-400">
             Built by the mile from the road.
+          </p>
+
+          <p className="mt-4 text-xs leading-6 text-slate-500">
+            {PRODUCT_DISCLAIMER_SNIPPET}
           </p>
 
           <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-red-300">
