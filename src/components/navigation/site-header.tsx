@@ -54,17 +54,10 @@ export default function SiteHeader() {
           </Link>
 
           <Link
-            href="/privacy"
+            href="/legal"
             className="text-sm font-bold uppercase tracking-[0.18em] text-slate-300 transition hover:text-sky-300"
           >
-            Privacy
-          </Link>
-
-          <Link
-            href="/terms"
-            className="text-sm font-bold uppercase tracking-[0.18em] text-slate-300 transition hover:text-sky-300"
-          >
-            Terms
+            Legal
           </Link>
         </nav>
 

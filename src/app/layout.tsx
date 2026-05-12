@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { CookieConsentBanner } from "@/components/legal/cookie-consent-banner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,9 +14,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Karpilo LoadIQ | Freight Profitability Intelligence",
+  title: "Karpilo Endeavor Technologies | LoadIQ",
   description:
-    "Mobile-first freight profitability intelligence for owner operators, lease operators, and small trucking operations.",
+    "Transportation software, freight profitability intelligence, and operational SaaS systems from Karpilo Endeavor Technologies LLC.",
+  metadataBase: new URL("https://karpiloloadiq.com"),
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -28,7 +34,10 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <CookieConsentBanner />
+      </body>
     </html>
   );
 }

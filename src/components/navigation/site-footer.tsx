@@ -2,6 +2,11 @@
 
 import Link from "next/link";
 
+import {
+  ACTIVE_DATA_PROVIDERS,
+  DATA_PROVIDER_DISCLOSURE,
+} from "@/config/data-providers";
+import { COMPANY_NAME, SUPPORT_EMAIL, legalNavigation } from "@/config/legal";
 import { PRODUCT_DISCLAIMER_SNIPPET } from "@/config/product-features";
 
 const footerLinks = {
@@ -11,8 +16,7 @@ const footerLinks = {
     { label: "Contact", href: "/contact" },
   ],
   legal: [
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms & Conditions", href: "/terms" },
+    ...legalNavigation,
     { label: "Copyright", href: "/copyright" },
     { label: "Notice", href: "/notice" },
   ],
@@ -26,11 +30,12 @@ export default function SiteFooter() {
       <div className="relative mx-auto grid max-w-7xl gap-12 px-6 py-14 sm:px-8 md:grid-cols-2 lg:grid-cols-4">
         <div>
           <p className="text-lg font-black tracking-[-0.03em] text-white">
-            Karpilo LoadIQ
+            {COMPANY_NAME}
           </p>
 
           <p className="mt-4 leading-7 text-slate-400">
-            Built by the mile from the road.
+            Transportation software, operational intelligence, and subscription
+            SaaS infrastructure.
           </p>
 
           <p className="mt-4 text-xs leading-6 text-slate-500">
@@ -38,7 +43,7 @@ export default function SiteFooter() {
           </p>
 
           <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-red-300">
-            Deadhead • Margin • Profitability
+            LoadIQ • FleetOS • Intelligence Systems
           </p>
         </div>
 
@@ -84,7 +89,7 @@ export default function SiteFooter() {
           </p>
 
           <div className="mt-5 space-y-3 text-slate-400">
-            <p>Karpilo Endeavor Technologies LLC</p>
+            <p>{COMPANY_NAME}</p>
 
             <a
               href="https://www.karpiloendeavortechnologies.com"
@@ -96,11 +101,37 @@ export default function SiteFooter() {
             </a>
 
             <a
-              href="mailto:karpiloloadiq@karpiloendeavortechnologies.com"
+              href={`mailto:${SUPPORT_EMAIL}`}
               className="block break-all transition hover:text-red-300"
             >
-              karpiloloadiq@karpiloendeavortechnologies.com
+              {SUPPORT_EMAIL}
             </a>
+          </div>
+        </div>
+
+        <div className="md:col-span-2 lg:col-span-4">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-5">
+            <p className="text-sm font-black uppercase tracking-[0.18em] text-sky-300">
+              Data Sources
+            </p>
+
+            <p className="mt-4 text-sm leading-7 text-slate-400">
+              {DATA_PROVIDER_DISCLOSURE}
+            </p>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {ACTIVE_DATA_PROVIDERS.map((provider) => (
+                <Link
+                  key={provider.id}
+                  href={provider.href ?? "#"}
+                  target={provider.href ? "_blank" : undefined}
+                  rel={provider.href ? "noreferrer" : undefined}
+                  className="rounded-full border border-sky-300/20 bg-sky-400/10 px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-sky-100 transition hover:bg-sky-400/15"
+                >
+                  {provider.shortName}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -108,7 +139,7 @@ export default function SiteFooter() {
       <div className="relative border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <p>
-            © {new Date().getFullYear()} Karpilo LoadIQ. All rights reserved.
+            © {new Date().getFullYear()} {COMPANY_NAME}. All rights reserved.
           </p>
 
           <p className="uppercase tracking-[0.18em]">
