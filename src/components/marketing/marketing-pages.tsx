@@ -97,7 +97,7 @@ function formatCurrency(value: number, maximumFractionDigits = 0) {
 
 function AppFrame({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen overflow-hidden bg-[#020617] text-white">
+    <div className="min-h-screen overflow-hidden bg-[#020617] pb-24 text-white sm:pb-0">
       <TelemetryBackground />
       <SiteHeader />
       <main className="relative z-10">{children}</main>

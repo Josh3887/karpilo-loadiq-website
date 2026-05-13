@@ -77,6 +77,29 @@ export default function SiteHeader() {
         </button>
       </div>
 
+      <nav
+        aria-label="Primary mobile feature navigation"
+        className="mx-auto flex max-w-7xl gap-2 overflow-x-auto border-t border-white/10 px-6 pb-4 sm:px-8 lg:hidden"
+      >
+        {LOADIQ_NAVIGATION_LINKS.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            onClick={() => setOpen(false)}
+            className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-[11px] font-black uppercase tracking-[0.13em] text-slate-200 transition hover:border-sky-300/35 hover:text-sky-200"
+          >
+            {link.label}
+          </Link>
+        ))}
+        <Link
+          href={LOADIQ_ROUTES.pilotProgram}
+          onClick={() => setOpen(false)}
+          className="shrink-0 rounded-full border border-red-400/35 bg-red-500/12 px-4 py-2 text-[11px] font-black uppercase tracking-[0.13em] text-red-100 transition hover:bg-red-500/20"
+        >
+          Pilot Access
+        </Link>
+      </nav>
+
       {open ? (
         <div className="border-t border-white/10 bg-[#020617]/98 px-6 py-5 shadow-[0_24px_60px_rgba(0,0,0,0.45)] lg:hidden">
           <nav className="mx-auto grid max-w-7xl gap-2">
