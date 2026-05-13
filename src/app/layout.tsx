@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { CookieConsentBanner } from "@/components/legal/cookie-consent-banner";
 import { DriverSafetyAcknowledgment } from "@/components/legal/driver-safety-acknowledgment";
 import { SystemHealthBanner } from "@/components/system/system-health-banner";
+import { BRAND } from "@/config/brand";
 import { LOADIQ_URLS } from "@/config/loadiq";
 import "./globals.css";
 
@@ -17,10 +18,38 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Karpilo Endeavor Technologies | LoadIQ",
+  title: `${BRAND.companyName} | ${BRAND.shortName}`,
   description:
     "Transportation software, freight profitability intelligence, and operational SaaS systems from Karpilo Endeavor Technologies LLC.",
   metadataBase: new URL(LOADIQ_URLS.website),
+  icons: {
+    icon: [{ url: BRAND.appIcon, type: "image/png" }],
+    apple: [{ url: BRAND.appIcon, type: "image/png" }],
+    shortcut: [{ url: BRAND.appIcon, type: "image/png" }],
+  },
+  openGraph: {
+    title: BRAND.productName,
+    description:
+      "Freight profitability intelligence, pilot onboarding, launch countdowns, and support for Karpilo LoadIQ.",
+    url: LOADIQ_URLS.website,
+    siteName: BRAND.productName,
+    images: [
+      {
+        url: BRAND.cardImage,
+        width: 1536,
+        height: 1024,
+        alt: BRAND.productName,
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: BRAND.productName,
+    description:
+      "Freight profitability intelligence and launch readiness for working operators.",
+    images: [BRAND.cardImage],
+  },
   robots: {
     index: true,
     follow: true,

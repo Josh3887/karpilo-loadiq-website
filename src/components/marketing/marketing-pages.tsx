@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 
 import { AppStorePlaceholders } from "@/components/app-store/app-store-placeholders";
+import { DemoVideoPlayer } from "@/components/demo/DemoVideoPlayer";
 import SiteFooter from "@/components/navigation/site-footer";
 import SiteHeader from "@/components/navigation/site-header";
 import { UniversalBackButton } from "@/components/navigation/universal-back-button";
@@ -760,7 +761,11 @@ export function DemoMarketingPage() {
         title="Try LoadIQ."
         description="Move the core freight numbers and watch profitability, true RPM, fuel pressure, and operating cost change."
       />
-      <section className="mx-auto grid max-w-7xl gap-5 px-6 pb-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr]">
+      <DemoVideoPlayer />
+      <section
+        id="interactive-demo"
+        className="mx-auto grid scroll-mt-24 max-w-7xl gap-5 px-6 pb-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr]"
+      >
         <div className="rounded-[1.75rem] border border-white/10 bg-[#0B1120]/85 p-6">
           {controls.map(([label, value, min, max, step, setter, unit]) => (
             <label key={label} className="mb-5 block last:mb-0">

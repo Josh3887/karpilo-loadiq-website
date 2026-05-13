@@ -1,10 +1,14 @@
+import { BRAND } from "@/config/brand";
+
 export const LOADIQ_BRAND = {
-  companyName: "Karpilo Endeavor Technologies LLC",
-  productName: "Karpilo LoadIQ",
-  shortName: "LoadIQ",
-  productMark: "K-LIQ",
-  appIcon: "/brand/karpilo-loadiq-icon.png",
-  companyImage: "/brand/karpiloendeavortechnology.png",
+  companyName: BRAND.legalCompanyName,
+  productName: BRAND.productName,
+  shortName: BRAND.shortName,
+  productMark: BRAND.productMark,
+  appIcon: BRAND.appIcon,
+  cardImage: BRAND.cardImage,
+  logo: BRAND.logo,
+  companyImage: BRAND.cardImage,
 } as const;
 
 export const LOADIQ_URLS = {
@@ -95,12 +99,16 @@ export const LOADIQ_APP_STORE_PLACEHOLDERS = [
   {
     id: "apple_app_store",
     label: "Apple App Store",
-    note: "Coming Soon",
+    note: "Apple App Store availability coming soon",
+    detail: "Pilot access opening first",
+    icon: BRAND.appIcon,
   },
   {
     id: "google_play",
     label: "Google Play",
-    note: "Coming Soon",
+    note: "Google Play availability coming soon",
+    detail: "Mobile app launch preparation in progress",
+    icon: BRAND.appIcon,
   },
 ] as const;
 

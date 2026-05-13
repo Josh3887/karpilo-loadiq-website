@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Play, Smartphone } from "lucide-react";
 
 import { LOADIQ_APP_STORE_PLACEHOLDERS } from "@/config/loadiq";
@@ -17,23 +18,33 @@ export function AppStorePlaceholders() {
             aria-label={`${store.label} ${store.note}`}
           >
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(56,189,248,0.16),transparent_34%),radial-gradient(circle_at_92%_20%,rgba(239,68,68,0.12),transparent_30%)] opacity-80 transition group-hover:opacity-100" />
-            <div className="relative flex items-center justify-between gap-4">
+            <div className="relative flex items-start gap-4">
               <div className="flex min-w-0 items-center gap-3">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-black/30 text-sky-300">
-                  <Icon className="h-5 w-5" />
+                <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-black/30">
+                  <Image
+                    src={store.icon}
+                    alt="Karpilo LoadIQ app icon"
+                    fill
+                    sizes="44px"
+                    className="object-cover"
+                  />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
-                    Download
+                  <p className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
+                    <Icon className="h-3.5 w-3.5 text-sky-300" />
+                    Coming Soon
                   </p>
                   <p className="mt-1 truncate text-base font-black text-white">
                     {store.label}
                   </p>
+                  <p className="mt-1 text-xs font-bold leading-5 text-red-100">
+                    {store.note}
+                  </p>
+                  <p className="text-xs leading-5 text-slate-500">
+                    {store.detail}
+                  </p>
                 </div>
               </div>
-              <span className="shrink-0 rounded-full border border-red-300/25 bg-red-500/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-red-100">
-                {store.note}
-              </span>
             </div>
           </div>
         );
