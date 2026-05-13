@@ -4,12 +4,29 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, MessageSquare, Send, Truck } from "lucide-react";
 
+import SiteFooter from "@/components/navigation/site-footer";
+import SiteHeader from "@/components/navigation/site-header";
+import { UniversalBackButton } from "@/components/navigation/universal-back-button";
+import {
+  LOADIQ_BRAND,
+  LOADIQ_CONTACT_CHANNELS,
+  LOADIQ_URLS,
+} from "@/config/loadiq";
+
 type FormStatus = "idle" | "loading" | "success" | "error";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0 },
 };
+
+const intakeTypeOptions = [
+  { value: "support", label: "Support" },
+  { value: "feedback", label: "Feedback" },
+  { value: "pilot_inquiry", label: "Pilot inquiry" },
+  { value: "launch_inquiry", label: "Launch inquiry" },
+  { value: "bug_report", label: "Bug report" },
+] as const;
 
 export default function ContactPage() {
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -25,6 +42,7 @@ export default function ContactPage() {
       name: String(formData.get("name") || "").trim(),
       email: String(formData.get("email") || "").trim().toLowerCase(),
       role: String(formData.get("role") || "").trim(),
+      intake_type: String(formData.get("intake_type") || "launch_inquiry").trim(),
       message: String(formData.get("message") || "").trim(),
       source: "contact-page",
     };
@@ -71,8 +89,11 @@ export default function ContactPage() {
         <div className="absolute inset-0 opacity-[0.14] bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:72px_72px]" />
       </div>
 
+      <SiteHeader />
+
       <section className="relative z-10 mx-auto grid max-w-7xl gap-12 px-6 py-20 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
         <motion.div initial="hidden" animate="visible" variants={fadeUp}>
+          <UniversalBackButton />
           <div className="inline-flex items-center gap-3 rounded-full border border-sky-300/20 bg-sky-400/10 px-5 py-2 text-xs font-black uppercase tracking-[0.22em] text-sky-200">
             <MessageSquare className="h-4 w-4" />
             Contact Karpilo LoadIQ
@@ -92,31 +113,45 @@ export default function ContactPage() {
               <Truck className="h-6 w-6 text-sky-300" />
               <div>
                 <p className="font-semibold text-white">
-                  Karpilo Endeavor Technologies LLC
+                  {LOADIQ_BRAND.companyName}
                 </p>
                 <a
-                  href="https://www.karpiloendeavortechnologies.com"
+                  href={LOADIQ_URLS.companyWebsite}
                   className="text-slate-300 transition hover:text-sky-300"
                 >
-                  www.karpiloendeavortechnologies.com
+                  {new URL(LOADIQ_URLS.companyWebsite).hostname}
                 </a>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#0B1120]/80 p-5">
-              <Mail className="h-6 w-6 text-red-300" />
-              <div>
-                <p className="font-semibold text-white">
-                  Launch & Operator Contact
-                </p>
-                <a
-                  href="mailto:karpiloloadiq@karpiloendeavortechnologies.com"
-                  className="break-all text-slate-300 transition hover:text-red-300"
+            {LOADIQ_CONTACT_CHANNELS.map((channel) => {
+              const Icon = channel.id === "feature-requests" ? MessageSquare : Mail;
+
+              return (
+                <div
+                  key={channel.id}
+                  className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#0B1120]/80 p-5"
                 >
-                  karpiloloadiq@karpiloendeavortechnologies.com
-                </a>
-              </div>
-            </div>
+                  <Icon className="h-6 w-6 text-red-300" />
+                  <div>
+                    <p className="font-semibold text-white">{channel.label}</p>
+                    {channel.monitored ? (
+                      <a
+                        href={`mailto:${channel.email}`}
+                        className="break-all text-slate-300 transition hover:text-red-300"
+                      >
+                        {channel.email}
+                      </a>
+                    ) : (
+                      <p className="break-all text-slate-300">{channel.email}</p>
+                    )}
+                    <p className="mt-1 text-sm text-slate-500">
+                      {channel.description}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </motion.div>
 
@@ -181,6 +216,23 @@ export default function ContactPage() {
 
               <div>
                 <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-400">
+                  Inquiry Type
+                </label>
+                <select
+                  name="intake_type"
+                  defaultValue="launch_inquiry"
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition focus:border-sky-300/50"
+                >
+                  {intakeTypeOptions.map((option) => (
+                    <option key={option.value} value={option.value} className="bg-[#0B1120]">
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-black uppercase tracking-[0.22em] text-slate-400">
                   Message
                 </label>
                 <textarea
@@ -207,6 +259,8 @@ export default function ContactPage() {
           )}
         </motion.div>
       </section>
+
+      <SiteFooter />
     </main>
   );
 }

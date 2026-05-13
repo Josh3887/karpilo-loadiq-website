@@ -13,7 +13,12 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
-const BRAND_IMAGE = "/brand/karpiloendeavortechnology.png";
+import SiteFooter from "@/components/navigation/site-footer";
+import SiteHeader from "@/components/navigation/site-header";
+import { UniversalBackButton } from "@/components/navigation/universal-back-button";
+import { LOADIQ_BRAND } from "@/config/loadiq";
+
+const BRAND_IMAGE = LOADIQ_BRAND.companyImage;
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -56,7 +61,10 @@ export default function AboutPage() {
         <div className="absolute inset-0 opacity-[0.14] bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:72px_72px]" />
       </div>
 
+      <SiteHeader />
+
       <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-16 sm:px-8">
+        <UniversalBackButton />
         <motion.div
           initial="hidden"
           animate="visible"
@@ -68,7 +76,7 @@ export default function AboutPage() {
               },
             },
           }}
-          className="grid items-center gap-14 lg:grid-cols-[0.9fr_1.1fr]"
+          className="mt-8 grid items-center gap-14 lg:grid-cols-[0.9fr_1.1fr]"
         >
           <motion.div variants={fadeUp}>
             <div className="relative overflow-hidden rounded-[2rem] border border-red-500/30 bg-[#0B1120]/80 p-6 shadow-[0_0_60px_rgba(239,68,68,0.12)]">
@@ -77,7 +85,7 @@ export default function AboutPage() {
               <div className="relative z-10 overflow-hidden rounded-[1.5rem]">
                 <Image
                   src={BRAND_IMAGE}
-                  alt="Karpilo Endeavor Technologies LLC"
+                  alt={LOADIQ_BRAND.companyName}
                   width={1200}
                   height={900}
                   priority
@@ -89,7 +97,7 @@ export default function AboutPage() {
 
           <motion.div variants={fadeUp}>
             <div className="inline-flex items-center gap-3 rounded-full border border-sky-300/20 bg-sky-400/10 px-5 py-2 text-xs font-black uppercase tracking-[0.22em] text-sky-200">
-              Built by Karpilo Endeavor Technologies LLC
+              Built by {LOADIQ_BRAND.companyName}
             </div>
 
             <h1 className="mt-7 text-5xl font-black tracking-[-0.06em] text-white sm:text-6xl">
@@ -165,6 +173,8 @@ export default function AboutPage() {
           })}
         </div>
       </section>
+
+      <SiteFooter />
     </main>
   );
 }

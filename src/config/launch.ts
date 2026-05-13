@@ -7,10 +7,97 @@ export type LaunchPhaseId =
   | "standard_active";
 
 export const launchTimeline = {
-  pilotOpensAtUtc: "2026-06-01T15:00:00.000Z",
-  pilotDurationDays: 60,
-  officialLaunchAtUtc: "2026-07-31T15:00:00.000Z",
+  pilotOpensAtLocal: "2026-05-13T08:00:00-07:00",
+  pilotDurationDays: 30,
+  launchPromotionDurationDays: 45,
 } as const;
+
+export type LaunchDisplayPhase = {
+  id: "pre_pilot" | "pilot_active" | "pilot_full" | "launch_active" | "standard";
+  activeProgram: "pilot" | "launch" | "standard";
+  title: string;
+  label: string;
+  targetTime: number | null;
+  slotsRemaining: number;
+  slotsTotal: number;
+  paymentsEnabled: boolean;
+};
+
+export function getLaunchPhase(now = Date.now()): LaunchDisplayPhase {
+  const pilotOpensAt = Date.parse(launchTimeline.pilotOpensAtLocal);
+  const pilotEndsAt =
+    pilotOpensAt + launchTimeline.pilotDurationDays * 24 * 60 * 60 * 1000;
+  const launchEndsAt =
+    pilotEndsAt + launchTimeline.launchPromotionDurationDays * 24 * 60 * 60 * 1000;
+  const pilotSlots = Math.max(pilotProgram.maxSlots - pilotProgram.claimedSlots, 0);
+  const launchSlots = Math.max(
+    launch500Program.maxSlots - launch500Program.claimedSlots,
+    0,
+  );
+
+  if (!Number.isFinite(pilotOpensAt) || now < pilotOpensAt) {
+    return {
+      id: "pre_pilot",
+      activeProgram: "pilot",
+      title: "Pre-Launch Pilot opens for the first 50 users.",
+      label: "Pre-launch pilot",
+      targetTime: Number.isFinite(pilotOpensAt) ? pilotOpensAt : null,
+      slotsRemaining: pilotSlots,
+      slotsTotal: pilotProgram.maxSlots,
+      paymentsEnabled: false,
+    };
+  }
+
+  if (now < pilotEndsAt && pilotSlots > 0) {
+    return {
+      id: "pilot_active",
+      activeProgram: "pilot",
+      title: "Pre-Launch Pilot enrollment active.",
+      label: "Founding 50 enrollment live",
+      targetTime: pilotEndsAt,
+      slotsRemaining: pilotSlots,
+      slotsTotal: pilotProgram.maxSlots,
+      paymentsEnabled: false,
+    };
+  }
+
+  if (now < pilotEndsAt) {
+    return {
+      id: "pilot_full",
+      activeProgram: "pilot",
+      title: "Founding 50 Pilot fully allocated.",
+      label: "Pilot allocation full",
+      targetTime: pilotEndsAt,
+      slotsRemaining: 0,
+      slotsTotal: pilotProgram.maxSlots,
+      paymentsEnabled: false,
+    };
+  }
+
+  if (now < launchEndsAt && launchSlots > 0) {
+    return {
+      id: "launch_active",
+      activeProgram: "launch",
+      title: "Launch promotion active for the first 500 users.",
+      label: "Launch operator pricing",
+      targetTime: launchEndsAt,
+      slotsRemaining: launchSlots,
+      slotsTotal: launch500Program.maxSlots,
+      paymentsEnabled: false,
+    };
+  }
+
+  return {
+    id: "standard",
+    activeProgram: "standard",
+    title: "Standard Public Access",
+    label: "Public pricing active",
+    targetTime: null,
+    slotsRemaining: 0,
+    slotsTotal: launch500Program.maxSlots,
+    paymentsEnabled: false,
+  };
+}
 
 export const pilotProgram = {
   name: "Founding 50 Pilot Program",
@@ -49,7 +136,7 @@ export const launch500Program = {
   maxSlots: 500,
   claimedSlots: 0,
   monthlyPrice: 19.99,
-  annualPrice: 159.99,
+  annualPrice: 149.99,
   lockLabel: "Legacy pricing lock",
   badge: "Launch Operator",
 } as const;

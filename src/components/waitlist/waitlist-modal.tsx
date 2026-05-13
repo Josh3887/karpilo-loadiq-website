@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 
+import { LOADIQ_LAUNCH_KEYS } from "@/config/loadiq";
+
 type WaitlistModalProps = {
   open: boolean;
   onClose: () => void;
@@ -14,7 +16,23 @@ type WaitlistResponse = {
   success?: boolean;
   error?: string;
   alreadyReserved?: boolean;
+  cohort?: string;
 };
+
+const cohortOptions = [
+  {
+    value: LOADIQ_LAUNCH_KEYS.founder50,
+    label: "Founder 50 pilot",
+    description: "$14.99/mo or $129.99/yr, first 50 approved reservations",
+  },
+] as const;
+
+const billingProviderOptions = [
+  { value: "stripe_web", label: "Stripe / Web" },
+  { value: "apple_app_store", label: "Apple App Store" },
+  { value: "google_play", label: "Google Play" },
+  { value: "undecided", label: "Undecided" },
+] as const;
 
 export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -37,6 +55,10 @@ export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
       email: String(formData.get("email") || "").trim().toLowerCase(),
       company: String(formData.get("company") || "").trim(),
       fleet_size: String(formData.get("fleet_size") || "").trim(),
+      cohort: String(formData.get("cohort") || LOADIQ_LAUNCH_KEYS.founder50).trim(),
+      intended_billing_provider: String(
+        formData.get("intended_billing_provider") || "undecided",
+      ).trim(),
     };
 
     if (!payload.name || !payload.email) {
@@ -104,7 +126,8 @@ export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
           </h2>
 
           <p className="mt-3 leading-7 text-slate-300">
-            First 25 qualified signups are marked for founding operator review.
+            Founder 50 reservations are open for the first 50 approved users and
+            routed for direct founder review before any billing provider is used.
           </p>
 
           {status === "success" ? (
@@ -149,6 +172,40 @@ export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
                 className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition placeholder:text-slate-600 focus:border-sky-300/50"
               />
 
+              <label className="block">
+                <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-slate-400">
+                  Reservation cohort
+                </span>
+                <select
+                  name="cohort"
+                  defaultValue={LOADIQ_LAUNCH_KEYS.founder50}
+                  className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition focus:border-sky-300/50"
+                >
+                  {cohortOptions.map((option) => (
+                    <option key={option.value} value={option.value} className="bg-[#0B1120]">
+                      {option.label} - {option.description}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block">
+                <span className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-slate-400">
+                  Intended billing provider
+                </span>
+                <select
+                  name="intended_billing_provider"
+                  defaultValue="undecided"
+                  className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition focus:border-sky-300/50"
+                >
+                  {billingProviderOptions.map((option) => (
+                    <option key={option.value} value={option.value} className="bg-[#0B1120]">
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
               {error && (
                 <p className="text-sm font-bold text-red-300">{error}</p>
               )}
@@ -160,7 +217,7 @@ export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
               >
                 {status === "loading"
                   ? "Reserving..."
-                  : "Reserve Founding Access"}
+                  : "Reserve Eligibility"}
               </button>
             </form>
           )}

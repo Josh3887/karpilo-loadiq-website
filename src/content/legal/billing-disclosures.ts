@@ -1,3 +1,5 @@
+import { LOADIQ_CONTACT } from "@/config/loadiq";
+
 export type LegalLink = {
   label: string;
   href: string;
@@ -12,7 +14,7 @@ export type LegalSection = {
   links?: LegalLink[];
 };
 
-export const LEGAL_CONTACT_EMAIL = "support@karpiloloadiq.com";
+export const LEGAL_CONTACT_EMAIL = LOADIQ_CONTACT.billingEmail;
 
 export const APPLE_BILLING_LINKS: LegalLink[] = [
   {

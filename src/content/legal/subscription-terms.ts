@@ -21,7 +21,7 @@ export const SUBSCRIPTION_TERMS_SECTIONS: LegalSection[] = [
     id: "plan-access",
     title: "Plan Access and Feature Gates",
     paragraphs: [
-      "Free, Pro, Founder, Pilot, promotional, and future plan tiers may include different feature limits, saved-load access, exports, templates, comparisons, support paths, or usage limits. Features may be adjusted for future billing periods as the product evolves.",
+      "Founder Pilot, Launch, Standard, promotional, and future plan tiers may include different feature limits, saved-load access, exports, templates, comparisons, support paths, or usage limits. Features may be adjusted for future billing periods as the product evolves.",
       "Subscription access is tied to the account and billing platform used at purchase. Promotional access may not be transferable between accounts, platforms, businesses, or app stores.",
     ],
   },

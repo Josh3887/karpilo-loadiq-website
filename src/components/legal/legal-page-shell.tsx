@@ -4,7 +4,6 @@ import {
   COMPANY_NAME,
   LEGAL_LAST_UPDATED,
   SUPPORT_EMAIL,
-  legalNavigation,
 } from "@/config/legal";
 
 type LegalPageShellProps = {
@@ -28,15 +27,31 @@ export function LegalPageShell({
       </div>
 
       <section className="relative z-10 border-b border-white/10">
-        <div className="mx-auto max-w-6xl px-6 py-14 sm:px-8 md:py-20">
-          <Link
-            href="/"
-            className="text-xs font-black uppercase tracking-[0.24em] text-sky-300 transition hover:text-sky-200"
-          >
-            {COMPANY_NAME}
-          </Link>
+        <div className="mx-auto max-w-5xl px-6 py-12 sm:px-8 md:py-16">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Link
+              href="/"
+              className="text-xs font-black uppercase tracking-[0.24em] text-sky-300 transition hover:text-sky-200"
+            >
+              {COMPANY_NAME}
+            </Link>
+            <div className="flex items-center gap-2">
+              <Link
+                href="/"
+                className="rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-slate-300 transition hover:text-sky-200"
+              >
+                Home
+              </Link>
+              <Link
+                href="/legal"
+                className="rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-slate-300 transition hover:text-sky-200"
+              >
+                Legal Center
+              </Link>
+            </div>
+          </div>
 
-          <div className="mt-7 grid gap-8 lg:grid-cols-[1fr_280px] lg:items-end">
+          <div className="mt-7 grid gap-8 lg:grid-cols-[1fr_260px] lg:items-end">
             <div>
               <h1 className="max-w-4xl text-4xl font-black tracking-[-0.055em] text-white sm:text-6xl">
                 {title}
@@ -61,27 +76,21 @@ export function LegalPageShell({
               </a>
             </div>
           </div>
-
-          <nav
-            aria-label="Legal sections"
-            className="mt-10 flex gap-2 overflow-x-auto pb-2"
-          >
-            {legalNavigation.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="shrink-0 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-slate-300 transition hover:border-sky-300/35 hover:bg-sky-400/10 hover:text-sky-200"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-6xl px-6 py-12 sm:px-8 md:py-16">
+      <section className="relative z-10 mx-auto max-w-5xl px-6 py-12 sm:px-8 md:py-16">
         {children}
       </section>
+
+      <footer className="relative z-10 border-t border-white/10 px-6 py-6 text-sm text-slate-500 sm:px-8">
+        <div className="mx-auto flex max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} {COMPANY_NAME}. All rights reserved.</p>
+          <Link href="/contact" className="font-bold text-slate-400 transition hover:text-sky-300">
+            Contact support
+          </Link>
+        </div>
+      </footer>
     </main>
   );
 }

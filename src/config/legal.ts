@@ -1,5 +1,13 @@
-export const COMPANY_NAME = "Karpilo Endeavor Technologies LLC";
-export const SUPPORT_EMAIL = "Josh.karpilo@karpiloendeavortechnologies.com";
+import { LOADIQ_CONTACT, LOADIQ_BRAND } from "@/config/loadiq";
+
+export const COMPANY_NAME = LOADIQ_BRAND.companyName;
+export const SUPPORT_EMAIL = LOADIQ_CONTACT.supportEmail;
+export const HELP_EMAIL = LOADIQ_CONTACT.helpEmail;
+export const BILLING_EMAIL = LOADIQ_CONTACT.billingEmail;
+export const UPDATES_EMAIL = LOADIQ_CONTACT.updatesEmail;
+export const NEWSLETTER_EMAIL = LOADIQ_CONTACT.newsletterEmail;
+export const NOREPLY_EMAIL = LOADIQ_CONTACT.noreplyEmail;
+export const FEEDBACK_EMAIL = LOADIQ_CONTACT.feedbackEmail;
 export const LEGAL_LAST_UPDATED = "May 11, 2026";
 export const COLORADO_BASELINE =
   "Karpilo Endeavor Technologies LLC is organized for U.S.-based SaaS operations, with a Colorado/U.S.-focused legal baseline for launch-stage policy architecture.";
@@ -28,6 +36,11 @@ export type LegalPage = {
 };
 
 const supportLink = `mailto:${SUPPORT_EMAIL}`;
+const helpLink = `mailto:${HELP_EMAIL}`;
+const billingLink = `mailto:${BILLING_EMAIL}`;
+const updatesLink = `mailto:${UPDATES_EMAIL}`;
+const newsletterLink = `mailto:${NEWSLETTER_EMAIL}`;
+const feedbackLink = `mailto:${FEEDBACK_EMAIL}`;
 
 export const legalNavigation = [
   { label: "Legal Center", href: "/legal" },
@@ -38,6 +51,9 @@ export const legalNavigation = [
   { label: "Subscriptions", href: "/legal/subscription-terms" },
   { label: "Data Usage", href: "/legal/data-usage" },
   { label: "Acceptable Use", href: "/legal/acceptable-use" },
+  { label: "Safety Disclosure", href: "/legal/safety-disclosure" },
+  { label: "Billing Policy", href: "/legal/billing-policy" },
+  { label: "Pricing Lock", href: "/legal/pricing-lock-policy" },
   { label: "IP Notice", href: "/legal/trademark-ip" },
   { label: "Pilot Terms", href: "/legal/pilot-program" },
   { label: "Support", href: "/legal/support" },
@@ -257,7 +273,7 @@ export const legalPages: Record<string, LegalPage> = {
         paragraphs: [
           "Contact support with the account email, receipt or invoice details, billing platform, charge date, and a clear explanation. For Apple or Google purchases, users may also need to use those platform refund systems.",
         ],
-        links: [{ label: SUPPORT_EMAIL, href: supportLink }],
+        links: [{ label: BILLING_EMAIL, href: billingLink }],
       },
     ],
   },
@@ -360,7 +376,7 @@ export const legalPages: Record<string, LegalPage> = {
         paragraphs: [
           "For direct billing questions, cancellation questions, duplicate billing, access issues, or subscription support, contact us with your account email and receipt or invoice details.",
         ],
-        links: [{ label: SUPPORT_EMAIL, href: supportLink }],
+        links: [{ label: BILLING_EMAIL, href: billingLink }],
       },
     ],
   },
@@ -465,7 +481,105 @@ export const legalPages: Record<string, LegalPage> = {
         id: "launch500",
         title: "Launch 500 Transition",
         paragraphs: [
-          "After pilot capacity or pilot timing ends, users may transition into Official Launch Founders Pricing for the first 500 launch operators at $19.99/month or $159.99/year where available.",
+          "After pilot capacity or pilot timing ends, users may transition into Official Launch Founders Pricing for the first 500 launch operators at $19.99/month or $149.99/year where available.",
+        ],
+      },
+    ],
+  },
+  "safety-disclosure": {
+    slug: "safety-disclosure",
+    title: "Hands-Free & Driver Safety Disclosure",
+    navLabel: "Safety Disclosure",
+    description:
+      "Required website safety disclosure for using Karpilo LoadIQ responsibly around vehicles, equipment, and active transportation work.",
+    sections: [
+      {
+        id: "hands-free",
+        title: "Hands-Free Use Required",
+        paragraphs: [
+          "Karpilo LoadIQ is an operational decision-support tool. It must not be used in a way that distracts a driver, violates hands-free laws, interferes with safe vehicle operation, or conflicts with carrier, shipper, receiver, or roadway safety rules.",
+          "Drivers should review LoadIQ information only when safely parked or when another authorized person can operate the device without distracting the driver.",
+        ],
+      },
+      {
+        id: "driver-responsibility",
+        title: "Driver Responsibility",
+        paragraphs: [
+          "Users remain responsible for obeying all traffic laws, hours-of-service rules, company policies, device-use restrictions, and safety requirements.",
+          "LoadIQ estimates do not replace professional judgment, dispatch instructions, route verification, weather awareness, road condition review, or regulatory compliance.",
+        ],
+      },
+      {
+        id: "website-acknowledgment",
+        title: "Website Acknowledgment",
+        paragraphs: [
+          "The public website may ask visitors to acknowledge this safety disclosure before continuing. That acknowledgment is stored locally in the visitor's browser and may reappear if browser storage is cleared.",
+          "Other legal policies remain publicly available for review and are not presented as mandatory website acceptance gates unless a separate checkout, account, or product flow requires it.",
+        ],
+      },
+    ],
+  },
+  "billing-policy": {
+    slug: "billing-policy",
+    title: "Billing Policy",
+    navLabel: "Billing Policy",
+    description:
+      "Billing-channel policy for Stripe/Web, Apple App Store, Google Play, and future subscription handling.",
+    sections: [
+      {
+        id: "billing-channels",
+        title: "Billing Channels",
+        paragraphs: [
+          "Stripe/Web, Apple App Store, and Google Play are billing channels only. They do not independently determine founder pilot eligibility, launch cohort eligibility, or pricing-lock authority.",
+          "Supabase-controlled reservation and entitlement records are the internal authority for cohort status and pricing-lock eligibility. Billing providers may still control receipts, payment retries, taxes, cancellation tools, disputes, and refund paths for purchases processed through their systems.",
+        ],
+      },
+      {
+        id: "no-trial-initially",
+        title: "No Initial Free Trial",
+        paragraphs: [
+          "Founder pilot access, launch cohort access, and standard access do not include a free trial initially unless a later checkout screen or written offer states otherwise.",
+          "Karpilo LoadIQ does not offer a permanent free tier initially.",
+        ],
+      },
+      {
+        id: "provider-selection",
+        title: "Intended Provider Selection",
+        paragraphs: [
+          "Website reservations may ask users to select an intended billing provider: Stripe/Web, Apple App Store, Google Play, or Undecided. That selection helps plan launch operations and does not itself create a subscription or charge.",
+          "Actual billing begins only when an authorized billing flow is available and the user completes checkout through the applicable provider.",
+        ],
+      },
+    ],
+  },
+  "pricing-lock-policy": {
+    slug: "pricing-lock-policy",
+    title: "Pricing Lock Policy",
+    navLabel: "Pricing Lock",
+    description:
+      "How founder pilot and launch cohort pricing-lock eligibility is controlled, preserved, and lost.",
+    sections: [
+      {
+        id: "authority",
+        title: "Supabase Is Pricing-Lock Authority",
+        paragraphs: [
+          "Pricing-lock eligibility is controlled by Karpilo LoadIQ's Supabase reservation and entitlement records. Stripe coupons, app-store products, frontend text, emails, or screenshots do not override the server-side authority.",
+          "Founder pilot pricing is limited to the first 50 approved users at $14.99/month or $129.99/year. Launch cohort pricing is limited to the next 500 launch users at $19.99/month or $149.99/year. Standard users are currently priced at $24.99/month or $189.99/year.",
+        ],
+      },
+      {
+        id: "conditions",
+        title: "Eligibility Conditions",
+        paragraphs: [
+          "A pricing lock remains available only while the qualifying account remains active, in good standing, and compliant with applicable terms, billing requirements, and platform rules.",
+          "Pricing-lock eligibility may be lost after cancellation, account deletion, transfer attempts, unresolved payment failure, chargeback misuse, fraud, abuse, or policy violations.",
+        ],
+      },
+      {
+        id: "billing-provider-limits",
+        title: "Billing Provider Limits",
+        paragraphs: [
+          "Different billing platforms may have different technical pricing, tax, renewal, cancellation, and refund behavior. Karpilo LoadIQ preserves the internal entitlement classification separately from the provider's billing mechanics where possible.",
         ],
       },
     ],
@@ -483,7 +597,13 @@ export const legalPages: Record<string, LegalPage> = {
         paragraphs: [
           "For account help, privacy requests, account deletion, refund review, subscription questions, legal questions, billing concerns, or technical access issues, contact support with the account email and relevant details.",
         ],
-        links: [{ label: SUPPORT_EMAIL, href: supportLink }],
+        links: [
+          { label: `Support: ${SUPPORT_EMAIL}`, href: supportLink },
+          { label: `Help: ${HELP_EMAIL}`, href: helpLink },
+          { label: `Billing: ${BILLING_EMAIL}`, href: billingLink },
+          { label: `Launch updates: ${UPDATES_EMAIL}`, href: updatesLink },
+          { label: `Newsletter: ${NEWSLETTER_EMAIL}`, href: newsletterLink },
+        ],
       },
     ],
   },
@@ -501,7 +621,7 @@ export const legalPages: Record<string, LegalPage> = {
           "Pilot users and early operators are encouraged to share ideas, pain points, workflow friction, and operational scenarios that can improve LoadIQ.",
           "Feedback may be used to improve Karpilo products without creating compensation, ownership, confidentiality, or implementation obligations unless separately agreed in writing.",
         ],
-        links: [{ label: "Send feature feedback", href: supportLink }],
+        links: [{ label: "Send feature feedback", href: feedbackLink }],
       },
     ],
   },
@@ -522,6 +642,13 @@ export const legalCenterSections: LegalSection[] = [
     paragraphs: [
       "Use the support channel for policy questions, account deletion requests, privacy requests, billing support, security concerns, intellectual property questions, and subscription help.",
     ],
-    links: [{ label: SUPPORT_EMAIL, href: supportLink }],
+    links: [
+      { label: `Support: ${SUPPORT_EMAIL}`, href: supportLink },
+      { label: `Help: ${HELP_EMAIL}`, href: helpLink },
+      { label: `Billing: ${BILLING_EMAIL}`, href: billingLink },
+      { label: `Launch updates: ${UPDATES_EMAIL}`, href: updatesLink },
+      { label: `Newsletter: ${NEWSLETTER_EMAIL}`, href: newsletterLink },
+      { label: `Recommendations / Feedback: ${FEEDBACK_EMAIL}`, href: feedbackLink },
+    ],
   },
 ];

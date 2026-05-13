@@ -1,77 +1,134 @@
-export type PublicPlanId = "free" | "pro-monthly" | "pro-annual";
-export type InternalPlanTier = "free" | "pro" | "founder";
+export type PublicPlanId =
+  | "founder-monthly"
+  | "founder-annual"
+  | "launch-monthly"
+  | "launch-annual"
+  | "standard-monthly"
+  | "standard-annual";
+export type InternalPlanTier = "founder" | "launch" | "standard";
 export type BillingInterval = "month" | "year";
 
 export const FOUNDER_ACCESS = {
-  name: "Founding Operator Access",
-  maxSeats: 500,
-  publicTeaser: "First 500 operators may qualify for Founding Operator Access.",
+  name: "Founding 50 Pilot Access",
+  maxSeats: 50,
+  publicTeaser: "First 50 approved operators may qualify for Founding 50 Pilot Access.",
   hiddenPricingEnabled: false,
-  inviteCodeRequired: true,
-  monthlyPrice: 19.99,
-  annualPrice: 149.99,
+  inviteCodeRequired: false,
+  monthlyPrice: 14.99,
+  annualPrice: 129.99,
 } as const;
 
 export const PILOT_ACCESS = {
-  name: "Pilot Operator Access",
+  name: "Founding 50 Pilot Access",
   publicTeaser:
-    "Pilot Operator Access may be available for approved early-access users.",
-  maxSeats: 25,
-  durationDays: 45,
+    "Pilot Operator Access may be available for the first 50 approved early-access users.",
+  maxSeats: 50,
+  durationDays: 30,
   monthlyPrice: 14.99,
+  annualPrice: 129.99,
   lifetimeLockRule:
     "Pilot pricing remains locked while the subscription stays active and is lost if canceled, deleted, or transferred.",
 } as const;
 
+export const LAUNCH_ACCESS = {
+  name: "Launch 500 Access",
+  maxSeats: 500,
+  monthlyPrice: 19.99,
+  annualPrice: 149.99,
+} as const;
+
+export const STANDARD_ACCESS = {
+  name: "Standard Access",
+  monthlyPrice: 24.99,
+  annualPrice: 189.99,
+} as const;
+
 export const PUBLIC_PRICING_PLANS = [
   {
-    id: "free",
-    tier: "free",
-    name: "Free",
-    price: 0,
+    id: "founder-monthly",
+    tier: "founder",
+    name: "Founder Pilot Monthly",
+    price: PILOT_ACCESS.monthlyPrice,
     interval: "month",
-    description: "Basic calculator access for testing LoadIQ before upgrading.",
-    cta: "Current baseline",
+    description: "Reserved for the first 50 approved founder pilot users.",
+    cta: "Founder reservation",
     bullets: [
-      "Limited monthly calculations",
-      "Limited saved-load capacity",
-      "Manual fuel entry fallback",
-      "No exports",
-      "No advanced comparisons",
+      "No free trial during the initial pilot",
+      "Pricing lock controlled by Supabase reservation authority",
+      "Available while the account remains active and in good standing",
     ],
   },
   {
-    id: "pro-monthly",
-    tier: "pro",
-    name: "Pro Monthly",
-    price: 24.99,
+    id: "launch-monthly",
+    tier: "launch",
+    name: "Launch Monthly",
+    price: LAUNCH_ACCESS.monthlyPrice,
     interval: "month",
-    description: "For operators analyzing freight every week.",
-    cta: "Upgrade when checkout is wired",
+    description: "Reserved for the next 500 launch users after founder pilot allocation.",
+    cta: "Launch reservation",
     featured: true,
     bullets: [
-      "Unlimited load calculations",
-      "Saved load history",
-      "Pay templates and lane templates",
-      "Post-trip actual comparison",
-      "Advanced profitability intelligence",
+      "No free trial initially",
+      "Launch cohort pricing controlled by Supabase",
+      "Stripe, Apple, and Google remain billing channels only",
     ],
   },
   {
-    id: "pro-annual",
-    tier: "pro",
-    name: "Pro Annual",
-    price: 189.99,
-    interval: "year",
-    description: "Best public value for year-round freight decisions.",
-    cta: "Annual plan",
-    savingsLabel: "Save $109.89 vs monthly",
+    id: "standard-monthly",
+    tier: "standard",
+    name: "Standard Monthly",
+    price: STANDARD_ACCESS.monthlyPrice,
+    interval: "month",
+    description: "Standard public subscription pricing after launch cohorts.",
+    cta: "Standard reservation",
     bullets: [
-      "Everything in Pro Monthly",
-      "Lower effective monthly cost",
-      "Saved load and template workflows",
-      "Print/export readiness",
-      "Built for owner-operator planning",
+      "No permanent free tier initially",
+      "Public access after launch cohort allocation",
+      "Checkout remains disabled until billing is wired",
+    ],
+  },
+  {
+    id: "founder-annual",
+    tier: "founder",
+    name: "Founder Pilot Annual",
+    price: PILOT_ACCESS.annualPrice,
+    interval: "year",
+    description: "Annual founder pilot access for approved Founding 50 users.",
+    cta: "Founder annual",
+    bullets: [
+      "First 50 founder pilot users only",
+      "No permanent free tier",
+      "Billing provider selected after eligibility review",
+    ],
+  },
+  {
+    id: "launch-annual",
+    tier: "launch",
+    name: "Launch Annual",
+    price: LAUNCH_ACCESS.annualPrice,
+    interval: "year",
+    description: "Annual launch cohort pricing for the first 500 launch users.",
+    cta: "Launch annual",
+    savingsLabel: "Launch cohort annual rate",
+    bullets: [
+      "First 500 launch users",
+      "No free trial initially",
+      "Pricing lock eligibility stored server-side",
+    ],
+  },
+  {
+    id: "standard-annual",
+    tier: "standard",
+    name: "Standard Annual",
+    price: STANDARD_ACCESS.annualPrice,
+    interval: "year",
+    description: "Standard annual pricing for year-round freight decisions.",
+    cta: "Standard annual",
+    savingsLabel: "Standard annual rate",
+    bullets: [
+      "No lifetime pricing lock",
+      "No permanent free tier initially",
+      "Future billing through selected provider channel",
     ],
   },
 ] as const;
@@ -80,13 +137,13 @@ export const INTERNAL_FOUNDER_PLANS = [
   {
     tier: "founder",
     name: "Founder Monthly",
-    price: FOUNDER_ACCESS.monthlyPrice,
+    price: PILOT_ACCESS.monthlyPrice,
     interval: "month" as BillingInterval,
   },
   {
     tier: "founder",
     name: "Founder Annual",
-    price: FOUNDER_ACCESS.annualPrice,
+    price: PILOT_ACCESS.annualPrice,
     interval: "year" as BillingInterval,
   },
 ] as const;

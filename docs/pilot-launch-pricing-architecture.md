@@ -50,7 +50,7 @@ Public phases:
 4. `launch500_active`
    - Label: “Official Launch Active”
    - Slots: `XXX / 500 Legacy Pricing Slots Remaining`
-   - Pricing: `$19.99/month`, `$159.99/year`
+   - Pricing: `$19.99/month`, `$149.99/year`
 
 5. `standard_active`
    - Label: “Standard Public Access Now Active”
