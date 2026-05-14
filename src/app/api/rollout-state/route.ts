@@ -31,6 +31,13 @@ type RolloutPhaseRow = {
   target_route: string | null;
 };
 
+type AppHealthNoticeRow = {
+  id: string;
+  title: string | null;
+  public_message: string | null;
+  is_active?: boolean | null;
+};
+
 function parseTime(value: string | null) {
   if (!value) return null;
   const time = Date.parse(value);
@@ -95,16 +102,37 @@ async function getStatusEvents(): Promise<RolloutStatusEvent[]> {
 
   if (!error && data) return data as RolloutStatusEvent[];
 
+  const activeNoticeFallback = await supabaseServer
+    .from("active_system_health_notices")
+    .select("id,title,public_message")
+    .limit(5);
+
+  if (!activeNoticeFallback.error) {
+    return ((activeNoticeFallback.data ?? []) as AppHealthNoticeRow[]).map(
+      (notice) => ({
+        id: notice.id,
+        title: notice.title || "System notice",
+        message: notice.public_message || "",
+        severity: "info",
+        status: "active",
+      }),
+    );
+  }
+
   const fallback = await supabaseServer
     .from("system_health_notices")
-    .select("id,title,message,severity,status")
-    .eq("public_visible", true)
-    .in("status", ["active", "scheduled"])
-    .order("starts_at", { ascending: false })
+    .select("id,title,public_message,is_active")
+    .eq("is_active", true)
     .limit(5);
 
   if (fallback.error) return [];
-  return (fallback.data ?? []) as RolloutStatusEvent[];
+  return ((fallback.data ?? []) as AppHealthNoticeRow[]).map((notice) => ({
+    id: notice.id,
+    title: notice.title || "System notice",
+    message: notice.public_message || "",
+    severity: "info",
+    status: notice.is_active === false ? "resolved" : "active",
+  }));
 }
 
 export async function GET() {

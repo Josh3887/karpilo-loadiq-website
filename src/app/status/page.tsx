@@ -26,6 +26,30 @@ type HealthNotice = {
   created_at: string;
 };
 
+type AppHealthNoticeRow = {
+  id: string;
+  title: string | null;
+  public_message: string | null;
+  is_active?: boolean | null;
+  created_at: string | null;
+};
+
+function mapAppHealthNotice(row: AppHealthNoticeRow): HealthNotice {
+  const createdAt = row.created_at || new Date(0).toISOString();
+
+  return {
+    id: row.id,
+    title: row.title || "System notice",
+    message: row.public_message || "",
+    severity: "info",
+    status: row.is_active === false ? "resolved" : "active",
+    starts_at: row.created_at,
+    ends_at: null,
+    resolved_at: null,
+    created_at: createdAt,
+  };
+}
+
 async function getHealthNotices() {
   const { data, error } = await supabaseServer
     .from("system_health_events")
@@ -37,12 +61,23 @@ async function getHealthNotices() {
 
   if (!error) return (data ?? []) as HealthNotice[];
 
+  const activeNoticeFallback = await supabaseServer
+    .from("active_system_health_notices")
+    .select("id,title,public_message,created_at")
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  if (!activeNoticeFallback.error) {
+    return ((activeNoticeFallback.data ?? []) as AppHealthNoticeRow[]).map(
+      mapAppHealthNotice,
+    );
+  }
+
   const fallback = await supabaseServer
     .from("system_health_notices")
-    .select("id,title,message,severity,status,starts_at,ends_at,resolved_at,created_at")
-    .eq("public_visible", true)
-    .in("status", ["active", "scheduled", "resolved"])
-    .order("starts_at", { ascending: false })
+    .select("id,title,public_message,is_active,created_at")
+    .eq("is_active", true)
+    .order("created_at", { ascending: false })
     .limit(50);
 
   if (fallback.error) {
@@ -50,7 +85,7 @@ async function getHealthNotices() {
     return [];
   }
 
-  return (fallback.data ?? []) as HealthNotice[];
+  return ((fallback.data ?? []) as AppHealthNoticeRow[]).map(mapAppHealthNotice);
 }
 
 function formatDate(value: string | null) {

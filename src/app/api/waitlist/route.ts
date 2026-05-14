@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 
-import { supabase } from "@/lib/supabase";
 import { supabaseServer } from "@/lib/supabase-server";
 import { LOADIQ_CONTACT, LOADIQ_LAUNCH_KEYS } from "@/config/loadiq";
 import { sendAuditedEmail } from "@/lib/email-audit";
@@ -124,7 +123,7 @@ export async function POST(request: Request) {
 
     if (reservationErrorMessage) {
       return NextResponse.json(
-        { error: reservationErrorMessage },
+        { error: "Failed to save reservation." },
         { status: 409 },
       );
     }
@@ -301,7 +300,7 @@ export async function POST(request: Request) {
       }
     }
 
-    const { data: existing } = await supabase
+    const { data: existing } = await supabaseServer
       .from("waitlist")
       .select("id")
       .eq("email", email)
@@ -315,7 +314,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const { error: dbError } = await supabase.from("waitlist").insert({
+    const { error: dbError } = await supabaseServer.from("waitlist").insert({
       name,
       email,
       company,
@@ -335,7 +334,6 @@ export async function POST(request: Request) {
         return NextResponse.json(
           {
             error: "Failed to save reservation.",
-            detail: reservationErrorMessage,
           },
           { status: 500 }
         );

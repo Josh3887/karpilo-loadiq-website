@@ -262,9 +262,9 @@ begin
 
   select *
     into existing_row
-    from public.website_reservations
-    where lower(email) = normalized_email
-      and assigned_cohort = p_requested_cohort;
+    from public.website_reservations wr
+    where lower(wr.email) = normalized_email
+      and wr.assigned_cohort = p_requested_cohort;
 
   if found then
     insert into public.reservation_events (reservation_id, event_type, actor_type, metadata)
