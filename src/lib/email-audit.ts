@@ -27,6 +27,17 @@ function formatSender(fromName: string, fromEmail: string) {
   return `${fromName} <${fromEmail}>`;
 }
 
+function senderEmailFor(channelKey: string, fromEmail?: string) {
+  if (fromEmail) return fromEmail;
+  if (channelKey === "updates") {
+    return process.env.EMAIL_UPDATES || LOADIQ_CONTACT.updatesEmail;
+  }
+  if (channelKey === "newsletter") {
+    return process.env.EMAIL_NEWSLETTER || LOADIQ_CONTACT.newsletterEmail;
+  }
+  return process.env.EMAIL_FROM || LOADIQ_CONTACT.noreplyEmail;
+}
+
 function errorMessage(error: unknown) {
   if (error instanceof Error) return error.message;
   if (typeof error === "string") return error;
@@ -77,7 +88,7 @@ export async function sendAuditedEmail({
   to,
   subject,
   text,
-  fromEmail = LOADIQ_CONTACT.noreplyEmail,
+  fromEmail,
   fromName = "Karpilo LoadIQ",
   replyTo,
   relatedTable,
@@ -85,6 +96,7 @@ export async function sendAuditedEmail({
   metadata = {},
 }: AuditedEmailInput) {
   const recipientEmail = normalizeRecipient(to);
+  const senderEmail = senderEmailFor(channelKey, fromEmail);
   let outboxId: string | null = null;
 
   const { data: outbox, error: outboxError } = await supabaseServer
@@ -94,7 +106,7 @@ export async function sendAuditedEmail({
       provider: "resend",
       message_type: messageType,
       to_email: recipientEmail,
-      from_email: fromEmail,
+      from_email: senderEmail,
       reply_to_email: replyTo || null,
       subject,
       status: "queued",
@@ -115,7 +127,7 @@ export async function sendAuditedEmail({
 
   try {
     const response = await resend.emails.send({
-      from: formatSender(fromName, fromEmail),
+      from: formatSender(fromName, senderEmail),
       to,
       replyTo,
       subject,
