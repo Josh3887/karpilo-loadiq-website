@@ -123,7 +123,7 @@ export const LOADIQ_NAVIGATION_LINKS = [
 
 export const LOADIQ_APP_ACCESS_LINKS = [
   {
-    label: "Open LoadIQ Dashboard",
+    label: "Open Karpilo LoadIQ Dashboard",
     href: `${LOADIQ_URLS.app}/dashboard`,
     description: "Return to the protected APP dashboard.",
   },
@@ -145,12 +145,12 @@ export const LOADIQ_APP_ACCESS_LINKS = [
   {
     label: "Signup",
     href: `${LOADIQ_URLS.app}/auth/register`,
-    description: "Create LoadIQ access.",
+    description: "Create Karpilo LoadIQ access.",
   },
   {
     label: "Subscription Help",
     href: `mailto:${LOADIQ_CONTACT.billingEmail}`,
-    description: "Reach the LoadIQ billing channel.",
+    description: "Reach the Karpilo LoadIQ billing channel.",
   },
 ] as const;
 

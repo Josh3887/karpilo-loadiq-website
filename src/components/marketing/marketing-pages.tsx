@@ -22,6 +22,7 @@ import {
 
 import { AppStorePlaceholders } from "@/components/app-store/app-store-placeholders";
 import { DemoVideoPlayer } from "@/components/demo/DemoVideoPlayer";
+import { CurrentNationalDieselAverageCard } from "@/components/fuel/current-national-diesel-average-card";
 import SiteFooter from "@/components/navigation/site-footer";
 import SiteHeader from "@/components/navigation/site-header";
 import { UniversalBackButton } from "@/components/navigation/universal-back-button";
@@ -307,7 +308,7 @@ export function HomeMarketingPage() {
           </motion.p>
           <motion.div variants={fadeUp} className="mt-8">
             <PrimaryCta mode="link" href="/demo">
-              Explore LoadIQ
+              Explore Karpilo LoadIQ
             </PrimaryCta>
           </motion.div>
           <motion.div variants={fadeUp} className="mt-6 max-w-xl">
@@ -359,6 +360,8 @@ export function HomeMarketingPage() {
           </p>
         </motion.div>
       </section>
+
+      <CurrentNationalDieselAverageCard />
 
       <section className="mx-auto max-w-7xl px-6 py-12 sm:px-8">
         <RolloutCommandCenter
@@ -444,7 +447,7 @@ export function HomeMarketingPage() {
         </div>
         <div className="mt-6 flex justify-center">
           <PrimaryCta mode="link" href="/demo">
-            Explore LoadIQ
+            Explore Karpilo LoadIQ
           </PrimaryCta>
         </div>
       </section>
