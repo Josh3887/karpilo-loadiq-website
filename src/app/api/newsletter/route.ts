@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { LOADIQ_CONTACT } from "@/config/loadiq";
 import { sendAuditedEmail } from "@/lib/email-audit";
-import { supabaseServer } from "@/lib/supabase-server";
+import { getSupabaseServer } from "@/lib/supabase-server";
 
 const notifyEmail =
   process.env.LOADIQ_NOTIFY_EMAIL || LOADIQ_CONTACT.newsletterEmail;
@@ -22,6 +22,7 @@ export async function POST(request: Request) {
       );
     }
 
+    const supabaseServer = getSupabaseServer();
     const { data: subscriber, error } = await supabaseServer
       .from("newsletter_subscribers")
       .insert({

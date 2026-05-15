@@ -10,7 +10,7 @@ import {
   type RolloutSnapshot,
   type RolloutStatusEvent,
 } from "@/config/rollout";
-import { supabaseServer } from "@/lib/supabase-server";
+import { getSupabaseServer } from "@/lib/supabase-server";
 
 export const dynamic = "force-dynamic";
 
@@ -92,6 +92,7 @@ function mergePhase(row: RolloutPhaseRow, fallback: RolloutPhaseConfig, now: num
 }
 
 async function getStatusEvents(): Promise<RolloutStatusEvent[]> {
+  const supabaseServer = getSupabaseServer();
   const { data, error } = await supabaseServer
     .from("system_health_events")
     .select("id,title,message,severity,status")
@@ -139,6 +140,7 @@ export async function GET() {
   const now = Date.now();
 
   try {
+    const supabaseServer = getSupabaseServer();
     const { data, error } = await supabaseServer
       .from("rollout_phases")
       .select(

@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 
 import { LOADIQ_CONTACT } from "@/config/loadiq";
-import { supabaseServer } from "@/lib/supabase-server";
+import { getSupabaseServer } from "@/lib/supabase-server";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -50,6 +50,7 @@ async function markOutbox(
 ) {
   if (!outboxId) return;
 
+  const supabaseServer = getSupabaseServer();
   const { error } = await supabaseServer
     .from("email_outbox")
     .update(values)
@@ -67,6 +68,7 @@ async function recordDeliveryEvent(
   recipientEmail: string,
   payload: Record<string, unknown>,
 ) {
+  const supabaseServer = getSupabaseServer();
   const { error } = await supabaseServer.from("email_delivery_events").insert({
     email_outbox_id: outboxId,
     provider: "resend",
@@ -99,6 +101,7 @@ export async function sendAuditedEmail({
   const senderEmail = senderEmailFor(channelKey, fromEmail);
   let outboxId: string | null = null;
 
+  const supabaseServer = getSupabaseServer();
   const { data: outbox, error: outboxError } = await supabaseServer
     .from("email_outbox")
     .insert({

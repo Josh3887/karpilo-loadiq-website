@@ -4,7 +4,7 @@ import { AlertTriangle, CheckCircle2, Clock, Wrench } from "lucide-react";
 import SiteFooter from "@/components/navigation/site-footer";
 import SiteHeader from "@/components/navigation/site-header";
 import { UniversalBackButton } from "@/components/navigation/universal-back-button";
-import { supabaseServer } from "@/lib/supabase-server";
+import { getSupabaseServer } from "@/lib/supabase-server";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +51,7 @@ function mapAppHealthNotice(row: AppHealthNoticeRow): HealthNotice {
 }
 
 async function getHealthNotices() {
+  const supabaseServer = getSupabaseServer();
   const { data, error } = await supabaseServer
     .from("system_health_events")
     .select("id,title,message,severity,status,starts_at,ends_at,resolved_at,created_at")

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { supabaseServer } from "@/lib/supabase-server";
+import { getSupabaseServer } from "@/lib/supabase-server";
 import { LOADIQ_CONTACT, LOADIQ_LAUNCH_KEYS } from "@/config/loadiq";
 import { sendAuditedEmail } from "@/lib/email-audit";
 
@@ -91,6 +91,7 @@ export async function POST(request: Request) {
       );
     }
 
+    const supabaseServer = getSupabaseServer();
     let reservationSaved = false;
     let reservationAlreadyExists = false;
     let reservationId: string | null = null;

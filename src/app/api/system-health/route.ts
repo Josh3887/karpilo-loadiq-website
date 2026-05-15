@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { supabaseServer } from "@/lib/supabase-server";
+import { getSupabaseServer } from "@/lib/supabase-server";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +28,7 @@ function mapAppHealthNotice(row: AppHealthNoticeRow) {
 
 export async function GET() {
   try {
+    const supabaseServer = getSupabaseServer();
     const { data, error } = await supabaseServer
       .from("system_health_events")
       .select(

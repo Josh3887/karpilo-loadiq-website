@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { supabaseServer } from "@/lib/supabase-server";
+import { getSupabaseServer } from "@/lib/supabase-server";
 import { LOADIQ_CONTACT } from "@/config/loadiq";
 import { sendAuditedEmail } from "@/lib/email-audit";
 
@@ -54,6 +54,7 @@ export async function POST(request: Request) {
       );
     }
 
+    const supabaseServer = getSupabaseServer();
     const { error: intakeError } = await supabaseServer.from("support_intake").insert({
       intake_type: intakeType,
       name,
