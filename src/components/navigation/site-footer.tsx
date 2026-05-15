@@ -9,6 +9,7 @@ import {
 } from "@/config/data-providers";
 import {
   LOADIQ_BRAND,
+  LOADIQ_APP_ACCESS_LINKS,
   LOADIQ_CONTACT_CHANNELS,
   LOADIQ_FOOTER_LINKS,
   LOADIQ_URLS,
@@ -18,6 +19,7 @@ import { NewsletterSignup } from "@/components/newsletter/newsletter-signup";
 
 const footerLinks = {
   ...LOADIQ_FOOTER_LINKS,
+  appAccess: LOADIQ_APP_ACCESS_LINKS,
   external: [
     ...LOADIQ_CONTACT_CHANNELS.map((channel) => ({
       label: channel.label,
@@ -39,6 +41,7 @@ const legalPrimaryLinks = footerLinks.legal.slice(0, 4);
 const legalPolicyLinks = footerLinks.legal.slice(4);
 const supportContactLinks = footerLinks.external.slice(0, 4);
 const updateContactLinks = footerLinks.external.slice(4);
+const appAccessLinks = footerLinks.appAccess;
 
 export default function SiteFooter() {
   return (
@@ -176,6 +179,31 @@ export default function SiteFooter() {
                   {"detail" in link ? (
                     <span className="block break-all text-sm text-slate-500">{link.detail}</span>
                   ) : null}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="sm:col-span-2 xl:col-span-5">
+            <p className="text-sm font-black uppercase tracking-[0.18em] text-sky-300">
+              App Access
+            </p>
+
+            <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {appAccessLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                  className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 text-slate-400 transition hover:border-sky-300/30 hover:text-sky-300"
+                >
+                  <span className="block font-semibold text-slate-200">
+                    {link.label}
+                  </span>
+                  <span className="mt-2 block text-sm leading-6 text-slate-500">
+                    {link.description}
+                  </span>
                 </Link>
               ))}
             </div>

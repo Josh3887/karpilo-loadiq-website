@@ -9,10 +9,12 @@ import {
   LOADIQ_BRAND,
   LOADIQ_NAVIGATION_LINKS,
   LOADIQ_ROUTES,
+  LOADIQ_URLS,
 } from "@/config/loadiq";
 
 const mobileNavigationLinks = [
   { label: "Home", href: LOADIQ_ROUTES.home },
+  { label: "Open App", href: `${LOADIQ_URLS.app}/dashboard` },
   ...LOADIQ_NAVIGATION_LINKS,
   { label: "Contact", href: LOADIQ_ROUTES.contact },
   { label: "Legal", href: LOADIQ_ROUTES.legal },
@@ -59,12 +61,20 @@ export default function SiteHeader() {
           ))}
         </nav>
 
-        <Link
-          href={LOADIQ_ROUTES.pilotProgram}
-          className="hidden rounded-full border border-red-500/30 bg-red-500/10 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-red-100 transition hover:bg-red-500/20 sm:inline-flex"
-        >
-          Pilot Access
-        </Link>
+        <div className="hidden items-center gap-3 sm:flex">
+          <Link
+            href={`${LOADIQ_URLS.app}/dashboard`}
+            className="rounded-full border border-sky-400/30 bg-sky-400/10 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-sky-100 transition hover:bg-sky-400/20"
+          >
+            Open App
+          </Link>
+          <Link
+            href={LOADIQ_ROUTES.pilotProgram}
+            className="rounded-full border border-red-500/30 bg-red-500/10 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-red-100 transition hover:bg-red-500/20"
+          >
+            Pilot Access
+          </Link>
+        </div>
 
         <button
           type="button"
@@ -91,6 +101,13 @@ export default function SiteHeader() {
             {link.label}
           </Link>
         ))}
+        <Link
+          href={`${LOADIQ_URLS.app}/dashboard`}
+          onClick={() => setOpen(false)}
+          className="shrink-0 rounded-full border border-sky-400/35 bg-sky-400/12 px-4 py-2 text-[11px] font-black uppercase tracking-[0.13em] text-sky-100 transition hover:bg-sky-400/20"
+        >
+          Open App
+        </Link>
         <Link
           href={LOADIQ_ROUTES.pilotProgram}
           onClick={() => setOpen(false)}

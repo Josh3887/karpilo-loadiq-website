@@ -13,6 +13,7 @@ export const LOADIQ_BRAND = {
 
 export const LOADIQ_URLS = {
   website: "https://www.karpiloloadiq.com",
+  app: process.env.NEXT_PUBLIC_LOADIQ_APP_URL ?? "https://app.karpiloloadiq.com",
   companyWebsite: "https://www.karpiloendeavortechnologies.com",
   facebook: "https://www.facebook.com/",
 } as const;
@@ -118,6 +119,39 @@ export const LOADIQ_NAVIGATION_LINKS = [
   { label: "Pilot", href: LOADIQ_ROUTES.pilotProgram },
   { label: "Launch", href: LOADIQ_ROUTES.launchPromo },
   { label: "Founder", href: LOADIQ_ROUTES.founder },
+] as const;
+
+export const LOADIQ_APP_ACCESS_LINKS = [
+  {
+    label: "Open LoadIQ Dashboard",
+    href: `${LOADIQ_URLS.app}/dashboard`,
+    description: "Return to the protected APP dashboard.",
+  },
+  {
+    label: "Account Settings",
+    href: `${LOADIQ_URLS.app}/dashboard/settings/account`,
+    description: "Manage operator identity in the APP.",
+  },
+  {
+    label: "Manage Billing",
+    href: `${LOADIQ_URLS.app}/dashboard/settings/billing`,
+    description: "Open Billing Command in the APP.",
+  },
+  {
+    label: "Login",
+    href: `${LOADIQ_URLS.app}/auth/login`,
+    description: "Sign in to the APP.",
+  },
+  {
+    label: "Signup",
+    href: `${LOADIQ_URLS.app}/auth/register`,
+    description: "Create LoadIQ access.",
+  },
+  {
+    label: "Subscription Help",
+    href: `mailto:${LOADIQ_CONTACT.billingEmail}`,
+    description: "Reach the LoadIQ billing channel.",
+  },
 ] as const;
 
 export const LOADIQ_FOOTER_LINKS = {
