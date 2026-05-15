@@ -164,7 +164,7 @@ export async function POST(request: Request) {
           },
         })
         .select("id")
-        .single();
+        .maybeSingle();
 
       if (reservationError) {
         reservationErrorMessage = reservationError.message;
@@ -176,7 +176,7 @@ export async function POST(request: Request) {
         }
       } else {
         reservationSaved = true;
-        reservationId = reservation.id;
+        reservationId = reservation?.id ?? null;
       }
     }
 
@@ -270,7 +270,7 @@ export async function POST(request: Request) {
             },
           })
           .select("id")
-          .single();
+          .maybeSingle();
 
       if (rolloutWaitlistError && rolloutWaitlistError.code !== "23505") {
         console.error("ROLLOUT_WAITLIST_INSERT_ERROR:", rolloutWaitlistError);

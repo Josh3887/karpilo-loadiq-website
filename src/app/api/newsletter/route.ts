@@ -34,7 +34,7 @@ export async function POST(request: Request) {
         consented_at: new Date().toISOString(),
       })
       .select("id")
-      .single();
+      .maybeSingle();
 
     if (error) {
       if (error.code === "23505") {

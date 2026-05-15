@@ -118,12 +118,12 @@ export async function sendAuditedEmail({
       metadata,
     })
     .select("id")
-    .single();
+    .maybeSingle();
 
   if (outboxError) {
     console.error("EMAIL_OUTBOX_INSERT_ERROR:", outboxError);
   } else {
-    outboxId = outbox.id;
+    outboxId = outbox?.id ?? null;
   }
 
   await markOutbox(outboxId, { status: "sending" });

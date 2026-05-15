@@ -88,7 +88,7 @@ export async function POST(request: Request) {
         },
       })
       .select("id")
-      .single();
+      .maybeSingle();
 
     if (error && intakeError) {
       console.error("CONTACT_INSERT_ERROR:", error);
