@@ -51,7 +51,7 @@ export const PLATINUM_ACCESS = {
   annualPrice: 349.99,
   priceLabel: "$34.99/mo or $349.99/year",
   annualPositioning:
-    "Planned premium intelligence layer with advanced trend and forecasting concepts.",
+    "Planned premium intelligence layer that expands Gold with advanced trend and forecasting concepts.",
 } as const;
 
 export const PUBLIC_PRICING_PLANS = [
@@ -90,11 +90,13 @@ export const PUBLIC_PRICING_PLANS = [
     name: "Gold Monthly",
     price: STANDARD_ACCESS.monthlyPrice,
     interval: "month",
-    description: "Full operational feature tier for disciplined freight decisions.",
+    description:
+      "Full operational feature tier for disciplined freight decisions before the truck moves.",
     cta: "Gold reservation",
     bullets: [
       "7-day free trial where provider rules allow",
-      "Operational visibility, overhead awareness, and load-decision support",
+      "Load, route, fuel, overhead, and trip margin visibility",
+      "Decision support for deadhead exposure, fuel variance, and operational leakage",
       "Prices are subject to change for future billing periods or future subscribers",
     ],
   },
@@ -133,12 +135,14 @@ export const PUBLIC_PRICING_PLANS = [
     name: "Gold Annual",
     price: STANDARD_ACCESS.annualPrice,
     interval: "year",
-    description: "Annual Gold access for year-round freight decisions.",
+    description:
+      "Annual Gold access for year-round visibility, overhead awareness, and operating discipline.",
     cta: "Gold annual",
     savingsLabel: "Gold annual rate",
     bullets: [
       "7-day free trial where provider rules allow",
-      "Full operational feature tier",
+      "Full operational feature tier with lower effective monthly overhead",
+      "Trip margin awareness, recurring overhead visibility, and saved decision history",
       "Prices are subject to change for future billing periods or future subscribers",
     ],
   },
@@ -150,13 +154,14 @@ export const PUBLIC_PRICING_PLANS = [
     priceLabel: PLATINUM_ACCESS.priceLabel,
     interval: "year",
     description:
-      "Planned premium operational intelligence for deeper trend visibility and future reporting.",
+      "Planned premium operational intelligence that enhances Gold with deeper trend visibility and future reporting.",
     cta: "Platinum updates",
     statusLabel: PLATINUM_ACCESS.status,
     savingsLabel: "Planned premium layer",
     bullets: [
       "7-day free trial planned where provider rules allow",
       "Prices are subject to change before release",
+      "Gold remains the complete operational access tier; Platinum adds advanced intelligence",
       "IFTA estimation intelligence with verification-required disclaimers",
       "Maintenance and out-of-route intelligence for operational refinement",
       "Year-over-year and month-to-month profitability pattern visibility",

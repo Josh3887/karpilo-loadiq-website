@@ -79,6 +79,24 @@ const featureIcons = [
   ShieldCheck,
 ];
 
+const subscriptionValuePoints = [
+  {
+    title: "Deadhead awareness",
+    description:
+      "Unpaid miles still consume fuel, time, and equipment life. Karpilo LoadIQ keeps that pressure visible before an offer looks better than it is.",
+  },
+  {
+    title: "Fuel and overhead visibility",
+    description:
+      "Fuel variance, recurring overhead, reserves, and trip-specific costs can quietly compress margin when they are not modeled together.",
+  },
+  {
+    title: "Margin discipline",
+    description:
+      "The goal is not a guaranteed outcome. The goal is clearer numbers so operators can evaluate freight with less guesswork and more operating context.",
+  },
+] as const;
+
 function publicPlanPriceLabel(plan: (typeof PUBLIC_PRICING_PLANS)[number]) {
   return "priceLabel" in plan
     ? plan.priceLabel
@@ -239,6 +257,44 @@ function SectionIntro({
       </h2>
       <p className="mt-5 text-base leading-8 text-slate-300">{description}</p>
     </div>
+  );
+}
+
+function SubscriptionValuePanel() {
+  return (
+    <section className="mx-auto max-w-7xl px-6 pb-12 sm:px-8">
+      <div className="grid gap-6 border-y border-white/10 py-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-sky-300">
+            Operational value
+          </p>
+          <h2 className="mt-4 text-3xl font-black tracking-[-0.045em] text-white sm:text-4xl">
+            Built as operating visibility, not another blind cost.
+          </h2>
+          <p className="mt-5 leading-8 text-slate-300">
+            One overlooked deadhead leg, fuel variance, detention assumption, or
+            overhead gap can often exceed the monthly Gold subscription cost.
+            Karpilo LoadIQ does not guarantee savings; it helps expose pressure
+            earlier so decisions can be made with clearer numbers.
+          </p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {subscriptionValuePoints.map((point) => (
+            <div
+              key={point.title}
+              className="rounded-2xl border border-white/10 bg-[#0B1120]/80 p-5"
+            >
+              <h3 className="text-sm font-black uppercase tracking-[0.16em] text-sky-200">
+                {point.title}
+              </h3>
+              <p className="mt-3 text-sm leading-6 text-slate-400">
+                {point.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -500,9 +556,10 @@ export function PricingMarketingPage() {
     <AppFrame>
       <PageHeader
         eyebrow="Pricing"
-        title="Simple public pricing for freight decisions."
-        description="No founder story, no countdown stack, no promotional clutter. Just the current public subscription structure."
+        title="Operational pricing for clearer freight decisions."
+        description="Gold is the complete operational access tier. Platinum is a planned intelligence expansion. Pilot and Launch access preserve early-user pricing locks while checkout remains controlled server-side."
       />
+      <SubscriptionValuePanel />
       <section className="mx-auto max-w-7xl px-6 pb-16 sm:px-8">
         <div className="grid gap-5 lg:grid-cols-3">
           {PUBLIC_PRICING_PLANS.map((plan) => (
@@ -539,17 +596,21 @@ export function PricingMarketingPage() {
         </div>
 
         <div className="mt-8 rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-5 text-sm leading-7 text-slate-400">
-          Public checkout remains disabled until payment systems are explicitly enabled server-side. Locked promotional pricing is handled on dedicated pilot and launch pages.
+          Public checkout remains disabled until payment systems are explicitly
+          enabled server-side. Locked promotional pricing is handled on
+          dedicated pilot and launch pages. Karpilo LoadIQ is decision-support
+          software; it does not guarantee savings, profit, freight availability,
+          or business outcomes.
         </div>
         <div className="mt-8 flex justify-center">
-          <PrimaryCta onWaitlist={openWaitlist}>Start Subscription</PrimaryCta>
+          <PrimaryCta onWaitlist={openWaitlist}>Reserve Access</PrimaryCta>
         </div>
         <div className="mx-auto mt-6 max-w-2xl">
           <AppStorePlaceholders />
         </div>
       </section>
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Start Subscription" onWaitlist={openWaitlist} />
+      <StickyMobileCta label="Reserve Access" onWaitlist={openWaitlist} />
     </AppFrame>
   );
 }

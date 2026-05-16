@@ -229,7 +229,7 @@ export const demoCta = {
   eyebrow: "Try the workflow",
   title: "See the money before the wheels turn.",
   description:
-    "Use Karpilo LoadIQ to model freight, pressure-test assumptions, and protect your operating margin before accepting a load.",
+    "Use Karpilo LoadIQ to model freight, pressure-test assumptions, and understand margin pressure before accepting a load.",
   buttonLabel: "Explore Karpilo LoadIQ",
   href: "/signup",
 } satisfies DemoCta;

@@ -20,14 +20,14 @@ export const PRODUCT_HERO = {
   eyebrow: "Karpilo LoadIQ",
   title: "Freight profitability intelligence built by the mile.",
   description:
-    "A mobile-first command center for owner operators and independent contractors who want to pressure-test freight before accepting it.",
+    "A mobile-first command center for owner operators and independent contractors who want operational awareness before accepting freight.",
 } satisfies ProductWebsiteSection;
 
 export const PRODUCT_FEATURES = [
   {
     title: "Freight profitability analysis",
     description:
-      "Estimate gross revenue, operating cost, net profit, break-even RPM, and margin before accepting freight.",
+      "Estimate gross revenue, operating cost, net profit, break-even RPM, and margin pressure before accepting freight.",
   },
   {
     title: "True RPM and deadhead exposure",
@@ -47,7 +47,7 @@ export const PRODUCT_FEATURES = [
   {
     title: "Saved load history",
     description:
-      "Save estimates, duplicate prior loads, create lane templates, and revisit freight decisions on supported plans.",
+      "Save estimates, duplicate prior loads, create lane templates, and revisit operating decisions on supported plans.",
   },
   {
     title: "Post-trip actual comparison",

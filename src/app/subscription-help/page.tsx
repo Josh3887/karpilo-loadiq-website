@@ -2,7 +2,8 @@ import { WebsiteSubscriptionHelpPanel } from "@/components/account/website-acces
 
 export const metadata = {
   title: "Subscription Help | Karpilo LoadIQ",
-  description: "Request Karpilo LoadIQ subscription and billing help.",
+  description:
+    "Request Karpilo LoadIQ subscription, trial, account access, refund review, or billing help.",
 };
 
 export default function SubscriptionHelpPage() {

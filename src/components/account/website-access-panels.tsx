@@ -174,7 +174,7 @@ export function WebsiteLoginPanel() {
     <AccessShell
       eyebrow="Website Login"
       title="Sign in to Karpilo LoadIQ"
-      description="Use the same Supabase identity that connects your website access, reservations, account settings, billing support, and future mobile app access."
+      description="Use the same Supabase identity that connects website access, reservations, account settings, subscription support, and future mobile app readiness."
     >
       <form className="grid gap-5" onSubmit={handleSubmit}>
         <Field
@@ -255,7 +255,7 @@ export function WebsiteSignupPanel() {
     <AccessShell
       eyebrow="Website Signup"
       title="Create Karpilo LoadIQ access"
-      description="Signup uses the shared Supabase Auth identity. Reservation, pricing lock, and billing rules remain separate server-controlled records."
+      description="Signup creates the shared Supabase Auth identity for website account access. Reservation, pricing lock, and billing rules remain server-controlled records."
     >
       <form className="grid gap-5" onSubmit={handleSubmit}>
         <Field
@@ -440,7 +440,7 @@ export function WebsiteBillingPanel() {
     <AccessShell
       eyebrow="Subscription Account"
       title="Manage Karpilo LoadIQ subscription support"
-      description="Website billing access supports account and subscription help. Full Karpilo LoadIQ app operations remain separate from the public website."
+      description="Website billing access supports account readiness, subscription help, and billing questions while the operational app remains separate from the public website."
     >
       {loading ? (
         <p className="text-sm font-bold text-slate-400">Checking session...</p>
@@ -456,9 +456,9 @@ export function WebsiteBillingPanel() {
           </div>
           <p className="text-sm leading-6 text-slate-400">
             This website keeps account and subscription support available from
-            a computer while the full operational app experience remains
-            separate. Payment details stay with the authorized billing
-            provider.
+            a computer. Gold and planned Platinum access are positioned as
+            operational visibility tools, while payment details stay with the
+            authorized billing provider.
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             <Link
@@ -534,7 +534,7 @@ export function WebsiteSubscriptionHelpPanel() {
     <AccessShell
       eyebrow="Subscription Help"
       title="Karpilo LoadIQ billing support"
-      description="Send subscription, invoice, refund review, or access questions through the existing website support intake and email audit path."
+      description="Send subscription, invoice, refund review, account access, or trial questions through the existing website support intake and email audit path."
     >
       <form className="grid gap-5" onSubmit={submitHelp}>
         <Field

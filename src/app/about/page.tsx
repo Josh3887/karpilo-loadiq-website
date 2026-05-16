@@ -29,7 +29,7 @@ const features = [
   {
     icon: Route,
     title: "Deadhead Visibility",
-    description: "Expose unpaid miles before they quietly destroy profitability.",
+    description: "Expose unpaid miles before they quietly compress projected margin.",
   },
   {
     icon: Fuel,
@@ -49,7 +49,7 @@ const features = [
   {
     icon: ShieldCheck,
     title: "Operational Discipline",
-    description: "Built for carriers who run trucking like a business, not a gamble.",
+    description: "Built for carriers who want repeatable operating context before committing equipment.",
   },
 ];
 
