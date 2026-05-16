@@ -6,7 +6,10 @@ import { FormEvent, useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
 import { LOADIQ_CONTACT, LOADIQ_ROUTES } from "@/config/loadiq";
-import { supabase } from "@/lib/supabase";
+import {
+  getSupabaseBrowserClient,
+  hasSupabaseBrowserConfig,
+} from "@/lib/supabase";
 
 type PanelState = {
   loading: boolean;
@@ -20,15 +23,26 @@ const initialPanelState: PanelState = {
   error: null,
 };
 
+const SUPABASE_UNAVAILABLE_MESSAGE =
+  "Karpilo LoadIQ account access is temporarily unavailable. Please try again shortly.";
+
 function useWebsiteUser() {
+  const accountAccessUnavailable = !hasSupabaseBrowserConfig();
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!accountAccessUnavailable);
 
   useEffect(() => {
     let active = true;
+    const supabase = getSupabaseBrowserClient();
+
+    if (!supabase) {
+      return;
+    }
+
+    const client = supabase;
 
     async function loadUser() {
-      const { data } = await supabase.auth.getUser();
+      const { data } = await client.auth.getUser();
 
       if (active) {
         setUser(data.user);
@@ -38,7 +52,7 @@ function useWebsiteUser() {
 
     void loadUser();
 
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data } = client.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
     });
@@ -49,7 +63,7 @@ function useWebsiteUser() {
     };
   }, []);
 
-  return { user, loading };
+  return { user, loading, accountAccessUnavailable };
 }
 
 function AccessShell({
@@ -151,6 +165,16 @@ export function WebsiteLoginPanel() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setState({ loading: true, message: null, error: null });
+    const supabase = getSupabaseBrowserClient();
+
+    if (!supabase) {
+      setState({
+        loading: false,
+        message: null,
+        error: SUPABASE_UNAVAILABLE_MESSAGE,
+      });
+      return;
+    }
 
     const { error } = await supabase.auth.signInWithPassword({
       email: email.trim().toLowerCase(),
@@ -223,6 +247,16 @@ export function WebsiteSignupPanel() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setState({ loading: true, message: null, error: null });
+    const supabase = getSupabaseBrowserClient();
+
+    if (!supabase) {
+      setState({
+        loading: false,
+        message: null,
+        error: SUPABASE_UNAVAILABLE_MESSAGE,
+      });
+      return;
+    }
 
     const redirectTo = `${window.location.origin}${LOADIQ_ROUTES.accountSettings}`;
     const { error } = await supabase.auth.signUp({
@@ -297,7 +331,7 @@ export function WebsiteSignupPanel() {
 }
 
 export function WebsiteAccountSettingsPanel() {
-  const { user, loading } = useWebsiteUser();
+  const { user, loading, accountAccessUnavailable } = useWebsiteUser();
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [state, setState] = useState<PanelState>(initialPanelState);
@@ -305,6 +339,16 @@ export function WebsiteAccountSettingsPanel() {
   async function updateEmail(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setState({ loading: true, message: null, error: null });
+    const supabase = getSupabaseBrowserClient();
+
+    if (!supabase) {
+      setState({
+        loading: false,
+        message: null,
+        error: SUPABASE_UNAVAILABLE_MESSAGE,
+      });
+      return;
+    }
 
     const { error } = await supabase.auth.updateUser({
       email: newEmail.trim().toLowerCase(),
@@ -320,6 +364,16 @@ export function WebsiteAccountSettingsPanel() {
   async function updatePassword(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setState({ loading: true, message: null, error: null });
+    const supabase = getSupabaseBrowserClient();
+
+    if (!supabase) {
+      setState({
+        loading: false,
+        message: null,
+        error: SUPABASE_UNAVAILABLE_MESSAGE,
+      });
+      return;
+    }
 
     const { error } = await supabase.auth.updateUser({
       password: newPassword,
@@ -334,6 +388,17 @@ export function WebsiteAccountSettingsPanel() {
   }
 
   async function signOut() {
+    const supabase = getSupabaseBrowserClient();
+
+    if (!supabase) {
+      setState({
+        loading: false,
+        message: null,
+        error: SUPABASE_UNAVAILABLE_MESSAGE,
+      });
+      return;
+    }
+
     await supabase.auth.signOut();
     setState({
       loading: false,
@@ -350,6 +415,10 @@ export function WebsiteAccountSettingsPanel() {
     >
       {loading ? (
         <p className="text-sm font-bold text-slate-400">Checking session...</p>
+      ) : accountAccessUnavailable ? (
+        <p className="rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm font-bold text-red-100">
+          {SUPABASE_UNAVAILABLE_MESSAGE}
+        </p>
       ) : user ? (
         <div className="grid gap-6">
           <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
@@ -434,7 +503,7 @@ export function WebsiteAccountSettingsPanel() {
 }
 
 export function WebsiteBillingPanel() {
-  const { user, loading } = useWebsiteUser();
+  const { user, loading, accountAccessUnavailable } = useWebsiteUser();
 
   return (
     <AccessShell
@@ -444,6 +513,10 @@ export function WebsiteBillingPanel() {
     >
       {loading ? (
         <p className="text-sm font-bold text-slate-400">Checking session...</p>
+      ) : accountAccessUnavailable ? (
+        <p className="rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm font-bold text-red-100">
+          {SUPABASE_UNAVAILABLE_MESSAGE}
+        </p>
       ) : (
         <div className="grid gap-5">
           <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
