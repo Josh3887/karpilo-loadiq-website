@@ -79,6 +79,12 @@ const featureIcons = [
   ShieldCheck,
 ];
 
+function publicPlanPriceLabel(plan: (typeof PUBLIC_PRICING_PLANS)[number]) {
+  return "priceLabel" in plan
+    ? plan.priceLabel
+    : formatPriceLabel(plan.price, plan.interval);
+}
+
 type CtaMode = "waitlist" | "link";
 
 type PrimaryCtaProps = {
@@ -414,8 +420,13 @@ export function HomeMarketingPage() {
                 {plan.name}
               </p>
               <p className="mt-4 text-3xl font-black text-white">
-                {formatPriceLabel(plan.price, plan.interval)}
+                {publicPlanPriceLabel(plan)}
               </p>
+              {"statusLabel" in plan ? (
+                <p className="mt-2 text-xs font-black uppercase tracking-[0.16em] text-red-200">
+                  {plan.statusLabel}
+                </p>
+              ) : null}
               <p className="mt-3 text-sm leading-6 text-slate-400">
                 {plan.description}
               </p>
@@ -507,8 +518,13 @@ export function PricingMarketingPage() {
                 {plan.name}
               </p>
               <p className="mt-5 text-4xl font-black tracking-[-0.05em] text-white">
-                {formatPriceLabel(plan.price, plan.interval)}
+                {publicPlanPriceLabel(plan)}
               </p>
+              {"statusLabel" in plan ? (
+                <p className="mt-2 text-xs font-black uppercase tracking-[0.16em] text-red-200">
+                  {plan.statusLabel}
+                </p>
+              ) : null}
               <p className="mt-4 leading-7 text-slate-300">{plan.description}</p>
               <div className="mt-6 space-y-3">
                 {plan.bullets.map((bullet) => (

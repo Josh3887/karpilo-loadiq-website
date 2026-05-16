@@ -29,13 +29,36 @@ function formatSender(fromName: string, fromEmail: string) {
 
 function senderEmailFor(channelKey: string, fromEmail?: string) {
   if (fromEmail) return fromEmail;
+  if (channelKey === "billing") {
+    return process.env.BILLING_EMAIL || LOADIQ_CONTACT.billingEmail;
+  }
+  if (channelKey === "support") {
+    return process.env.SUPPORT_EMAIL || LOADIQ_CONTACT.supportEmail;
+  }
+  if (channelKey === "feature_requests" || channelKey === "feedback") {
+    return (
+      process.env.FOUNDER_FEEDBACK_EMAIL || LOADIQ_CONTACT.featureRequestEmail
+    );
+  }
   if (channelKey === "updates") {
-    return process.env.EMAIL_UPDATES || LOADIQ_CONTACT.updatesEmail;
+    return (
+      process.env.UPDATES_EMAIL ||
+      process.env.EMAIL_UPDATES ||
+      LOADIQ_CONTACT.updatesEmail
+    );
   }
   if (channelKey === "newsletter") {
-    return process.env.EMAIL_NEWSLETTER || LOADIQ_CONTACT.newsletterEmail;
+    return (
+      process.env.NEWSLETTER_EMAIL ||
+      process.env.EMAIL_NEWSLETTER ||
+      LOADIQ_CONTACT.newsletterEmail
+    );
   }
-  return process.env.EMAIL_FROM || LOADIQ_CONTACT.noreplyEmail;
+  return (
+    process.env.NO_REPLY_EMAIL ||
+    process.env.EMAIL_FROM ||
+    LOADIQ_CONTACT.noReplyEmail
+  );
 }
 
 function errorMessage(error: unknown) {

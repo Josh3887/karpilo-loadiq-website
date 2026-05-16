@@ -6,6 +6,7 @@ import { sendAuditedEmail } from "@/lib/email-audit";
 
 const allowedIntakeTypes = [
   "support",
+  "billing_support",
   "feedback",
   "pilot_inquiry",
   "launch_inquiry",
@@ -27,6 +28,7 @@ function contactInquiryTypeFor(intakeType: IntakeType) {
 }
 
 function destinationEmailFor(intakeType: IntakeType) {
+  if (intakeType === "billing_support") return LOADIQ_CONTACT.billingEmail;
   if (intakeType === "feedback") return LOADIQ_CONTACT.featureRequestEmail;
   if (intakeType === "pilot_inquiry" || intakeType === "launch_inquiry") {
     return LOADIQ_CONTACT.updatesEmail;
@@ -102,13 +104,15 @@ export async function POST(request: Request) {
     try {
       await sendAuditedEmail({
         channelKey:
-          intakeType === "feedback"
+          intakeType === "billing_support"
+            ? "billing"
+            : intakeType === "feedback"
             ? "feature_requests"
             : intakeType === "pilot_inquiry" || intakeType === "launch_inquiry"
               ? "updates"
               : "support",
         messageType: "contact_inquiry_notification",
-        to: process.env.LOADIQ_NOTIFY_EMAIL || destinationEmail,
+        to: destinationEmail,
         replyTo: email,
         subject: "New Karpilo LoadIQ Contact Inquiry",
         text: `

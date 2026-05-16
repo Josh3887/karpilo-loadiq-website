@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { CookieConsentBanner } from "@/components/legal/cookie-consent-banner";
+import { DevelopmentNoticePopup } from "@/components/development/development-notice-popup";
+import { DevelopmentReadinessBanner } from "@/components/development/development-readiness-banner";
 import { DriverSafetyAcknowledgment } from "@/components/legal/driver-safety-acknowledgment";
 import { SystemHealthBanner } from "@/components/system/system-health-banner";
 import { BRAND } from "@/config/brand";
@@ -68,7 +70,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <SystemHealthBanner />
+        <DevelopmentReadinessBanner />
         {children}
+        <DevelopmentNoticePopup />
         <DriverSafetyAcknowledgment />
         <CookieConsentBanner />
       </body>

@@ -5,7 +5,7 @@ import { sendAuditedEmail } from "@/lib/email-audit";
 import { getSupabaseServer } from "@/lib/supabase-server";
 
 const notifyEmail =
-  process.env.LOADIQ_NOTIFY_EMAIL || LOADIQ_CONTACT.newsletterEmail;
+  process.env.NEWSLETTER_EMAIL || LOADIQ_CONTACT.newsletterEmail;
 
 export async function POST(request: Request) {
   try {

@@ -19,14 +19,18 @@ export const LOADIQ_URLS = {
 } as const;
 
 export const LOADIQ_CONTACT = {
+  noReplyEmail: "noreply@karpiloloadiq.com",
   supportEmail: "support@karpiloloadiq.com",
-  helpEmail: "help@karpiloloadiq.com",
-  billingEmail: "billing@karpiloloadiq.com",
-  updatesEmail: "updates@karpiloloadiq.com",
+  helpEmail: "support@karpiloloadiq.com",
   newsletterEmail: "newsletter@karpiloloadiq.com",
+  updatesEmail: "updates@karpiloloadiq.com",
+  billingEmail: "billing@karpiloloadiq.com",
   noreplyEmail: "noreply@karpiloloadiq.com",
-  feedbackEmail: "Josh.karpilo@karpiloendeavortechnologies.com",
-  featureRequestEmail: "Josh.karpilo@karpiloendeavortechnologies.com",
+  founderFeedbackEmail: "j.karpilo@karpiloloadiq.com",
+  feedbackEmail: "j.karpilo@karpiloloadiq.com",
+  featureRequestEmail: "j.karpilo@karpiloloadiq.com",
+  corporateEmail: "Josh.karpilo@karpiloendeavortechnologies.com",
+  legalEmail: "Josh.karpilo@karpiloendeavortechnologies.com",
 } as const;
 
 export const LOADIQ_CONTACT_CHANNELS = [
@@ -73,9 +77,16 @@ export const LOADIQ_CONTACT_CHANNELS = [
     monitored: true,
   },
   {
+    id: "corporate",
+    label: "Corporate / Legal",
+    email: LOADIQ_CONTACT.corporateEmail,
+    description: "Legal, policies, partnerships, and corporate matters.",
+    monitored: true,
+  },
+  {
     id: "noreply",
     label: "Automated Notices",
-    email: LOADIQ_CONTACT.noreplyEmail,
+    email: LOADIQ_CONTACT.noReplyEmail,
     description: "System-generated confirmations and receipts. This inbox is not monitored.",
     monitored: false,
   },
@@ -89,6 +100,11 @@ export const LOADIQ_ROUTES = {
   demo: "/demo",
   founder: "/founder",
   contact: "/contact",
+  login: "/login",
+  signup: "/signup",
+  accountSettings: "/account/settings",
+  billing: "/billing",
+  subscriptionHelp: "/subscription-help",
   status: "/status",
   legal: "/legal",
   privacy: "/privacy",
@@ -125,31 +141,31 @@ export const LOADIQ_APP_ACCESS_LINKS = [
   {
     label: "Open Karpilo LoadIQ Dashboard",
     href: `${LOADIQ_URLS.app}/dashboard`,
-    description: "Return to the protected APP dashboard.",
+    description: "Enter the protected app dashboard.",
   },
   {
     label: "Account Settings",
-    href: `${LOADIQ_URLS.app}/dashboard/settings/account`,
-    description: "Manage operator identity in the APP.",
+    href: LOADIQ_ROUTES.accountSettings,
+    description: "Manage website account identity.",
   },
   {
     label: "Manage Billing",
-    href: `${LOADIQ_URLS.app}/dashboard/settings/billing`,
-    description: "Open Billing Command in the APP.",
+    href: LOADIQ_ROUTES.billing,
+    description: "Review billing access and subscription support.",
   },
   {
     label: "Login",
-    href: `${LOADIQ_URLS.app}/auth/login`,
-    description: "Sign in to the APP.",
+    href: LOADIQ_ROUTES.login,
+    description: "Sign in on the website.",
   },
   {
     label: "Signup",
-    href: `${LOADIQ_URLS.app}/auth/register`,
+    href: LOADIQ_ROUTES.signup,
     description: "Create Karpilo LoadIQ access.",
   },
   {
     label: "Subscription Help",
-    href: `mailto:${LOADIQ_CONTACT.billingEmail}`,
+    href: LOADIQ_ROUTES.subscriptionHelp,
     description: "Reach the Karpilo LoadIQ billing channel.",
   },
 ] as const;

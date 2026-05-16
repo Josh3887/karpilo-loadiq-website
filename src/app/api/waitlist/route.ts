@@ -5,8 +5,7 @@ import { LOADIQ_CONTACT, LOADIQ_LAUNCH_KEYS } from "@/config/loadiq";
 import { sendAuditedEmail } from "@/lib/email-audit";
 
 const notifyEmail =
-  process.env.LOADIQ_NOTIFY_EMAIL ||
-  LOADIQ_CONTACT.featureRequestEmail;
+  process.env.UPDATES_EMAIL || LOADIQ_CONTACT.updatesEmail;
 
 const allowedCohorts = [
   LOADIQ_LAUNCH_KEYS.founder50,

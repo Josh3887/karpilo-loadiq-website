@@ -4,8 +4,9 @@ export type PublicPlanId =
   | "launch-monthly"
   | "launch-annual"
   | "standard-monthly"
-  | "standard-annual";
-export type InternalPlanTier = "founder" | "launch" | "standard";
+  | "standard-annual"
+  | "platinum-planned";
+export type InternalPlanTier = "founder" | "launch" | "standard" | "platinum";
 export type BillingInterval = "month" | "year";
 
 export const FOUNDER_ACCESS = {
@@ -41,6 +42,15 @@ export const STANDARD_ACCESS = {
   name: "Standard Access",
   monthlyPrice: 24.99,
   annualPrice: 189.99,
+} as const;
+
+export const PLATINUM_ACCESS = {
+  name: "Platinum Annual",
+  status: "Coming Soon",
+  referencePrice: 34.99,
+  priceLabel: "Coming soon",
+  annualPositioning:
+    "Planned premium intelligence layer with user-selectable annual commitment structure.",
 } as const;
 
 export const PUBLIC_PRICING_PLANS = [
@@ -129,6 +139,26 @@ export const PUBLIC_PRICING_PLANS = [
       "No lifetime pricing lock",
       "No permanent free tier initially",
       "Future billing through selected provider channel",
+    ],
+  },
+  {
+    id: "platinum-planned",
+    tier: "platinum",
+    name: "Platinum Annual",
+    price: 0,
+    priceLabel: PLATINUM_ACCESS.priceLabel,
+    interval: "year",
+    description:
+      "Planned premium operational intelligence for deeper trend visibility and future reporting.",
+    cta: "Platinum updates",
+    statusLabel: PLATINUM_ACCESS.status,
+    savingsLabel: "Planned premium layer",
+    bullets: [
+      "IFTA estimation intelligence with verification-required disclaimers",
+      "Maintenance and out-of-route intelligence for operational refinement",
+      "Year-over-year and month-to-month profitability pattern visibility",
+      "Driver habit insights, efficiency drift signals, and margin compression trends",
+      "Premium reporting/dashboard experience planned for a later release",
     ],
   },
 ] as const;

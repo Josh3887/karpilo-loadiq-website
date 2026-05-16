@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import { AlertTriangle, Clock3, Lock, Radar, ShieldCheck } from "lucide-react";
 
 import {
   buildFallbackRolloutSnapshot,
+  DEVELOPMENT_READINESS_NOTICE,
   type RolloutPhaseSnapshot,
   type RolloutSnapshot,
 } from "@/config/rollout";
@@ -17,18 +17,8 @@ type RolloutCommandCenterProps = {
   showPublicLaunchCountdown?: boolean;
 };
 
-function splitTime(total: number) {
-  return {
-    days: Math.floor(total / 86400000),
-    hours: Math.floor((total / 3600000) % 24),
-    minutes: Math.floor((total / 60000) % 60),
-    seconds: Math.floor((total / 1000) % 60),
-  };
-}
-
 function useRolloutSnapshot() {
   const [snapshot, setSnapshot] = useState<RolloutSnapshot | null>(null);
-  const [now, setNow] = useState<number | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -46,81 +36,39 @@ function useRolloutSnapshot() {
 
         if (active) {
           setSnapshot(payload);
-          setNow(Date.now());
         }
       } catch {
         if (active) {
           setSnapshot(buildFallbackRolloutSnapshot());
-          setNow(Date.now());
         }
       }
     };
 
     load();
 
-    const clock = window.setInterval(() => {
-      setNow(Date.now());
-    }, 1000);
     const refresh = window.setInterval(load, 30000);
 
     return () => {
       active = false;
-      window.clearInterval(clock);
       window.clearInterval(refresh);
     };
   }, []);
 
-  return { snapshot, now };
+  return { snapshot };
 }
 
-function CountdownDigits({
-  targetAt,
-  now,
-}: {
-  targetAt: string | null;
-  now: number | null;
-}) {
-  const remaining = useMemo(() => {
-    if (!targetAt || !now) return null;
-    const target = Date.parse(targetAt);
-    if (!Number.isFinite(target)) return null;
-    return splitTime(Math.max(target - now, 0));
-  }, [now, targetAt]);
-
-  const items = remaining
-    ? [
-        ["Days", remaining.days],
-        ["Hours", remaining.hours],
-        ["Minutes", remaining.minutes],
-        ["Seconds", remaining.seconds],
-      ]
-    : [
-        ["Days", "--"],
-        ["Hours", "--"],
-        ["Minutes", "--"],
-        ["Seconds", "--"],
-      ];
-
+function ReadinessTimingPanel() {
   return (
-    <div className="grid grid-cols-4 gap-2">
-      {items.map(([label, value]) => (
-        <div
-          key={label}
-          className="flex h-[74px] flex-col items-center justify-center rounded-xl border border-white/10 bg-black/30 text-center"
-        >
-          <motion.p
-            key={`${label}-${value}`}
-            initial={{ opacity: 0.65, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="font-mono text-xl font-black text-sky-200 sm:text-3xl"
-          >
-            {typeof value === "number" ? String(value).padStart(2, "0") : value}
-          </motion.p>
-          <p className="mt-2 text-[8px] font-bold uppercase tracking-[0.1em] text-slate-500">
-            {label}
-          </p>
-        </div>
-      ))}
+    <div className="rounded-2xl border border-sky-300/20 bg-sky-400/10 p-4">
+      <p className="text-xs font-black uppercase tracking-[0.16em] text-sky-200">
+        {DEVELOPMENT_READINESS_NOTICE.eyebrow}
+      </p>
+      <h3 className="mt-2 text-lg font-black tracking-[-0.03em] text-white">
+        Timing under readiness review
+      </h3>
+      <p className="mt-2 text-sm leading-6 text-slate-300">
+        {DEVELOPMENT_READINESS_NOTICE.message}
+      </p>
     </div>
   );
 }
@@ -173,7 +121,7 @@ export function RolloutCommandCenter({
   compact = false,
   showPublicLaunchCountdown = false,
 }: RolloutCommandCenterProps) {
-  const { snapshot, now } = useRolloutSnapshot();
+  const { snapshot } = useRolloutSnapshot();
   const fallback = useMemo(() => buildFallbackRolloutSnapshot(), []);
   const current = snapshot ?? fallback;
   const activePhase = current.activePhase;
@@ -230,7 +178,7 @@ export function RolloutCommandCenter({
           </div>
 
           <div className="grid gap-4">
-            <CountdownDigits targetAt={activePhase.targetAt} now={now} />
+            <ReadinessTimingPanel />
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="font-mono text-sm font-black uppercase tracking-[0.1em] text-sky-200">
                 <SlotText phase={activePhase} />
@@ -251,16 +199,16 @@ export function RolloutCommandCenter({
             <div className="grid gap-4 lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-red-200">
-                  Final Public Launch
+                  Final Public Launch Readiness
                 </p>
                 <h3 className="mt-2 text-xl font-black tracking-[-0.035em] text-white">
-                  App live to public at 90 days from Phase 3 launch.
+                  Public access opens after final launch gates clear.
                 </h3>
                 <p className="mt-2 text-sm leading-6 text-slate-300">
-                  Target: November 24, 2026 at 08:00 MST.
+                  {DEVELOPMENT_READINESS_NOTICE.paymentNote}
                 </p>
               </div>
-              <CountdownDigits targetAt={publicLaunchPhase.startsAt} now={now} />
+              <ReadinessTimingPanel />
             </div>
           </div>
         ) : null}
