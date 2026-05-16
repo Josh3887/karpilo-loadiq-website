@@ -45,8 +45,8 @@ const pricingByCohort: Record<
   },
   standard_future: {
     pricingLockTier: "standard",
-    monthlyPrice: 24.99,
-    annualPrice: 189.99,
+    monthlyPrice: 29.99,
+    annualPrice: 299.99,
     createsLock: false,
   },
 };

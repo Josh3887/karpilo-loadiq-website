@@ -20,8 +20,8 @@ export const LOADIQ_URLS = {
 
 export const LOADIQ_CONTACT = {
   noReplyEmail: "noreply@karpiloloadiq.com",
-  supportEmail: "support@karpiloloadiq.com",
-  helpEmail: "support@karpiloloadiq.com",
+  supportEmail: "j.karpilo@karpiloloadiq.com",
+  helpEmail: "j.karpilo@karpiloloadiq.com",
   newsletterEmail: "newsletter@karpiloloadiq.com",
   updatesEmail: "updates@karpiloloadiq.com",
   billingEmail: "billing@karpiloloadiq.com",
@@ -139,9 +139,9 @@ export const LOADIQ_NAVIGATION_LINKS = [
 
 export const LOADIQ_APP_ACCESS_LINKS = [
   {
-    label: "Open Karpilo LoadIQ Dashboard",
-    href: `${LOADIQ_URLS.app}/dashboard`,
-    description: "Enter the protected app dashboard.",
+    label: "Prepare Mobile App Access",
+    href: LOADIQ_ROUTES.accountSettings,
+    description: "Review account readiness for future mobile app access.",
   },
   {
     label: "Account Settings",
@@ -151,7 +151,7 @@ export const LOADIQ_APP_ACCESS_LINKS = [
   {
     label: "Manage Billing",
     href: LOADIQ_ROUTES.billing,
-    description: "Review billing access and subscription support.",
+    description: "Review subscription access and billing support.",
   },
   {
     label: "Login",

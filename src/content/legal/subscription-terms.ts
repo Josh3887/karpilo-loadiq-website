@@ -29,7 +29,7 @@ export const SUBSCRIPTION_TERMS_SECTIONS: LegalSection[] = [
     id: "failed-payments",
     title: "Failed Payments and Suspension",
     paragraphs: [
-      "If a recurring payment fails, the payment provider may retry collection and send notices. LoadIQ may temporarily restrict paid features, downgrade access, suspend service, or cancel the subscription after unresolved payment failure.",
+      "If a recurring payment fails, the payment provider may retry collection and send notices. Karpilo LoadIQ may temporarily restrict paid features, downgrade access, suspend service, or cancel the subscription after unresolved payment failure.",
       "Users are responsible for keeping payment methods, account email, and platform billing details current.",
     ],
   },
@@ -45,7 +45,7 @@ export const SUBSCRIPTION_TERMS_SECTIONS: LegalSection[] = [
     id: "future-products",
     title: "Future Products and Enterprise Plans",
     paragraphs: [
-      "These terms are designed to support future Karpilo products, FleetOS subscriptions, team accounts, enterprise licensing, API subscriptions, usage-based plans, annual contracts, and B2B agreements. Enterprise or separately signed agreements may include different billing, refund, cancellation, data, or service terms.",
+      "These terms are designed to support future Karpilo products, Karpilo FleetOS subscriptions, team accounts, enterprise licensing, API subscriptions, usage-based plans, annual contracts, and B2B agreements. Enterprise or separately signed agreements may include different billing, refund, cancellation, data, or service terms.",
     ],
   },
 ];

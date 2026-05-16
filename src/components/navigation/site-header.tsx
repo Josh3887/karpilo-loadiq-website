@@ -48,11 +48,11 @@ export default function SiteHeader() {
 
           <div>
             <p className="text-sm font-black uppercase tracking-[0.28em] text-sky-100">
-              Karpilo
+              Karpilo LoadIQ
             </p>
 
             <p className="text-xs uppercase tracking-[0.32em] text-slate-500">
-              {LOADIQ_BRAND.shortName} ({LOADIQ_BRAND.productMark})
+              {LOADIQ_BRAND.productMark}
             </p>
           </div>
         </Link>

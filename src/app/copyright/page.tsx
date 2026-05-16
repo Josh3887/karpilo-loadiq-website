@@ -17,7 +17,7 @@ export default function CopyrightPage() {
     <LegalDocumentPage
       eyebrow="Copyright"
       title="Karpilo LoadIQ Copyright"
-      description="This page publishes the repository copyright notice for the public website and related LoadIQ materials."
+      description="This page publishes the repository copyright notice for the public website and related Karpilo LoadIQ materials."
       content={content}
       tone="red"
     />

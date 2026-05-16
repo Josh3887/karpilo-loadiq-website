@@ -82,7 +82,7 @@ export const legalPages: Record<string, LegalPage> = {
         title: "Information We Collect",
         paragraphs: [
           "We may collect account details, contact details, company or fleet information, waitlist submissions, support messages, product feedback, subscription status, plan selection, and billing metadata.",
-          "For LoadIQ and future operational products, we may process user-entered operational records such as pickup and delivery information, mileage, fuel assumptions, pay structure templates, overhead settings, post-trip actuals, facility notes, ratings, saved calculations, and profitability assumptions.",
+          "For Karpilo LoadIQ and future operational products, we may process user-entered operational records such as pickup and delivery information, mileage, fuel assumptions, pay structure templates, overhead settings, post-trip actuals, facility notes, ratings, saved calculations, and profitability assumptions.",
         ],
       },
       {
@@ -498,7 +498,7 @@ export const legalPages: Record<string, LegalPage> = {
         title: "Hands-Free Use Required",
         paragraphs: [
           "Karpilo LoadIQ is an operational decision-support tool. It must not be used in a way that distracts a driver, violates hands-free laws, interferes with safe vehicle operation, or conflicts with carrier, shipper, receiver, or roadway safety rules.",
-          "Drivers should review LoadIQ information only when safely parked or when another authorized person can operate the device without distracting the driver.",
+          "Drivers should review Karpilo LoadIQ information only when safely parked or when another authorized person can operate the device without distracting the driver.",
         ],
       },
       {
@@ -506,7 +506,7 @@ export const legalPages: Record<string, LegalPage> = {
         title: "Driver Responsibility",
         paragraphs: [
           "Users remain responsible for obeying all traffic laws, hours-of-service rules, company policies, device-use restrictions, and safety requirements.",
-          "LoadIQ estimates do not replace professional judgment, dispatch instructions, route verification, weather awareness, road condition review, or regulatory compliance.",
+          "Karpilo LoadIQ estimates do not replace professional judgment, dispatch instructions, route verification, weather awareness, road condition review, or regulatory compliance.",
         ],
       },
       {
@@ -535,10 +535,11 @@ export const legalPages: Record<string, LegalPage> = {
         ],
       },
       {
-        id: "no-trial-initially",
-        title: "No Initial Free Trial",
+        id: "trial-availability",
+        title: "Trial Availability",
         paragraphs: [
-          "Founder pilot access, launch cohort access, and standard access do not include a free trial initially unless a later checkout screen or written offer states otherwise.",
+          "Founder pilot access, launch cohort access, Gold access, and planned Platinum access are intended to support a 7-day free trial where the applicable billing provider and checkout flow allow it.",
+          "A checkout or platform screen should disclose the trial duration, conversion date, recurring price, billing interval, and cancellation method before the user is charged.",
           "Karpilo LoadIQ does not offer a permanent free tier initially.",
         ],
       },
@@ -564,7 +565,7 @@ export const legalPages: Record<string, LegalPage> = {
         title: "Supabase Is Pricing-Lock Authority",
         paragraphs: [
           "Pricing-lock eligibility is controlled by Karpilo LoadIQ's Supabase reservation and entitlement records. Stripe coupons, app-store products, frontend text, emails, or screenshots do not override the server-side authority.",
-          "Founder pilot pricing is limited to the first 50 approved users at $14.99/month or $129.99/year. Launch cohort pricing is limited to the next 500 launch users at $19.99/month or $149.99/year. Standard users are currently priced at $24.99/month or $189.99/year.",
+          "Founder pilot pricing is limited to the first 50 approved users at $14.99/month or $129.99/year. Launch cohort pricing is limited to the next 500 launch users at $19.99/month or $149.99/year. Gold users are currently priced at $29.99/month or $299.99/year, and planned Platinum pricing is currently presented at $34.99/month or $349.99/year before release.",
         ],
       },
       {
@@ -618,7 +619,7 @@ export const legalPages: Record<string, LegalPage> = {
         id: "feedback",
         title: "Operational Feedback",
         paragraphs: [
-          "Pilot users and early operators are encouraged to share ideas, pain points, workflow friction, and operational scenarios that can improve LoadIQ.",
+          "Pilot users and early operators are encouraged to share ideas, pain points, workflow friction, and operational scenarios that can improve Karpilo LoadIQ.",
           "Feedback may be used to improve Karpilo products without creating compensation, ownership, confidentiality, or implementation obligations unless separately agreed in writing.",
         ],
         links: [{ label: "Send feature feedback", href: feedbackLink }],

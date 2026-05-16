@@ -381,7 +381,7 @@ export function HomeMarketingPage() {
         <SectionIntro
           eyebrow="Core value"
           title="See the operating pressure before dispatch."
-          description="LoadIQ turns a freight offer into a clearer operating decision without burying drivers in generic software noise."
+          description="Karpilo LoadIQ turns a freight offer into a clearer operating decision without burying drivers in generic software noise."
         />
       </section>
 
@@ -445,14 +445,14 @@ export function HomeMarketingPage() {
           />
           <PromotionBanner
             eyebrow="Demo"
-            title="Try LoadIQ"
+            title="Try Karpilo LoadIQ"
             description="Use a public demo to move freight numbers and watch profitability change."
             href="/demo"
           />
           <PromotionBanner
             eyebrow="Founder"
             title="Built on the road"
-            description="Read the story behind LoadIQ and why it was designed for working operators."
+            description="Read the story behind Karpilo LoadIQ and why it was designed for working operators."
             href="/founder"
           />
         </div>
@@ -475,7 +475,7 @@ export function HomeMarketingPage() {
           </div>
           <div>
             <p className="leading-7 text-slate-300">
-              Joshua Karpilo is an active driver and owner-operator with more than 13 years in trucking. LoadIQ is shaped by real freight pressure, not boardroom theory.
+              Joshua Karpilo is an active driver and owner-operator with more than 13 years in trucking. Karpilo LoadIQ is shaped by real freight pressure, not boardroom theory.
             </p>
             <Link
               href="/founder"
@@ -488,7 +488,7 @@ export function HomeMarketingPage() {
       </section>
 
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Explore LoadIQ" href="/demo" onWaitlist={openWaitlist} />
+      <StickyMobileCta label="Explore Karpilo LoadIQ" href="/demo" onWaitlist={openWaitlist} />
     </AppFrame>
   );
 }
@@ -609,7 +609,7 @@ export function PilotProgramPage() {
             Your loyalty helped build this platform.
           </p>
           <p className="mt-4 leading-8 text-slate-300">
-            LoadIQ is being shaped by operators who understand the road, the pressure, and the cost of unclear freight decisions. Pilot feedback matters because the product is being built for people actually living the work.
+            Karpilo LoadIQ is being shaped by operators who understand the road, the pressure, and the cost of unclear freight decisions. Pilot feedback matters because the product is being built for people actually living the work.
           </p>
           <div className="mt-6">
             <PrimaryCta onWaitlist={openWaitlist}>Claim Pilot Access</PrimaryCta>
@@ -777,7 +777,7 @@ export function DemoMarketingPage() {
     <AppFrame>
       <PageHeader
         eyebrow="Interactive demo"
-        title="Try LoadIQ."
+        title="Try Karpilo LoadIQ."
         description="Move the core freight numbers and watch profitability, true RPM, fuel pressure, and operating cost change."
       />
       <DemoVideoPlayer />
@@ -854,7 +854,7 @@ export function FounderMarketingPage() {
     <AppFrame>
       <PageHeader
         eyebrow={founderStory.eyebrow}
-        title="Joshua Karpilo built LoadIQ from inside the work."
+        title="Joshua Karpilo built Karpilo LoadIQ from inside the work."
         description="The founder story belongs here, where it can build trust without competing against pricing, demo, or pilot conversion paths."
       />
       <section className="mx-auto max-w-5xl px-6 pb-20 sm:px-8">

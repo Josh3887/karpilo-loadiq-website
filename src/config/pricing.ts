@@ -39,18 +39,19 @@ export const LAUNCH_ACCESS = {
 } as const;
 
 export const STANDARD_ACCESS = {
-  name: "Standard Access",
-  monthlyPrice: 24.99,
-  annualPrice: 189.99,
+  name: "Gold Access",
+  monthlyPrice: 29.99,
+  annualPrice: 299.99,
 } as const;
 
 export const PLATINUM_ACCESS = {
-  name: "Platinum Annual",
+  name: "Platinum Access",
   status: "Coming Soon",
-  referencePrice: 34.99,
-  priceLabel: "Coming soon",
+  monthlyPrice: 34.99,
+  annualPrice: 349.99,
+  priceLabel: "$34.99/mo or $349.99/year",
   annualPositioning:
-    "Planned premium intelligence layer with user-selectable annual commitment structure.",
+    "Planned premium intelligence layer with advanced trend and forecasting concepts.",
 } as const;
 
 export const PUBLIC_PRICING_PLANS = [
@@ -63,9 +64,9 @@ export const PUBLIC_PRICING_PLANS = [
     description: "Reserved for the first 50 approved founder pilot users.",
     cta: "Founder reservation",
     bullets: [
-      "No free trial during the initial pilot",
-      "Pricing lock controlled by Supabase reservation authority",
-      "Available while the account remains active and in good standing",
+      "7-day free trial where provider rules allow",
+      "Lifetime pricing lock while the account remains active and in good standing",
+      "Future released Karpilo LoadIQ platform features made generally available inside the platform ecosystem",
     ],
   },
   {
@@ -78,23 +79,23 @@ export const PUBLIC_PRICING_PLANS = [
     cta: "Launch reservation",
     featured: true,
     bullets: [
-      "No free trial initially",
-      "Launch cohort pricing controlled by Supabase",
-      "Stripe, Apple, and Google remain billing channels only",
+      "7-day free trial where provider rules allow",
+      "First 500 launch users across two phases of 250",
+      "Lifetime pricing lock with future released Karpilo LoadIQ platform features made generally available inside the platform ecosystem",
     ],
   },
   {
     id: "standard-monthly",
     tier: "standard",
-    name: "Standard Monthly",
+    name: "Gold Monthly",
     price: STANDARD_ACCESS.monthlyPrice,
     interval: "month",
-    description: "Standard public subscription pricing after launch cohorts.",
-    cta: "Standard reservation",
+    description: "Full operational feature tier for disciplined freight decisions.",
+    cta: "Gold reservation",
     bullets: [
-      "No permanent free tier initially",
-      "Public access after launch cohort allocation",
-      "Checkout remains disabled until billing is wired",
+      "7-day free trial where provider rules allow",
+      "Operational visibility, overhead awareness, and load-decision support",
+      "Prices are subject to change for future billing periods or future subscribers",
     ],
   },
   {
@@ -107,8 +108,8 @@ export const PUBLIC_PRICING_PLANS = [
     cta: "Founder annual",
     bullets: [
       "First 50 founder pilot users only",
-      "No permanent free tier",
-      "Billing provider selected after eligibility review",
+      "7-day free trial where provider rules allow",
+      "Lifetime pricing lock with future released Karpilo LoadIQ platform features made generally available inside the platform ecosystem",
     ],
   },
   {
@@ -122,29 +123,29 @@ export const PUBLIC_PRICING_PLANS = [
     savingsLabel: "Launch cohort annual rate",
     bullets: [
       "First 500 launch users",
-      "No free trial initially",
-      "Pricing lock eligibility stored server-side",
+      "Two controlled phases of 250 users",
+      "7-day free trial and lifetime pricing lock where provider rules allow",
     ],
   },
   {
     id: "standard-annual",
     tier: "standard",
-    name: "Standard Annual",
+    name: "Gold Annual",
     price: STANDARD_ACCESS.annualPrice,
     interval: "year",
-    description: "Standard annual pricing for year-round freight decisions.",
-    cta: "Standard annual",
-    savingsLabel: "Standard annual rate",
+    description: "Annual Gold access for year-round freight decisions.",
+    cta: "Gold annual",
+    savingsLabel: "Gold annual rate",
     bullets: [
-      "No lifetime pricing lock",
-      "No permanent free tier initially",
-      "Future billing through selected provider channel",
+      "7-day free trial where provider rules allow",
+      "Full operational feature tier",
+      "Prices are subject to change for future billing periods or future subscribers",
     ],
   },
   {
     id: "platinum-planned",
     tier: "platinum",
-    name: "Platinum Annual",
+    name: "Platinum Planned",
     price: 0,
     priceLabel: PLATINUM_ACCESS.priceLabel,
     interval: "year",
@@ -154,11 +155,13 @@ export const PUBLIC_PRICING_PLANS = [
     statusLabel: PLATINUM_ACCESS.status,
     savingsLabel: "Planned premium layer",
     bullets: [
+      "7-day free trial planned where provider rules allow",
+      "Prices are subject to change before release",
       "IFTA estimation intelligence with verification-required disclaimers",
       "Maintenance and out-of-route intelligence for operational refinement",
       "Year-over-year and month-to-month profitability pattern visibility",
       "Driver habit insights, efficiency drift signals, and margin compression trends",
-      "Premium reporting/dashboard experience planned for a later release",
+      "Premium reporting experience planned for a later release",
     ],
   },
 ] as const;

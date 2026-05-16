@@ -237,7 +237,7 @@ export default function ContactPage() {
                 </label>
                 <textarea
                   name="message"
-                  placeholder="Tell us what you want LoadIQ to help you calculate."
+                  placeholder="Tell us what you want Karpilo LoadIQ to help you calculate."
                   rows={6}
                   className="mt-2 w-full resize-none rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition placeholder:text-slate-600 focus:border-sky-300/50"
                 />

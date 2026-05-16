@@ -127,7 +127,7 @@ export default function AboutPage() {
               href="/"
               className="group mt-10 inline-flex items-center justify-center rounded-full border border-red-500/30 bg-red-500/10 px-7 py-4 text-sm font-black uppercase tracking-[0.18em] text-red-100 transition hover:bg-red-500/20"
             >
-              Back to LoadIQ
+              Back to Karpilo LoadIQ
 
               <ArrowRight className="ml-3 h-5 w-5 transition group-hover:translate-x-1" />
             </Link>

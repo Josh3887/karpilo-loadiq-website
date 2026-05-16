@@ -142,8 +142,8 @@ export const launch500Program = {
 } as const;
 
 export const standardPricing = {
-  monthlyPrice: 24.99,
-  annualPrice: 189.99,
+  monthlyPrice: 29.99,
+  annualPrice: 299.99,
   lockLabel: "No lifetime lock",
 } as const;
 
@@ -154,7 +154,7 @@ export const founderStory = {
     "It was built by someone actively living it.",
   paragraphs: [
     "Joshua Karpilo, Founder & CEO of Karpilo Endeavor Technologies, is an active driver and owner-operator with more than 13 years in trucking.",
-    "LoadIQ comes from the daily pressure of real freight decisions: long hours, volatile fuel costs, breakdown exposure, broker pressure, deadhead, and thin margins that do not care how good a gross number looks.",
+    "Karpilo LoadIQ comes from the daily pressure of real freight decisions: long hours, volatile fuel costs, breakdown exposure, broker pressure, deadhead, and thin margins that do not care how good a gross number looks.",
     "The goal is not to dress trucking up in generic software language. The goal is to give drivers operational intelligence before the load is accepted.",
   ],
 } as const;
@@ -166,7 +166,7 @@ export const founderWelcomeCopy = [
   "The long hours, uncertainty, fuel costs, breakdowns, missed time, and sacrifices behind the windshield are hard to explain to people who have never lived them.",
   "Karpilo LoadIQ was built because I got tired of watching drivers make high-stakes decisions without real operational intelligence.",
   "This app is my contribution back to the people who keep this country moving. My goal is simple: help drivers think clearer, operate smarter, and stay profitable longer.",
-  "LoadIQ is only the beginning. It is the foundation for a larger operational ecosystem still being built carefully behind the scenes.",
+  "Karpilo LoadIQ is only the beginning. It is the foundation for a larger operational ecosystem still being built carefully behind the scenes.",
   "As an early supporter, your feedback matters. Some of the best ideas in trucking do not come from boardrooms. They come from truck stops, loading docks, breakdowns, and honest conversations between people who live this work.",
   "Thank you for believing in the vision early. Your loyalty during this pilot phase earns you a lifetime pricing lock as one of our founding operators, as long as your account remains active and in good standing.",
   "Welcome to the beginning of a new journey.",

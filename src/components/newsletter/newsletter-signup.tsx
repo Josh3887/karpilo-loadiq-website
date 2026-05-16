@@ -81,7 +81,7 @@ export function NewsletterSignup() {
       </div>
       {status === "success" ? (
         <p className="mt-3 text-xs font-bold text-sky-200">
-          You are subscribed to LoadIQ launch updates.
+          You are subscribed to Karpilo LoadIQ launch updates.
         </p>
       ) : null}
       {error ? <p className="mt-3 text-xs font-bold text-red-300">{error}</p> : null}

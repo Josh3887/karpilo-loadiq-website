@@ -39,7 +39,7 @@ export function DriverSafetyAcknowledgment() {
             Driver Safety Required
           </div>
           <h2 className="mt-5 text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
-            Use LoadIQ only when it is safe and hands-free.
+            Use Karpilo LoadIQ only when it is safe and hands-free.
           </h2>
           <div className="mt-5 space-y-4 text-sm leading-7 text-slate-300 sm:text-base">
             <p>

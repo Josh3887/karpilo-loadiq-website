@@ -17,7 +17,7 @@ export default function NoticePage() {
     <LegalDocumentPage
       eyebrow="Notice"
       title="Karpilo LoadIQ Notice"
-      description="This page publishes the proprietary notice for the public website, product concepts, visual systems, and related LoadIQ materials."
+      description="This page publishes the proprietary notice for the public website, product concepts, visual systems, and related Karpilo LoadIQ materials."
       content={content}
     />
   );

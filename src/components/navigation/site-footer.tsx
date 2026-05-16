@@ -59,7 +59,7 @@ export default function SiteFooter() {
             </div>
             <div>
               <p className="text-lg font-black tracking-[-0.03em] text-white">
-                {LOADIQ_BRAND.shortName}
+                {LOADIQ_BRAND.productName}
               </p>
               <p className="text-xs uppercase tracking-[0.22em] text-slate-500">
                 {LOADIQ_BRAND.companyName}
@@ -76,7 +76,7 @@ export default function SiteFooter() {
           </p>
 
           <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-red-300">
-            LoadIQ • FleetOS • Intelligence Systems
+            Karpilo LoadIQ • Karpilo FleetOS • Intelligence Systems
           </p>
 
           <div className="mt-6">

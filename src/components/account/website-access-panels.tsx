@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
-import { LOADIQ_CONTACT, LOADIQ_ROUTES, LOADIQ_URLS } from "@/config/loadiq";
+import { LOADIQ_CONTACT, LOADIQ_ROUTES } from "@/config/loadiq";
 import { supabase } from "@/lib/supabase";
 
 type PanelState = {
@@ -174,7 +174,7 @@ export function WebsiteLoginPanel() {
     <AccessShell
       eyebrow="Website Login"
       title="Sign in to Karpilo LoadIQ"
-      description="Use the same Supabase identity that connects your website access, reservations, billing support, and protected app dashboard."
+      description="Use the same Supabase identity that connects your website access, reservations, account settings, billing support, and future mobile app access."
     >
       <form className="grid gap-5" onSubmit={handleSubmit}>
         <Field
@@ -438,9 +438,9 @@ export function WebsiteBillingPanel() {
 
   return (
     <AccessShell
-      eyebrow="Billing Command"
-      title="Manage Karpilo LoadIQ billing"
-      description="Website billing access uses the same account email, Supabase user, and Stripe subscription assumptions as the app. No second billing identity is created."
+      eyebrow="Subscription Account"
+      title="Manage Karpilo LoadIQ subscription support"
+      description="Website billing access supports account and subscription help. Full Karpilo LoadIQ app operations remain separate from the public website."
     >
       {loading ? (
         <p className="text-sm font-bold text-slate-400">Checking session...</p>
@@ -455,10 +455,10 @@ export function WebsiteBillingPanel() {
             </p>
           </div>
           <p className="text-sm leading-6 text-slate-400">
-            Stripe customer portal wiring was not present in this WEBSITE repo.
-            This page keeps billing access website-side and routes subscription
-            help through the existing support channel until portal automation is
-            approved.
+            This website keeps account and subscription support available from
+            a computer while the full operational app experience remains
+            separate. Payment details stay with the authorized billing
+            provider.
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             <Link
@@ -468,12 +468,10 @@ export function WebsiteBillingPanel() {
               {user ? "Subscription Help" : "Login"}
             </Link>
             <Link
-              href={`${LOADIQ_URLS.app}/dashboard`}
-              target="_blank"
-              rel="noreferrer"
+              href={LOADIQ_ROUTES.accountSettings}
               className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-center text-xs font-black uppercase tracking-[0.16em] text-slate-200"
             >
-              Open Karpilo LoadIQ Dashboard
+              Prepare Mobile App Access
             </Link>
           </div>
           <p className="text-xs leading-5 text-slate-500">
