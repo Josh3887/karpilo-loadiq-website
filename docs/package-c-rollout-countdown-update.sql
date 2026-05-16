@@ -21,7 +21,7 @@ set
   target_route = '/pilot-program',
   metadata = metadata || jsonb_build_object(
     'anchor_timezone', 'MST UTC-07',
-    'notification_recipient', 'josh.karpilo@karpiloendeavortechnologies.com',
+    'notification_recipient', 'j.karpilo@karpiloloadiq.com',
     'reservation_scope', 'first_50'
   )
 where phase_key = 'PRELAUNCH_WAITLIST';
