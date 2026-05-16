@@ -1,0 +1,5 @@
+{
+    "vercel.files.exclude": [
+        "**/node_modules"
+    ]
+}
