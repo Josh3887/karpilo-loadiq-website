@@ -25,6 +25,8 @@ const initialPanelState: PanelState = {
 
 const SUPABASE_UNAVAILABLE_MESSAGE =
   "Karpilo LoadIQ account access is temporarily unavailable. Please try again shortly.";
+const PORTAL_UNAVAILABLE_MESSAGE =
+  "Subscription management is temporarily unavailable. Please contact support.";
 
 function useWebsiteUser() {
   const accountAccessUnavailable = !hasSupabaseBrowserConfig();
@@ -120,6 +122,25 @@ function FormStatus({ state }: { state: PanelState }) {
   return null;
 }
 
+async function getWebsiteAccessToken() {
+  const supabase = getSupabaseBrowserClient();
+
+  if (!supabase) {
+    throw new Error(SUPABASE_UNAVAILABLE_MESSAGE);
+  }
+
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.getSession();
+
+  if (error || !session?.access_token) {
+    throw new Error("Login is required before account changes can be submitted.");
+  }
+
+  return session.access_token;
+}
+
 function Field({
   label,
   name,
@@ -153,6 +174,225 @@ function Field({
         className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-base text-white outline-none transition placeholder:text-slate-600 focus:border-sky-300/45"
       />
     </label>
+  );
+}
+
+function WebsiteBillingPortalButton() {
+  const [state, setState] = useState<PanelState>(initialPanelState);
+
+  async function openPortal() {
+    try {
+      setState({
+        loading: true,
+        message: "Opening subscription management...",
+        error: null,
+      });
+
+      const token = await getWebsiteAccessToken();
+      const response = await fetch("/api/billing/portal", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = (await response.json().catch(() => ({}))) as {
+        url?: string;
+        error?: string;
+      };
+
+      if (!response.ok || !data.url) {
+        setState({
+          loading: false,
+          message: null,
+          error: data.error ?? PORTAL_UNAVAILABLE_MESSAGE,
+        });
+        return;
+      }
+
+      window.location.href = data.url;
+    } catch (error) {
+      setState({
+        loading: false,
+        message: null,
+        error:
+          error instanceof Error ? error.message : PORTAL_UNAVAILABLE_MESSAGE,
+      });
+    }
+  }
+
+  return (
+    <div className="grid gap-3">
+      <button
+        type="button"
+        disabled={state.loading}
+        onClick={openPortal}
+        className="rounded-2xl border border-sky-300/35 bg-sky-400/15 px-4 py-3 text-center text-xs font-black uppercase tracking-[0.16em] text-sky-100 transition hover:bg-sky-400/25 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        Manage Subscription
+      </button>
+      <FormStatus state={state} />
+    </div>
+  );
+}
+
+function WebsiteAccountDeletionPanel({ userEmail }: { userEmail: string }) {
+  const [contactEmail, setContactEmail] = useState(userEmail);
+  const [reason, setReason] = useState("");
+  const [requestedScope, setRequestedScope] = useState<
+    "account_and_data" | "data_only"
+  >("account_and_data");
+  const [acknowledgedSubscriptionWarning, setAcknowledgedSubscriptionWarning] =
+    useState(false);
+  const [confirmationPhrase, setConfirmationPhrase] = useState("");
+  const [state, setState] = useState<PanelState>(initialPanelState);
+
+  async function submitDeletionRequest(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setState({ loading: true, message: null, error: null });
+
+    try {
+      const token = await getWebsiteAccessToken();
+      const response = await fetch("/api/account/deletion-request", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contactEmail,
+          reason,
+          requestedScope,
+          acknowledgedSubscriptionWarning,
+          confirmationPhrase,
+        }),
+      });
+      const data = (await response.json().catch(() => ({}))) as {
+        error?: string;
+      };
+
+      if (!response.ok) {
+        setState({
+          loading: false,
+          message: null,
+          error: data.error ?? "Unable to submit account deletion request.",
+        });
+        return;
+      }
+
+      setReason("");
+      setConfirmationPhrase("");
+      setAcknowledgedSubscriptionWarning(false);
+      setState({
+        loading: false,
+        message:
+          "Deletion request received. Account deletion and subscription cancellation remain separate review paths.",
+        error: null,
+      });
+    } catch (error) {
+      setState({
+        loading: false,
+        message: null,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Unable to submit account deletion request.",
+      });
+    }
+  }
+
+  return (
+    <form
+      onSubmit={submitDeletionRequest}
+      className="grid gap-4 rounded-2xl border border-red-400/25 bg-red-500/10 p-4"
+    >
+      <div>
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-red-200">
+          Danger Zone
+        </p>
+        <h2 className="mt-2 text-xl font-black text-white">
+          Request account deletion
+        </h2>
+        <p className="mt-3 text-sm leading-6 text-slate-300">
+          Deleting your account may remove access to saved loads, profiles,
+          settings, and account history. Subscription cancellation is handled
+          separately through billing management unless already canceled.
+        </p>
+      </div>
+
+      <Field
+        label="Contact email"
+        name="deletion_contact_email"
+        type="email"
+        required
+        value={contactEmail}
+        onChange={setContactEmail}
+      />
+
+      <label className="grid gap-2 text-sm font-bold text-slate-200">
+        Request scope
+        <select
+          value={requestedScope}
+          onChange={(event) =>
+            setRequestedScope(
+              event.target.value as "account_and_data" | "data_only",
+            )
+          }
+          className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-base text-white outline-none transition focus:border-sky-300/45"
+        >
+          <option value="account_and_data">Delete account and app data</option>
+          <option value="data_only">Delete app data where possible</option>
+        </select>
+      </label>
+
+      <label className="grid gap-2 text-sm font-bold text-slate-200">
+        Optional context
+        <textarea
+          value={reason}
+          onChange={(event) => setReason(event.target.value)}
+          className="min-h-28 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-base text-white outline-none transition placeholder:text-slate-600 focus:border-sky-300/45"
+        />
+      </label>
+
+      <label className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm leading-6 text-slate-300">
+        <input
+          type="checkbox"
+          checked={acknowledgedSubscriptionWarning}
+          onChange={(event) =>
+            setAcknowledgedSubscriptionWarning(event.target.checked)
+          }
+          className="mt-1 h-4 w-4 accent-red-300"
+        />
+        <span>
+          I understand account deletion does not automatically cancel active
+          subscriptions with Stripe, Apple, or Google, and some records may be
+          retained for legal, billing, fraud prevention, tax, dispute, or
+          security reasons.
+        </span>
+      </label>
+
+      <Field
+        label="Type DELETE to confirm"
+        name="deletion_confirmation"
+        required
+        value={confirmationPhrase}
+        onChange={setConfirmationPhrase}
+      />
+
+      <FormStatus state={state} />
+
+      <button
+        type="submit"
+        disabled={
+          state.loading ||
+          !contactEmail ||
+          !acknowledgedSubscriptionWarning ||
+          confirmationPhrase.trim() !== "DELETE"
+        }
+        className="rounded-2xl border border-red-300/40 bg-red-500/10 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-red-100 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Submit Deletion Request
+      </button>
+    </form>
   );
 }
 
@@ -483,6 +723,8 @@ export function WebsiteAccountSettingsPanel() {
               Logout
             </button>
           </div>
+
+          <WebsiteAccountDeletionPanel userEmail={user.email ?? ""} />
         </div>
       ) : (
         <div className="grid gap-4">
@@ -534,18 +776,30 @@ export function WebsiteBillingPanel() {
             authorized billing provider.
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
-            <Link
-              href={user ? LOADIQ_ROUTES.subscriptionHelp : LOADIQ_ROUTES.login}
-              className="rounded-2xl border border-sky-300/35 bg-sky-400/15 px-4 py-3 text-center text-xs font-black uppercase tracking-[0.16em] text-sky-100"
-            >
-              {user ? "Subscription Help" : "Login"}
-            </Link>
+            {user ? (
+              <WebsiteBillingPortalButton />
+            ) : (
+              <Link
+                href={LOADIQ_ROUTES.login}
+                className="rounded-2xl border border-sky-300/35 bg-sky-400/15 px-4 py-3 text-center text-xs font-black uppercase tracking-[0.16em] text-sky-100"
+              >
+                Login
+              </Link>
+            )}
             <Link
               href={LOADIQ_ROUTES.accountSettings}
               className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-center text-xs font-black uppercase tracking-[0.16em] text-slate-200"
             >
               Prepare Mobile App Access
             </Link>
+            {user ? (
+              <Link
+                href={LOADIQ_ROUTES.subscriptionHelp}
+                className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-center text-xs font-black uppercase tracking-[0.16em] text-slate-200"
+              >
+                Subscription Help
+              </Link>
+            ) : null}
           </div>
           <p className="text-xs leading-5 text-slate-500">
             Billing support:{" "}
