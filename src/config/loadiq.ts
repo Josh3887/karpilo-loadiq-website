@@ -98,7 +98,7 @@ export const LOADIQ_ROUTES = {
   pilotProgram: "/pilot-program",
   launchPromo: "/launch-promo",
   demo: "/demo",
-  iation: "/iation",
+  atlas: "/atlas",
   founder: "/founder",
   contact: "/contact",
   login: "/login",
@@ -132,6 +132,7 @@ export const LOADIQ_APP_STORE_PLACEHOLDERS = [
 
 export const LOADIQ_NAVIGATION_LINKS = [
   { label: "Pricing", href: LOADIQ_ROUTES.pricing },
+  { label: "Atlas", href: LOADIQ_ROUTES.atlas },
   { label: "Demo", href: LOADIQ_ROUTES.demo },
   { label: "Pilot", href: LOADIQ_ROUTES.pilotProgram },
   { label: "Launch", href: LOADIQ_ROUTES.launchPromo },
@@ -176,7 +177,7 @@ export const LOADIQ_FOOTER_LINKS = {
     { label: "Home", href: LOADIQ_ROUTES.home },
     { label: "Pricing", href: LOADIQ_ROUTES.pricing },
     { label: "Demo", href: LOADIQ_ROUTES.demo },
-    { label: "iAtion", href: LOADIQ_ROUTES.iation },
+    { label: "Atlas", href: LOADIQ_ROUTES.atlas },
     { label: "Pilot Program", href: LOADIQ_ROUTES.pilotProgram },
     { label: "Launch Promotion", href: LOADIQ_ROUTES.launchPromo },
   ],

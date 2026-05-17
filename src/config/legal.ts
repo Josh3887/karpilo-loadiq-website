@@ -441,7 +441,7 @@ export const legalPages: Record<string, LegalPage> = {
         id: "ownership",
         title: "Ownership",
         paragraphs: [
-          "Karpilo Endeavor Technologies, Karpilo LoadIQ, Karpilo FleetOS, iAtion, iAtion Core, product names, interface systems, operational workflows, copy, layouts, animations, graphics, and product concepts may be protected intellectual property.",
+          "Karpilo Endeavor Technologies, Karpilo LoadIQ, Karpilo FleetOS, Karpilo Atlas, Atlas Core, Atlas Freight Intelligence, Atlas Route Intelligence, Atlas Educational Intelligence, product names, interface systems, operational workflows, copy, layouts, animations, graphics, and product concepts may be protected intellectual property.",
           "No public page, demo, screenshot, copy, workflow, pricing system, or visual design grants permission to clone, scrape, reproduce, redistribute, resell, or create derivative products from Karpilo materials.",
         ],
       },

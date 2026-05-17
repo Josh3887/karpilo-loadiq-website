@@ -194,6 +194,6 @@ export const educationCards = [
 
 export const ecosystemTeasers = [
   "Karpilo FleetOS",
-  "iAtion",
-  "iAtion Core",
+  "Karpilo Atlas",
+  "Atlas Freight Intelligence",
 ] as const;

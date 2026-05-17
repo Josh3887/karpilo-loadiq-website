@@ -11,7 +11,7 @@
 7. Education: operational intelligence concepts for drivers.
 8. How It Works: step-by-step LoadIQ workflow.
 9. Pricing: public plans plus early access framing.
-10. Future Ecosystem: subtle FleetOS, iAtion, and iAtion Core teasers.
+10. Future Ecosystem: subtle Karpilo FleetOS, Karpilo Atlas, and Atlas Freight Intelligence teasers.
 11. FAQ, final CTA, footer legal infrastructure.
 
 ## Countdown Architecture
