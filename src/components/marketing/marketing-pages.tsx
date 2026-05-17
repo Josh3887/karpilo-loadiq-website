@@ -418,7 +418,7 @@ export function HomeMarketingPage() {
             ))}
           </div>
           <p className="mt-5 text-sm leading-6 text-slate-400">
-            A compact freight decision screen for fuel, deadhead, overhead, reserves, and net profitability before the load is accepted.
+            A compact freight estimation screen for fuel, deadhead, overhead, reserves, and projected net before the user makes an independent load decision.
           </p>
         </motion.div>
       </section>
@@ -436,8 +436,8 @@ export function HomeMarketingPage() {
       <section className="mx-auto max-w-7xl px-6 py-14 sm:px-8">
         <SectionIntro
           eyebrow="Core value"
-          title="See the operating pressure before dispatch."
-          description="Karpilo LoadIQ turns a freight offer into a clearer operating decision without burying drivers in generic software noise."
+          title="See the operating pressure before the decision."
+          description="Karpilo LoadIQ turns user-supplied freight details into clearer profitability estimates without burying operators in generic software noise."
         />
       </section>
 

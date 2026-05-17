@@ -28,7 +28,7 @@ export const PILOT_ACCESS = {
   monthlyPrice: 14.99,
   annualPrice: 129.99,
   lifetimeLockRule:
-    "Pilot pricing remains locked while the subscription stays active and is lost if canceled, deleted, or transferred.",
+    "Pilot pricing remains locked while the subscription stays active and applies only within the purchased entitlement scope and current Karpilo LoadIQ product family. It is lost if canceled, deleted, or transferred.",
 } as const;
 
 export const LAUNCH_ACCESS = {
@@ -66,7 +66,7 @@ export const PUBLIC_PRICING_PLANS = [
     bullets: [
       "7-day free trial where provider rules allow",
       "Lifetime pricing lock while the account remains active and in good standing",
-      "Future released Karpilo LoadIQ platform features made generally available inside the platform ecosystem",
+      "Future released Karpilo LoadIQ features made generally available within the purchased entitlement scope and current product family",
     ],
   },
   {
@@ -81,7 +81,7 @@ export const PUBLIC_PRICING_PLANS = [
     bullets: [
       "7-day free trial where provider rules allow",
       "First 500 launch users across two phases of 250",
-      "Lifetime pricing lock with future released Karpilo LoadIQ platform features made generally available inside the platform ecosystem",
+      "Lifetime pricing lock with future released Karpilo LoadIQ features made generally available within the purchased entitlement scope and current product family",
     ],
   },
   {
@@ -91,12 +91,12 @@ export const PUBLIC_PRICING_PLANS = [
     price: STANDARD_ACCESS.monthlyPrice,
     interval: "month",
     description:
-      "Full operational feature tier for disciplined freight decisions before the truck moves.",
+      "Full operational feature tier for estimating freight margin, fuel exposure, overhead, and trip profitability context.",
     cta: "Gold reservation",
     bullets: [
       "7-day free trial where provider rules allow",
       "Load, route, fuel, overhead, and trip margin visibility",
-      "Decision support for deadhead exposure, fuel variance, and operational leakage",
+      "Analysis support for deadhead exposure, fuel variance, and operational leakage",
       "Prices are subject to change for future billing periods or future subscribers",
     ],
   },
@@ -111,7 +111,7 @@ export const PUBLIC_PRICING_PLANS = [
     bullets: [
       "First 50 founder pilot users only",
       "7-day free trial where provider rules allow",
-      "Lifetime pricing lock with future released Karpilo LoadIQ platform features made generally available inside the platform ecosystem",
+      "Lifetime pricing lock with future released Karpilo LoadIQ features made generally available within the purchased entitlement scope and current product family",
     ],
   },
   {

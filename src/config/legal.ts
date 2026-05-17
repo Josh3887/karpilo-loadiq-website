@@ -8,7 +8,7 @@ export const UPDATES_EMAIL = LOADIQ_CONTACT.updatesEmail;
 export const NEWSLETTER_EMAIL = LOADIQ_CONTACT.newsletterEmail;
 export const NOREPLY_EMAIL = LOADIQ_CONTACT.noreplyEmail;
 export const FEEDBACK_EMAIL = LOADIQ_CONTACT.feedbackEmail;
-export const LEGAL_LAST_UPDATED = "May 11, 2026";
+export const LEGAL_LAST_UPDATED = "May 17, 2026";
 export const COLORADO_BASELINE =
   "Karpilo Endeavor Technologies LLC is organized for U.S.-based SaaS operations, with a Colorado/U.S.-focused legal baseline for launch-stage policy architecture.";
 
@@ -72,7 +72,7 @@ export const legalPages: Record<string, LegalPage> = {
         id: "overview",
         title: "Privacy Operating Standard",
         paragraphs: [
-          `${COMPANY_NAME} builds transportation software, operational intelligence systems, analytics platforms, and subscription SaaS products including Karpilo LoadIQ, Karpilo FleetOS, and future product lines.`,
+          `${COMPANY_NAME} builds transportation profitability estimation software, analytics platforms, educational operational awareness tools, and subscription SaaS products including Karpilo LoadIQ, Karpilo FleetOS, and future product lines.`,
           "This Privacy Policy explains how we collect, use, retain, protect, and disclose information when users visit our websites, join a waitlist, contact support, use our software, interact with billing flows, or connect with future app ecosystem features.",
           COLORADO_BASELINE,
         ],
@@ -149,14 +149,23 @@ export const legalPages: Record<string, LegalPage> = {
     title: "Terms & Conditions",
     navLabel: "Terms",
     description:
-      "Platform use terms for Karpilo LoadIQ, Karpilo FleetOS, and future Karpilo Endeavor Technologies SaaS products.",
+      "Platform use terms for Karpilo LoadIQ as a transportation profitability calculator, operational estimation platform, analytics and insight tool, and educational operational awareness platform.",
     sections: [
       {
         id: "use",
         title: "Use of Karpilo Products",
         paragraphs: [
-          "Karpilo products are software and operational intelligence tools. They provide estimates, workflows, dashboards, product content, analytics, and decision-support interfaces for transportation and business operations.",
+          "Karpilo LoadIQ is a transportation profitability calculator, operational estimation platform, analytics and insight tool, and educational operational awareness platform. It provides estimates, workflows, dashboards, product content, analytics, and user-assisted calculation interfaces for transportation and business operations.",
+          "The platform is intended for informational, educational, analytical, and estimation purposes only and does not replace independent business judgment, professional accounting, legal advice, regulatory guidance, safety review, or operational decision-making.",
           "Users are responsible for ensuring their use of the products complies with applicable laws, contracts, carrier policies, brokerage requirements, safety rules, employment or contractor obligations, and business requirements.",
+        ],
+      },
+      {
+        id: "classification",
+        title: "No Transportation Authority or Control",
+        paragraphs: [
+          "Karpilo LoadIQ is not dispatch software, freight brokerage software, routing authority software, compliance management software, fleet command software, motor carrier supervision software, or a regulated transportation authority system.",
+          "Karpilo LoadIQ does not dispatch freight, direct drivers, supervise carriers, control equipment, certify route legality, enforce compliance, approve brokerage terms, or assume responsibility for transportation operations.",
         ],
       },
       {
@@ -164,6 +173,8 @@ export const legalPages: Record<string, LegalPage> = {
         title: "No Operational or Profit Guarantees",
         paragraphs: [
           "Karpilo LoadIQ and related tools may estimate profitability, costs, fuel exposure, RPM, margin, deadhead, overhead, or operational risk. These outputs are informational estimates based on assumptions, available data, and user inputs.",
+          "Users acknowledge that all calculations are dependent on user-supplied inputs, assumptions, market conditions, and operational variables that may materially alter real-world outcomes.",
+          "Actual operational conditions including rates, weather, fuel pricing, traffic, detention, maintenance events, compliance events, driver behavior, market volatility, and third-party conditions materially affect real-world outcomes.",
           "We do not guarantee profit, freight availability, revenue, route accuracy, fuel pricing, dispatch results, compliance outcomes, customer behavior, broker conduct, app store approval, marketplace availability, or business performance.",
         ],
       },
@@ -196,7 +207,33 @@ export const legalPages: Record<string, LegalPage> = {
         title: "Limitation of Liability",
         paragraphs: [
           "To the fullest extent permitted by law, Karpilo Endeavor Technologies LLC is not liable for indirect, incidental, consequential, special, exemplary, punitive, operational, business, lost-profit, lost-revenue, downtime, dispatch, freight, compliance, payment, marketplace, or data-source damages.",
-          "Users remain responsible for reviewing outputs, verifying data, maintaining business records, and making independent operational decisions.",
+          "Users remain responsible for reviewing outputs, verifying data, maintaining business records, and making independent operational, safety, route, compliance, tax, accounting, and business decisions.",
+        ],
+      },
+      {
+        id: "force-majeure",
+        title: "Force Majeure",
+        paragraphs: [
+          "Karpilo Endeavor Technologies LLC is not responsible for delay, interruption, or failure caused by events outside reasonable control, including internet outages, hosting failures, payment processor outages, app-store disruptions, cyber incidents, labor disruptions, natural disasters, severe weather, government action, transportation market disruption, third-party API failure, or other force majeure events.",
+        ],
+      },
+      {
+        id: "dispute-resolution",
+        title: "Dispute Resolution, Arbitration, and Class Action Waiver",
+        paragraphs: [
+          "To the fullest extent permitted by applicable law, disputes or claims arising from or relating to Karpilo LoadIQ, these terms, subscriptions, billing, access, or user accounts will be resolved by individual binding arbitration under the Federal Arbitration Act and applicable Colorado law, unless an exception below applies.",
+          "Either party may bring an individual claim in small claims court where available. Either party may seek injunctive or equitable relief in a court of competent jurisdiction for unauthorized access, misuse, intellectual property infringement, or trade secret misuse.",
+          "Users and Karpilo Endeavor Technologies LLC waive the right to participate in class actions, class arbitrations, collective actions, representative actions, or consolidated proceedings to the fullest extent permitted by law.",
+          "Users and Karpilo Endeavor Technologies LLC waive the right to a jury trial for disputes covered by these terms to the fullest extent permitted by law.",
+        ],
+      },
+      {
+        id: "governing-law",
+        title: "Governing Law, Venue, and Electronic Consent",
+        paragraphs: [
+          "These terms are governed by Colorado law, without regard to conflict-of-law rules, and by applicable federal law including the Federal Arbitration Act where applicable.",
+          "For claims that are not subject to arbitration, the parties consent to the state or federal courts located in Colorado, unless a different venue is required by applicable law.",
+          "By using the website, creating an account, clicking acceptance controls, continuing to use Karpilo products, or purchasing a subscription, users consent to electronic records, electronic signatures, electronic policy acknowledgements, and electronic delivery of notices where permitted by law.",
         ],
       },
       {
@@ -367,7 +404,8 @@ export const legalPages: Record<string, LegalPage> = {
         title: "Future Products and Plan Evolution",
         paragraphs: [
           "Subscription terms are designed to support Karpilo LoadIQ, Karpilo FleetOS, future SaaS products, team accounts, mobile apps, enterprise plans, API access, annual agreements, and product bundles.",
-          "Features, plan names, usage limits, availability, prices, discounts, pilot programs, and founder access may change for future billing periods where permitted.",
+          "Features, plan names, usage limits, availability, prices, discounts, pilot programs, founder access, future enterprise licensing, future operational modules, and future feature segmentation may change for future billing periods where permitted.",
+          "Pilot and Launch lifetime or grandfathered access is limited to the qualifying account, purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family. It does not automatically include all future enterprise products, Karpilo FleetOS systems, Pro/FleetOS capabilities, API products, team accounts, or separately licensed future offerings.",
         ],
       },
       {
@@ -441,7 +479,7 @@ export const legalPages: Record<string, LegalPage> = {
         id: "ownership",
         title: "Ownership",
         paragraphs: [
-          "Karpilo Endeavor Technologies, Karpilo LoadIQ, Karpilo FleetOS, Karpilo Atlas, Atlas Core, Atlas Freight Intelligence, Atlas Route Intelligence, Atlas Educational Intelligence, product names, interface systems, operational workflows, copy, layouts, animations, graphics, and product concepts may be protected intellectual property.",
+          "Karpilo Endeavor Technologies, Karpilo LoadIQ, Karpilo FleetOS, Karpilo Atlas AI, Atlas Insights, Atlas Guidance, Atlas Educational Support, Atlas Operational Context, product names, interface systems, operational workflows, copy, layouts, animations, graphics, and product concepts may be protected intellectual property.",
           "No public page, demo, screenshot, copy, workflow, pricing system, or visual design grants permission to clone, scrape, reproduce, redistribute, resell, or create derivative products from Karpilo materials.",
         ],
       },
@@ -467,6 +505,7 @@ export const legalPages: Record<string, LegalPage> = {
         paragraphs: [
           "The Founding 50 Pilot Program is limited to the first 50 approved users. Pilot pricing is currently structured at $14.99/month or $129.99/year while the account remains active and in good standing.",
           "Pilot access is qualification-based. Submitting interest does not guarantee approval, access, billing availability, app store availability, or a pricing lock.",
+          "Pilot access is limited to the purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family.",
         ],
       },
       {
@@ -474,6 +513,7 @@ export const legalPages: Record<string, LegalPage> = {
         title: "Lifetime Pricing Lock",
         paragraphs: [
           "A lifetime pricing lock means the qualifying pilot rate remains available for the qualifying account while it stays active and in good standing, subject to payment platform rules and applicable law.",
+          "A lifetime pricing lock is not ownership of Karpilo LoadIQ and does not grant automatic access to all future Karpilo FleetOS, Pro, enterprise, API, team, or separately licensed products.",
           "The lock may be lost after account deletion, fraud, abuse, chargeback misuse, payment failure, policy violations, transfer attempts, or terms violations.",
         ],
       },
@@ -497,7 +537,7 @@ export const legalPages: Record<string, LegalPage> = {
         id: "hands-free",
         title: "Hands-Free Use Required",
         paragraphs: [
-          "Karpilo LoadIQ is an operational decision-support tool. It must not be used in a way that distracts a driver, violates hands-free laws, interferes with safe vehicle operation, or conflicts with carrier, shipper, receiver, or roadway safety rules.",
+          "Karpilo LoadIQ is an operational estimation and educational awareness tool. It must not be used in a way that distracts a driver, violates hands-free laws, interferes with safe vehicle operation, or conflicts with carrier, shipper, receiver, or roadway safety rules.",
           "Drivers should review Karpilo LoadIQ information only when safely parked or when another authorized person can operate the device without distracting the driver.",
         ],
       },
@@ -506,7 +546,7 @@ export const legalPages: Record<string, LegalPage> = {
         title: "Driver Responsibility",
         paragraphs: [
           "Users remain responsible for obeying all traffic laws, hours-of-service rules, company policies, device-use restrictions, and safety requirements.",
-          "Karpilo LoadIQ estimates do not replace professional judgment, dispatch instructions, route verification, weather awareness, road condition review, or regulatory compliance.",
+          "Karpilo LoadIQ estimates do not replace professional judgment, dispatch instructions, route verification, weather awareness, road condition review, cargo securement, vehicle legality, or regulatory compliance.",
         ],
       },
       {
@@ -566,6 +606,7 @@ export const legalPages: Record<string, LegalPage> = {
         paragraphs: [
           "Pricing-lock eligibility is controlled by Karpilo LoadIQ's Supabase reservation and entitlement records. Stripe coupons, app-store products, frontend text, emails, or screenshots do not override the server-side authority.",
           "Founder pilot pricing is limited to the first 50 approved users at $14.99/month or $129.99/year. Launch cohort pricing is limited to the next 500 launch users at $19.99/month or $149.99/year. Gold users are currently priced at $29.99/month or $299.99/year, and planned Platinum pricing is currently presented at $34.99/month or $349.99/year before release.",
+          "Pricing-lock eligibility applies only to the qualifying account, purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family. Future enterprise licensing, Pro/FleetOS capabilities, team accounts, APIs, or separately licensed modules may require separate pricing and terms.",
         ],
       },
       {

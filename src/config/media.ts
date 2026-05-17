@@ -10,7 +10,7 @@ export const MEDIA = {
   demoWalkthrough: {
     title: "Video walkthrough",
     description:
-      "Watch a guided walkthrough of Karpilo LoadIQ and see how operators can calculate profitability, evaluate freight, and manage operational assumptions before committing to loads.",
+      "Watch a guided walkthrough of Karpilo LoadIQ and see how operators can estimate profitability, evaluate freight assumptions, and manage operational inputs before making independent load decisions.",
     src: "/media/demo/loadiq-demo-walkthrough-v1.mp4",
     poster: "/media/demo/loadiq-demo-poster-v1.jpg",
     caption:

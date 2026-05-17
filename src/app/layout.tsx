@@ -22,7 +22,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: `${BRAND.companyName} | ${BRAND.shortName}`,
   description:
-    "Transportation software, freight profitability intelligence, and operational SaaS systems from Karpilo Endeavor Technologies LLC.",
+    "Transportation profitability estimation software, analytics, and educational operational awareness tools from Karpilo Endeavor Technologies LLC.",
   metadataBase: new URL(LOADIQ_URLS.website),
   icons: {
     icon: [{ url: BRAND.appIcon, type: "image/png" }],
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: BRAND.productName,
     description:
-      "Freight profitability intelligence, pilot onboarding, launch countdowns, and support for Karpilo LoadIQ.",
+      "Freight profitability estimates, pilot onboarding, launch countdowns, and support for Karpilo LoadIQ.",
     url: LOADIQ_URLS.website,
     siteName: BRAND.productName,
     images: [
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: BRAND.productName,
     description:
-      "Freight profitability intelligence and launch readiness for working operators.",
+      "Freight profitability estimates and launch readiness for working operators.",
     images: [BRAND.cardImage],
   },
   robots: {

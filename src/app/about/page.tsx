@@ -38,18 +38,18 @@ const features = [
   },
   {
     icon: Gauge,
-    title: "Dispatch Decision Support",
-    description: "Built for fast operational decisions under real trucking conditions.",
+    title: "Operational Estimate Support",
+    description: "Built for fast profitability review under real trucking conditions.",
   },
   {
     icon: BarChart3,
     title: "Margin Clarity",
-    description: "Turn gross revenue into true operational profitability visibility.",
+    description: "Turn gross revenue into clearer estimated profitability visibility.",
   },
   {
     icon: ShieldCheck,
     title: "Operational Discipline",
-    description: "Built for carriers who want repeatable operating context before committing equipment.",
+    description: "Built for carriers who want repeatable operating context before making equipment commitments.",
   },
 ];
 
@@ -112,15 +112,15 @@ export default function AboutPage() {
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
               This is not software built from a boardroom theory. It is designed
-              around the actual economics and decision-making pressure
+              around the actual economics and decision pressure
               owner-operators and carriers face every day on the road.
             </p>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-              Karpilo LoadIQ helps operators determine whether a load is truly
-              profitable before the truck moves by exposing operating cost,
-              deadhead exposure, fuel pressure, margin compression, and real
-              profitability visibility.
+              Karpilo LoadIQ helps operators estimate whether a load appears
+              profitable based on user-supplied assumptions by exposing
+              operating cost, deadhead exposure, fuel pressure, margin
+              compression, and profitability visibility.
             </p>
 
             <Link

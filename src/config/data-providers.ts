@@ -27,7 +27,7 @@ export const EIA_ATTRIBUTION_TEXT =
   "Fuel pricing data may include publicly available datasets provided by the U.S. Energy Information Administration (EIA).";
 
 export const DATA_PROVIDER_DISCLOSURE =
-  "External operational datasets are used for informational decision support only. Provider data can be delayed, revised, unavailable, or vary from real-world operating conditions.";
+  "External operational datasets are used for informational reference and estimation support only. Provider data can be delayed, revised, unavailable, or vary from real-world operating conditions.";
 
 export const DATA_PROVIDERS: DataProvider[] = [
   {

@@ -10,18 +10,18 @@ import { UniversalBackButton } from "@/components/navigation/universal-back-butt
 import { LOADIQ_BRAND, LOADIQ_ROUTES } from "@/config/loadiq";
 
 export const metadata: Metadata = {
-  title: "Karpilo Atlas Intelligence | Karpilo LoadIQ",
+  title: "Karpilo Atlas AI | Karpilo LoadIQ",
   description:
-    "Explore Karpilo Atlas, the embedded operational intelligence architecture behind Karpilo LoadIQ's freight, route, educational, and runtime awareness layers.",
+    "Explore Karpilo Atlas AI, the educational and analytical support layer behind Karpilo LoadIQ's calculation explanations, operational context, and user-interface guidance.",
 };
 
 const atlasLayers = [
   {
-    name: "Karpilo Atlas Core",
+    name: "Karpilo Atlas AI",
     runtime: "K-ATLS-CORE",
-    role: "Runtime orchestration, intelligence coordination, and system cognition backbone.",
+    role: "Educational, informational, and analytical support for Karpilo LoadIQ calculations.",
     description:
-      "Atlas Core coordinates the intelligence layers into a unified runtime so operational context can move through Karpilo LoadIQ as infrastructure, not as a detached assistant layer.",
+      "Karpilo Atlas AI supports calculation explanation, profitability interpretation, and app guidance without replacing the user's independent business judgment.",
     image: "/branding/atlas/core/karpilo-atlas-core-dashboard-v1.png",
     emblem: "/branding/atlas/core/karpilo-atlas-core-emblem.png",
     icon: Layers3,
@@ -30,11 +30,11 @@ const atlasLayers = [
     glow: "shadow-[0_0_46px_rgba(168,85,247,0.12)]",
   },
   {
-    name: "Atlas Freight Intelligence",
+    name: "Atlas Analysis Assistance",
     runtime: "K-ATLS-FI",
-    role: "Freight economics, margin pressure, deadhead exposure, and cost awareness.",
+    role: "Profitability estimate interpretation, margin pressure, deadhead exposure, and cost awareness.",
     description:
-      "Atlas Freight Intelligence interprets calculated load outputs so operators can understand profitability pressure, fuel exposure, and the operational meaning behind a rate.",
+      "Atlas Analysis Assistance explains calculated load outputs so operators can understand estimated profitability pressure, fuel exposure, and the operational meaning behind user-supplied numbers.",
     image: "/branding/atlas/freight/karpilo-atlas-freight-dashboard-v1.png",
     emblem: "/branding/atlas/freight/karpilo-atlas-freight-emblem.png",
     icon: RadioTower,
@@ -43,11 +43,11 @@ const atlasLayers = [
     glow: "shadow-[0_0_46px_rgba(16,185,129,0.12)]",
   },
   {
-    name: "Atlas Route Intelligence",
+    name: "Atlas Operational Context",
     runtime: "K-ATLS-RTE",
     role: "Movement intelligence, corridor flow, route pressure, and timing context.",
     description:
-      "Atlas Route Intelligence frames movement, distance pressure, stop complexity, and cyber-highway telemetry without turning the website into a routing tool.",
+      "Atlas Operational Context frames entered distance, deadhead, stop complexity, and timing assumptions without acting as a routing authority or navigation tool.",
     image: "/branding/atlas/route/karpilo-atlas-route-dashboard-v1.png",
     emblem: "/branding/atlas/route/karpilo-atlas-route-emblem.png",
     icon: Route,
@@ -56,11 +56,11 @@ const atlasLayers = [
     glow: "shadow-[0_0_46px_rgba(239,68,68,0.12)]",
   },
   {
-    name: "Atlas Educational Intelligence",
+    name: "Atlas Educational Support",
     runtime: "K-ATLS-EDU",
     role: "Contextual operational explanation, workflow meaning, and metric interpretation.",
     description:
-      "Atlas Educational Intelligence explains why Karpilo LoadIQ metrics matter and how workflows fit together, while leaving final operational decisions with the user.",
+      "Atlas Educational Support explains why Karpilo LoadIQ metrics matter and how workflows fit together, while leaving final operational decisions with the user.",
     image: "/branding/atlas/educational/karpilo-atlas-educational-dashboard-v1.png",
     emblem: "/branding/atlas/educational/karpilo-atlas-educational-emblem.png",
     icon: GraduationCap,
@@ -71,13 +71,13 @@ const atlasLayers = [
 ] as const;
 
 const disclosure =
-  "Atlas intelligence features are designed to support operational understanding, not replace professional judgment, regulatory compliance responsibility, dispatch authority, or financial decision-making.";
+  "Karpilo Atlas AI features are designed to support educational understanding, calculation interpretation, and operational awareness. They do not replace professional judgment, regulatory compliance responsibility, dispatch authority, routing review, safety review, or financial decision-making.";
 
 const vendorDisclosure =
   "Certain intelligence processing may be powered by third-party AI infrastructure where applicable.";
 
 const proprietaryStatement =
-  "Karpilo Atlas, Atlas Core, Atlas Freight Intelligence, Atlas Route Intelligence, and Atlas Educational Intelligence are proprietary intelligence concepts and branded systems of Karpilo Endeavor Technologies for use within Karpilo LoadIQ and related future platforms.";
+  "Karpilo Atlas AI, Atlas Insights, Atlas Guidance, Atlas Educational Support, and Atlas Operational Context are proprietary support concepts and branded systems of Karpilo Endeavor Technologies for use within Karpilo LoadIQ and related future platforms.";
 
 export default function AtlasPage() {
   return (
@@ -112,17 +112,18 @@ export default function AtlasPage() {
                   className="object-cover"
                 />
               </span>
-              <span>Embedded Operational Intelligence</span>
+              <span>Educational Analytical Support</span>
             </div>
 
             <h1 className="mt-7 max-w-4xl text-5xl font-black tracking-[-0.06em] text-white sm:text-6xl">
-              Karpilo Atlas is the intelligence architecture behind Karpilo LoadIQ operational awareness.
+              Karpilo Atlas AI supports Karpilo LoadIQ calculation explanation and operational awareness.
             </h1>
 
             <p className="mt-8 max-w-3xl text-lg leading-8 text-slate-300">
-              Atlas organizes freight, route, educational, and runtime context into
-              a native Karpilo LoadIQ intelligence system. It does not replace
-              driver judgment. It makes operational meaning easier to see.
+              Atlas organizes calculation explanations, entered route context,
+              educational guidance, and analytical support into a native
+              Karpilo LoadIQ experience. It does not replace driver judgment,
+              professional review, or independent business decisions.
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
@@ -146,7 +147,7 @@ export default function AtlasPage() {
             <div className="relative overflow-hidden rounded-[1.5rem]">
               <Image
                 src="/branding/atlas/core/karpilo-atlas-core-dashboard-alt.png"
-                alt="Karpilo Atlas Core runtime intelligence visual"
+                alt="Karpilo Atlas AI educational analysis visual"
                 width={1200}
                 height={900}
                 priority
@@ -218,7 +219,7 @@ export default function AtlasPage() {
           <div className="relative h-72">
             <Image
               src="/branding/atlas/freight/karpilo-atlas-freight-dashboard-alt.png"
-              alt="Atlas Freight Intelligence freight economics visual"
+              alt="Atlas Analysis Assistance freight economics visual"
               fill
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="object-cover"
@@ -230,36 +231,36 @@ export default function AtlasPage() {
               Freight Economics
             </p>
             <h2 className="mt-4 text-3xl font-black tracking-[-0.05em] text-white">
-              Atlas Freight Intelligence interprets the pressure behind the rate.
+              Atlas Analysis Assistance explains pressure behind the estimate.
             </h2>
             <p className="mt-5 leading-7 text-slate-300">
-              Freight intelligence is designed to frame margin pressure,
+              Atlas analysis support is designed to frame margin pressure,
               deadhead exposure, fuel-cost drag, accessorial context, and load
               profitability interpretation after Karpilo LoadIQ calculates the
-              deterministic numbers.
+              deterministic estimates.
             </p>
           </div>
         </div>
 
         <div className="grid gap-6">
           <OperationalCard
-            title="Route Intelligence"
-            eyebrow="Movement Telemetry"
-            body="Atlas Route Intelligence focuses on movement, corridor flow, stop complexity, distance pressure, and timing context. It is route cognition, not a public load board and not fleet dispatch automation."
+            title="Atlas Operational Context"
+            eyebrow="Route Variable Context"
+            body="Atlas Operational Context focuses on user-entered movement, distance pressure, stop complexity, and timing assumptions. It is not a public load board, routing authority, or fleet dispatch automation."
             icon={<Route className="h-6 w-6 text-red-200" />}
             border="border-red-300/20"
           />
           <OperationalCard
-            title="Educational Intelligence"
+            title="Atlas Educational Support"
             eyebrow="Operational Understanding"
-            body="Atlas Educational Intelligence explains the operational meaning behind Karpilo LoadIQ metrics and workflows so the system can teach context without becoming an onboarding screen or decision-maker."
+            body="Atlas Educational Support explains the operational meaning behind Karpilo LoadIQ metrics and workflows without becoming a decision-maker."
             icon={<GraduationCap className="h-6 w-6 text-sky-200" />}
             border="border-sky-300/20"
           />
           <OperationalCard
-            title="Core Runtime"
-            eyebrow="Unified Infrastructure"
-            body="Atlas Core keeps the layers coordinated as embedded intelligence infrastructure. Users experience Atlas as native Karpilo LoadIQ awareness, not as a website widget or detached assistant."
+            title="Karpilo Atlas AI"
+            eyebrow="Supplemental Context"
+            body="Karpilo Atlas AI keeps educational guidance and analysis support native to Karpilo LoadIQ. Users experience Atlas as supplemental context, not operational authority."
             icon={<Network className="h-6 w-6 text-purple-200" />}
             border="border-purple-300/20"
           />
@@ -274,9 +275,9 @@ export default function AtlasPage() {
               Website preview only.
             </h2>
             <p className="mt-4 leading-7 text-slate-300">
-              Functional Atlas behavior belongs inside the authenticated {LOADIQ_BRAND.productName}
-              application. This website introduces the intelligence architecture
-              and proprietary operating concepts without adding provider calls, API
+              Functional Karpilo Atlas AI behavior belongs inside the authenticated {LOADIQ_BRAND.productName}
+              application. This website introduces the educational and analytical
+              support concepts without adding provider calls, API
               keys, live chat, or app-only behavior.
             </p>
           </div>
