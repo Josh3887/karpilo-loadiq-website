@@ -5,7 +5,9 @@ import { LOADIQ_CONTACT, LOADIQ_LAUNCH_KEYS } from "@/config/loadiq";
 import { sendAuditedEmail } from "@/lib/email-audit";
 
 const notifyEmail =
-  process.env.UPDATES_EMAIL || LOADIQ_CONTACT.updatesEmail;
+  process.env.NEWSLETTER_EMAIL ||
+  process.env.EMAIL_NEWSLETTER ||
+  LOADIQ_CONTACT.newsletterEmail;
 
 const allowedCohorts = [
   LOADIQ_LAUNCH_KEYS.founder50,
@@ -345,6 +347,7 @@ export async function POST(request: Request) {
         channelKey: "updates",
         messageType: "reservation_notification",
         to: notifyEmail,
+        replyTo: email,
         subject: "New Karpilo LoadIQ Founding Operator Reservation",
         text: `
 New founding operator reservation:

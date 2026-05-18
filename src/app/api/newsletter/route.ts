@@ -53,6 +53,7 @@ export async function POST(request: Request) {
         channelKey: "newsletter",
         messageType: "newsletter_signup_notification",
         to: notifyEmail,
+        replyTo: email,
         subject: "New Karpilo LoadIQ Newsletter Signup",
         text: `
 New Karpilo LoadIQ newsletter signup:

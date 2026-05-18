@@ -1,4 +1,5 @@
 import { BRAND } from "@/config/brand";
+import { EMAIL_ADDRESSES } from "@/config/email";
 
 export const LOADIQ_BRAND = {
   companyName: BRAND.legalCompanyName,
@@ -19,18 +20,19 @@ export const LOADIQ_URLS = {
 } as const;
 
 export const LOADIQ_CONTACT = {
-  noReplyEmail: "noreply@karpiloloadiq.com",
-  supportEmail: "j.karpilo@karpiloloadiq.com",
-  helpEmail: "j.karpilo@karpiloloadiq.com",
-  newsletterEmail: "newsletter@karpiloloadiq.com",
-  updatesEmail: "updates@karpiloloadiq.com",
-  billingEmail: "billing@karpiloloadiq.com",
-  noreplyEmail: "noreply@karpiloloadiq.com",
-  founderFeedbackEmail: "j.karpilo@karpiloloadiq.com",
-  feedbackEmail: "j.karpilo@karpiloloadiq.com",
-  featureRequestEmail: "j.karpilo@karpiloloadiq.com",
-  corporateEmail: "Josh.karpilo@karpiloendeavortechnologies.com",
-  legalEmail: "Josh.karpilo@karpiloendeavortechnologies.com",
+  noReplyEmail: EMAIL_ADDRESSES.noReply,
+  supportEmail: EMAIL_ADDRESSES.support,
+  helpEmail: EMAIL_ADDRESSES.support,
+  newsletterEmail: EMAIL_ADDRESSES.newsletter,
+  updatesEmail: EMAIL_ADDRESSES.newsletter,
+  billingEmail: EMAIL_ADDRESSES.billing,
+  noreplyEmail: EMAIL_ADDRESSES.noReply,
+  founderFeedbackEmail: EMAIL_ADDRESSES.executive,
+  feedbackEmail: EMAIL_ADDRESSES.support,
+  featureRequestEmail: EMAIL_ADDRESSES.support,
+  executiveEmail: EMAIL_ADDRESSES.executive,
+  corporateEmail: EMAIL_ADDRESSES.executive,
+  legalEmail: EMAIL_ADDRESSES.executive,
 } as const;
 
 export const LOADIQ_CONTACT_CHANNELS = [
@@ -78,9 +80,9 @@ export const LOADIQ_CONTACT_CHANNELS = [
   },
   {
     id: "corporate",
-    label: "Corporate / Legal",
+    label: "Executive / Business",
     email: LOADIQ_CONTACT.corporateEmail,
-    description: "Legal, policies, partnerships, and corporate matters.",
+    description: "Partnerships, strategic inquiries, press, media, founder-level escalation, and business matters.",
     monitored: true,
   },
   {

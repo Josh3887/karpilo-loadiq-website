@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 
-import { LOADIQ_CONTACT } from "@/config/loadiq";
+import { EMAIL_CHANNEL_ALIASES, EMAIL_IDENTITIES } from "@/config/email";
+import { buildLoadiqEmailContent } from "@/lib/email-template";
 import { getSupabaseServer } from "@/lib/supabase-server";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -11,6 +12,7 @@ type AuditedEmailInput = {
   to: string | string[];
   subject: string;
   text: string;
+  html?: string;
   fromEmail?: string;
   fromName?: string;
   replyTo?: string;
@@ -27,38 +29,69 @@ function formatSender(fromName: string, fromEmail: string) {
   return `${fromName} <${fromEmail}>`;
 }
 
+function canonicalIdentityKey(channelKey: string) {
+  if (channelKey in EMAIL_CHANNEL_ALIASES) {
+    return EMAIL_CHANNEL_ALIASES[
+      channelKey as keyof typeof EMAIL_CHANNEL_ALIASES
+    ];
+  }
+
+  if (channelKey === "billing") return "billing";
+  if (
+    channelKey === "support" ||
+    channelKey === "feature_requests" ||
+    channelKey === "feedback"
+  ) {
+    return "support";
+  }
+  if (channelKey === "newsletter") return "newsletter";
+  if (channelKey === "security") return "security";
+  if (channelKey === "notifications") return "notifications";
+
+  return "authSystem";
+}
+
+function configuredSupportEmail() {
+  return process.env.SUPPORT_EMAIL || EMAIL_IDENTITIES.support.address;
+}
+
+function configuredBillingEmail() {
+  return process.env.BILLING_EMAIL || EMAIL_IDENTITIES.billing.address;
+}
+
+function configuredNewsletterEmail() {
+  return (
+    process.env.NEWSLETTER_EMAIL ||
+    process.env.EMAIL_NEWSLETTER ||
+    EMAIL_IDENTITIES.newsletter.address
+  );
+}
+
 function senderEmailFor(channelKey: string, fromEmail?: string) {
   if (fromEmail) return fromEmail;
-  if (channelKey === "billing") {
-    return process.env.BILLING_EMAIL || LOADIQ_CONTACT.billingEmail;
+  const identityKey = canonicalIdentityKey(channelKey);
+
+  if (identityKey === "billing") return configuredBillingEmail();
+  if (identityKey === "support") return configuredSupportEmail();
+  if (identityKey === "newsletter") return configuredNewsletterEmail();
+  if (identityKey === "security") return EMAIL_IDENTITIES.security.address;
+  if (identityKey === "notifications") {
+    return EMAIL_IDENTITIES.notifications.address;
   }
-  if (channelKey === "support") {
-    return process.env.SUPPORT_EMAIL || LOADIQ_CONTACT.supportEmail;
-  }
-  if (channelKey === "feature_requests" || channelKey === "feedback") {
-    return (
-      process.env.FOUNDER_FEEDBACK_EMAIL || LOADIQ_CONTACT.featureRequestEmail
-    );
-  }
-  if (channelKey === "updates") {
-    return (
-      process.env.UPDATES_EMAIL ||
-      process.env.EMAIL_UPDATES ||
-      LOADIQ_CONTACT.updatesEmail
-    );
-  }
-  if (channelKey === "newsletter") {
-    return (
-      process.env.NEWSLETTER_EMAIL ||
-      process.env.EMAIL_NEWSLETTER ||
-      LOADIQ_CONTACT.newsletterEmail
-    );
-  }
+
   return (
     process.env.NO_REPLY_EMAIL ||
     process.env.EMAIL_FROM ||
-    LOADIQ_CONTACT.noReplyEmail
+    EMAIL_IDENTITIES.authSystem.address
   );
+}
+
+function replyToFor(channelKey: string, replyTo?: string) {
+  if (replyTo) return replyTo;
+  const identityKey = canonicalIdentityKey(channelKey);
+
+  if (identityKey === "billing") return configuredBillingEmail();
+  return configuredSupportEmail();
 }
 
 function errorMessage(error: unknown) {
@@ -113,6 +146,7 @@ export async function sendAuditedEmail({
   to,
   subject,
   text,
+  html,
   fromEmail,
   fromName = "Karpilo LoadIQ",
   replyTo,
@@ -122,6 +156,8 @@ export async function sendAuditedEmail({
 }: AuditedEmailInput) {
   const recipientEmail = normalizeRecipient(to);
   const senderEmail = senderEmailFor(channelKey, fromEmail);
+  const resolvedReplyTo = replyToFor(channelKey, replyTo);
+  const emailContent = buildLoadiqEmailContent({ channelKey, subject, text });
   let outboxId: string | null = null;
 
   const supabaseServer = getSupabaseServer();
@@ -133,7 +169,7 @@ export async function sendAuditedEmail({
       message_type: messageType,
       to_email: recipientEmail,
       from_email: senderEmail,
-      reply_to_email: replyTo || null,
+      reply_to_email: resolvedReplyTo,
       subject,
       status: "queued",
       related_table: relatedTable || null,
@@ -155,9 +191,10 @@ export async function sendAuditedEmail({
     const response = await resend.emails.send({
       from: formatSender(fromName, senderEmail),
       to,
-      replyTo,
+      replyTo: resolvedReplyTo,
       subject,
-      text,
+      text: emailContent.text,
+      html: html || emailContent.html,
     });
 
     if (response.error) {
