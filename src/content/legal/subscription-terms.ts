@@ -21,17 +21,18 @@ export const SUBSCRIPTION_TERMS_SECTIONS: LegalSection[] = [
     id: "plan-access",
     title: "Plan Access and Feature Gates",
     paragraphs: [
-      "Gold and Platinum are current paid subscription tiers. Pilot and Launch are protected legacy or lifetime-access programs within their purchased entitlement scope. Future tiers or products, including reserved Pro or Karpilo FleetOS-related offerings, may have different pricing, eligibility, feature limits, support paths, usage limits, or licensing terms.",
+      "Karpilo LoadIQ commercial tiers are Silver, Gold, Platinum, and Pro. They describe decision-support depth and published pricing. Pilot and Legacy Launch are protected rollout or promotional access programs within their purchased entitlement scope. Checkout availability, billing provider configuration, and entitlement enforcement may roll out separately.",
+      "Any displayed Pro modeled-truck surcharge is commercial pricing communication only until supported by an approved billing provider configuration.",
       "Subscription access is tied to the account and billing platform used at purchase. Promotional access may not be transferable between accounts, platforms, businesses, or app stores.",
       "Feature availability may evolve for future billing periods, future subscribers, future product modules, enterprise licensing, or separately licensed offerings where permitted by law and platform rules.",
     ],
   },
   {
     id: "pilot-launch-scope",
-    title: "Pilot and Launch Entitlement Scope",
+    title: "Pilot and Legacy Launch Entitlement Scope",
     paragraphs: [
-      "Pilot and Launch lifetime or grandfathered access applies to the qualifying account, purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family features made generally available for that entitlement class.",
-      "Pilot and Launch access does not grant ownership of Karpilo LoadIQ, unlimited future platform access, automatic access to all future enterprise products, Karpilo FleetOS systems, fleet-management modules, Pro/FleetOS capabilities, API products, team accounts, or separately licensed future offerings.",
+      "Pilot and Legacy Launch lifetime or grandfathered access applies to the qualifying account, purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family features made generally available for that entitlement class.",
+      "Pilot and Legacy Launch access does not grant ownership of Karpilo LoadIQ, unlimited future platform access, automatic access to all future enterprise products, Karpilo FleetOS systems, fleet-management modules, Pro/FleetOS capabilities, API products, team accounts, or separately licensed future offerings.",
       "Karpilo Endeavor Technologies LLC reserves the right to create future pricing, future enterprise licensing, future feature segmentation, future operational modules, and separately licensed products without converting every legacy entitlement into those future offerings.",
     ],
   },

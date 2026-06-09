@@ -519,9 +519,9 @@ export const legalPages: Record<string, LegalPage> = {
       },
       {
         id: "launch500",
-        title: "Launch 500 Transition",
+        title: "Legacy Launch Transition",
         paragraphs: [
-          "After pilot capacity or pilot timing ends, users may transition into Official Launch Founders Pricing for the first 500 launch operators at $19.99/month or $149.99/year where available.",
+          "After pilot capacity or pilot timing ends, users may transition into Legacy Launch rollout pricing where available. Specific pricing-lock eligibility remains controlled by Karpilo LoadIQ server-side reservation and entitlement records, not by public website text alone.",
         ],
       },
     ],
@@ -578,7 +578,7 @@ export const legalPages: Record<string, LegalPage> = {
         id: "trial-availability",
         title: "Trial Availability",
         paragraphs: [
-          "Founder pilot access, launch cohort access, Gold access, and planned Platinum access are intended to support a 7-day free trial where the applicable billing provider and checkout flow allow it.",
+          "Pilot access, Legacy Launch access, and public Karpilo LoadIQ commercial tiers may support a 7-day free trial where the applicable billing provider and checkout flow allow it.",
           "A checkout or platform screen should disclose the trial duration, conversion date, recurring price, billing interval, and cancellation method before the user is charged.",
           "Karpilo LoadIQ does not offer a permanent free tier initially.",
         ],
@@ -605,8 +605,8 @@ export const legalPages: Record<string, LegalPage> = {
         title: "Supabase Is Pricing-Lock Authority",
         paragraphs: [
           "Pricing-lock eligibility is controlled by Karpilo LoadIQ's Supabase reservation and entitlement records. Stripe coupons, app-store products, frontend text, emails, or screenshots do not override the server-side authority.",
-          "Founder pilot pricing is limited to the first 50 approved users at $14.99/month or $129.99/year. Launch cohort pricing is limited to the next 500 launch users at $19.99/month or $149.99/year. Gold users are currently priced at $29.99/month or $299.99/year, and planned Platinum pricing is currently presented at $34.99/month or $349.99/year before release.",
-          "Pricing-lock eligibility applies only to the qualifying account, purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family. Future enterprise licensing, Pro/FleetOS capabilities, team accounts, APIs, or separately licensed modules may require separate pricing and terms.",
+          "Public Karpilo LoadIQ commercial pricing is displayed as Silver at $19.99/month or $199/year, Gold at $39.99/month or $399/year, Platinum at $69.99/month or $699/year, and Pro at $149.99/month or $1499/year. Legacy Launch display pricing is Silver at $14.99/month, Gold at $24.99/month, Platinum at $49.99/month, and Pro at $99.99/month. Any Pro modeled-truck surcharge is display-only until supported by approved billing provider configuration.",
+          "Pricing-lock eligibility applies only to the qualifying account, purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family. Future enterprise licensing, Karpilo FleetOS capabilities, team accounts, APIs, or separately licensed modules may require separate pricing and terms.",
         ],
       },
       {

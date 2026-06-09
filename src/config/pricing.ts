@@ -1,13 +1,20 @@
-export type PublicPlanId =
-  | "founder-monthly"
-  | "founder-annual"
-  | "launch-monthly"
-  | "launch-annual"
-  | "standard-monthly"
-  | "standard-annual"
-  | "platinum-planned";
+export type PublicPlanId = "silver" | "gold" | "platinum" | "pro";
 export type InternalPlanTier = "founder" | "launch" | "standard" | "platinum";
 export type BillingInterval = "month" | "year";
+export type LoadIqCommercialTierId = PublicPlanId;
+export type LoadIqCommercialTier = {
+  id: LoadIqCommercialTierId;
+  name: string;
+  decisionSupportDepth: string;
+  coreQuestion: string;
+  homepageStory: string;
+  monthlyPrice: number;
+  annualPrice: number;
+  legacyLaunchMonthlyPrice: number;
+  upgradePath: string;
+  capabilities: readonly string[];
+  displayOnly: true;
+};
 
 export const FOUNDER_ACCESS = {
   name: "Founding 50 Pilot Access",
@@ -39,137 +46,114 @@ export const LAUNCH_ACCESS = {
 } as const;
 
 export const STANDARD_ACCESS = {
-  name: "Gold Access",
-  monthlyPrice: 29.99,
-  annualPrice: 299.99,
+  name: "Gold",
+  monthlyPrice: 39.99,
+  annualPrice: 399,
 } as const;
 
 export const PLATINUM_ACCESS = {
-  name: "Platinum Access",
-  status: "Coming Soon",
-  monthlyPrice: 34.99,
-  annualPrice: 349.99,
-  priceLabel: "$34.99/mo or $349.99/year",
-  annualPositioning:
-    "Planned premium intelligence layer that expands Gold with advanced trend and forecasting concepts.",
+  name: "Platinum",
+  status: "Display Only",
+  monthlyPrice: 69.99,
+  annualPrice: 699,
+  priceLabel: "$69.99/mo or $699/year",
+  annualPositioning: "Variance Intelligence for profitability pattern context.",
 } as const;
 
-export const PUBLIC_PRICING_PLANS = [
-  {
-    id: "founder-monthly",
-    tier: "founder",
-    name: "Founder Pilot Monthly",
-    price: PILOT_ACCESS.monthlyPrice,
-    interval: "month",
-    description: "Reserved for the first 50 approved founder pilot users.",
-    cta: "Founder reservation",
-    bullets: [
-      "7-day free trial where provider rules allow",
-      "Lifetime pricing lock while the account remains active and in good standing",
-      "Future released Karpilo LoadIQ features made generally available within the purchased entitlement scope and current product family",
+export const LOADIQ_PRO_MODELED_TRUCK_SURCHARGE = {
+  label: "Additional modeled truck",
+  monthlyPrice: 10,
+  displayOnly: true,
+} as const;
+
+export const LOADIQ_COMMERCIAL_TIERS = {
+  silver: {
+    id: "silver",
+    name: "Silver",
+    decisionSupportDepth: "Load Viability",
+    coreQuestion: "Is this load worth hauling?",
+    homepageStory: "Know if the load is worth hauling.",
+    monthlyPrice: 19.99,
+    annualPrice: 199,
+    legacyLaunchMonthlyPrice: 14.99,
+    upgradePath:
+      "Upgrade to Gold when one-off load checks become repeat freight decisions.",
+    capabilities: [
+      "Load viability decision support",
+      "Freight profitability estimate positioning",
+      "Break-even and margin pressure framing",
+      "Load-level operating-cost awareness",
     ],
+    displayOnly: true,
   },
-  {
-    id: "launch-monthly",
-    tier: "launch",
-    name: "Launch Monthly",
-    price: LAUNCH_ACCESS.monthlyPrice,
-    interval: "month",
-    description: "Reserved for the next 500 launch users after founder pilot allocation.",
-    cta: "Launch reservation",
-    featured: true,
-    bullets: [
-      "7-day free trial where provider rules allow",
-      "First 500 launch users across two phases of 250",
-      "Lifetime pricing lock with future released Karpilo LoadIQ features made generally available within the purchased entitlement scope and current product family",
+  gold: {
+    id: "gold",
+    name: "Gold",
+    decisionSupportDepth: "Operational Visibility",
+    coreQuestion: "What freight should I repeat, avoid, or adjust?",
+    homepageStory: "Know which freight to repeat.",
+    monthlyPrice: 39.99,
+    annualPrice: 399,
+    legacyLaunchMonthlyPrice: 24.99,
+    upgradePath:
+      "Upgrade to Platinum when saved patterns and actuals need deeper variance explanation.",
+    capabilities: [
+      "Operational freight pattern visibility",
+      "Repeat, avoid, or adjust decision support",
+      "Saved-load and workflow context positioning",
+      "Lane, pay, fuel, overhead, and margin awareness",
     ],
+    displayOnly: true,
   },
-  {
-    id: "standard-monthly",
-    tier: "standard",
-    name: "Gold Monthly",
-    price: STANDARD_ACCESS.monthlyPrice,
-    interval: "month",
-    description:
-      "Full operational feature tier for estimating freight margin, fuel exposure, overhead, and trip profitability context.",
-    cta: "Gold reservation",
-    bullets: [
-      "7-day free trial where provider rules allow",
-      "Load, route, fuel, overhead, and trip margin visibility",
-      "Analysis support for deadhead exposure, fuel variance, and operational leakage",
-      "Prices are subject to change for future billing periods or future subscribers",
+  platinum: {
+    id: "platinum",
+    name: "Platinum",
+    decisionSupportDepth: "Variance Intelligence",
+    coreQuestion:
+      "Why are my estimates wrong and what patterns are affecting profitability?",
+    homepageStory: "Know why profitability changes.",
+    monthlyPrice: 69.99,
+    annualPrice: 699,
+    legacyLaunchMonthlyPrice: 49.99,
+    upgradePath:
+      "Upgrade to Pro when variance intelligence needs to support scale, capital, and growth planning.",
+    capabilities: [
+      "Estimate-to-actual variance positioning",
+      "Profitability pattern interpretation",
+      "Margin compression and operating drift awareness",
+      "Maintenance, fuel, route, and expense pattern context",
     ],
+    displayOnly: true,
   },
-  {
-    id: "founder-annual",
-    tier: "founder",
-    name: "Founder Pilot Annual",
-    price: PILOT_ACCESS.annualPrice,
-    interval: "year",
-    description: "Annual founder pilot access for approved Founding 50 users.",
-    cta: "Founder annual",
-    bullets: [
-      "First 50 founder pilot users only",
-      "7-day free trial where provider rules allow",
-      "Lifetime pricing lock with future released Karpilo LoadIQ features made generally available within the purchased entitlement scope and current product family",
+  pro: {
+    id: "pro",
+    name: "Pro",
+    decisionSupportDepth: "Growth Intelligence",
+    coreQuestion: "Can this operation scale safely and profitably?",
+    homepageStory: "Know when your operation is ready to grow.",
+    monthlyPrice: 149.99,
+    annualPrice: 1499,
+    legacyLaunchMonthlyPrice: 99.99,
+    upgradePath:
+      "Use Pro when repeatable per-truck modeling, capital planning, reserve goals, and growth thresholds become necessary.",
+    capabilities: [
+      "Scale projection positioning",
+      "Threshold, reserve, and capital planning context",
+      "Hiring and expansion modeling positioning",
+      "Risk forecasting and repeatable per-truck modeling context",
     ],
+    displayOnly: true,
   },
-  {
-    id: "launch-annual",
-    tier: "launch",
-    name: "Launch Annual",
-    price: LAUNCH_ACCESS.annualPrice,
-    interval: "year",
-    description: "Annual launch cohort pricing for the first 500 launch users.",
-    cta: "Launch annual",
-    savingsLabel: "Launch cohort annual rate",
-    bullets: [
-      "First 500 launch users",
-      "Two controlled phases of 250 users",
-      "7-day free trial and lifetime pricing lock where provider rules allow",
-    ],
-  },
-  {
-    id: "standard-annual",
-    tier: "standard",
-    name: "Gold Annual",
-    price: STANDARD_ACCESS.annualPrice,
-    interval: "year",
-    description:
-      "Annual Gold access for year-round visibility, overhead awareness, and operating discipline.",
-    cta: "Gold annual",
-    savingsLabel: "Gold annual rate",
-    bullets: [
-      "7-day free trial where provider rules allow",
-      "Full operational feature tier with lower effective monthly overhead",
-      "Trip margin awareness, recurring overhead visibility, and saved decision history",
-      "Prices are subject to change for future billing periods or future subscribers",
-    ],
-  },
-  {
-    id: "platinum-planned",
-    tier: "platinum",
-    name: "Platinum Planned",
-    price: 0,
-    priceLabel: PLATINUM_ACCESS.priceLabel,
-    interval: "year",
-    description:
-      "Planned premium operational intelligence that enhances Gold with deeper trend visibility and future reporting.",
-    cta: "Platinum updates",
-    statusLabel: PLATINUM_ACCESS.status,
-    savingsLabel: "Planned premium layer",
-    bullets: [
-      "7-day free trial planned where provider rules allow",
-      "Prices are subject to change before release",
-      "Gold remains the complete operational access tier; Platinum adds advanced intelligence",
-      "IFTA estimation intelligence with verification-required disclaimers",
-      "Maintenance and out-of-route intelligence for operational refinement",
-      "Year-over-year and month-to-month profitability pattern visibility",
-      "Driver habit insights, efficiency drift signals, and margin compression trends",
-      "Premium reporting experience planned for a later release",
-    ],
-  },
+} as const satisfies Record<LoadIqCommercialTierId, LoadIqCommercialTier>;
+
+export const LOADIQ_COMMERCIAL_TIER_LIST = [
+  LOADIQ_COMMERCIAL_TIERS.silver,
+  LOADIQ_COMMERCIAL_TIERS.gold,
+  LOADIQ_COMMERCIAL_TIERS.platinum,
+  LOADIQ_COMMERCIAL_TIERS.pro,
 ] as const;
+
+export const PUBLIC_PRICING_PLANS = LOADIQ_COMMERCIAL_TIER_LIST;
 
 export const INTERNAL_FOUNDER_PLANS = [
   {
@@ -189,4 +173,9 @@ export const INTERNAL_FOUNDER_PLANS = [
 export function formatPriceLabel(price: number, interval: BillingInterval) {
   if (price === 0) return "$0";
   return `$${price.toFixed(2)}/${interval === "month" ? "mo" : "yr"}`;
+}
+
+export function formatCommercialPriceLabel(price: number, interval: BillingInterval) {
+  const displayPrice = Number.isInteger(price) ? String(price) : price.toFixed(2);
+  return `$${displayPrice}/${interval === "month" ? "mo" : "yr"}`;
 }

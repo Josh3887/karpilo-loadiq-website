@@ -771,8 +771,8 @@ export function WebsiteBillingPanel() {
           </div>
           <p className="text-sm leading-6 text-slate-400">
             This website keeps account and subscription support available from
-            a computer. Gold and planned Platinum access are positioned as
-            operational visibility tools, while payment details stay with the
+            a computer. Silver, Gold, Platinum, and Pro describe Karpilo LoadIQ
+            decision-support depth, while payment details stay with the
             authorized billing provider.
           </p>
           <div className="grid gap-3 sm:grid-cols-2">

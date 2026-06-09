@@ -43,8 +43,9 @@ import {
   demoSteps,
 } from "@/config/product-demo";
 import {
-  PUBLIC_PRICING_PLANS,
-  formatPriceLabel,
+  LOADIQ_COMMERCIAL_TIER_LIST,
+  LOADIQ_PRO_MODELED_TRUCK_SURCHARGE,
+  formatCommercialPriceLabel,
 } from "@/config/pricing";
 import {
   educationCards,
@@ -96,12 +97,6 @@ const subscriptionValuePoints = [
       "The goal is not a guaranteed outcome. The goal is clearer numbers so operators can evaluate freight with less guesswork and more operating context.",
   },
 ] as const;
-
-function publicPlanPriceLabel(plan: (typeof PUBLIC_PRICING_PLANS)[number]) {
-  return "priceLabel" in plan
-    ? plan.priceLabel
-    : formatPriceLabel(plan.price, plan.interval);
-}
 
 type CtaMode = "waitlist" | "link";
 
@@ -273,9 +268,10 @@ function SubscriptionValuePanel() {
           </h2>
           <p className="mt-5 leading-8 text-slate-300">
             One overlooked deadhead leg, fuel variance, detention assumption, or
-            overhead gap can often exceed the monthly Gold subscription cost.
+            overhead gap can exceed the cost of better decision support.
             Karpilo LoadIQ does not guarantee savings; it helps expose pressure
-            earlier so decisions can be made with clearer numbers.
+            earlier so decisions can be made with clearer numbers at the right
+            commercial depth.
           </p>
         </div>
         <div className="grid gap-3 sm:grid-cols-3">
@@ -295,6 +291,78 @@ function SubscriptionValuePanel() {
         </div>
       </div>
     </section>
+  );
+}
+
+function CommercialTierCard({
+  tier,
+  compact = false,
+}: {
+  tier: (typeof LOADIQ_COMMERCIAL_TIER_LIST)[number];
+  compact?: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-[1.5rem] border p-5 ${
+        tier.id === "gold"
+          ? "border-red-400/35 bg-[#111827]/90 shadow-[0_0_44px_rgba(239,68,68,0.12)]"
+          : "border-white/10 bg-[#0B1120]/80"
+      }`}
+    >
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-sky-300">
+        Karpilo LoadIQ {tier.name}
+      </p>
+      <h3 className="mt-3 text-2xl font-black tracking-[-0.04em] text-white">
+        {tier.decisionSupportDepth}
+      </h3>
+      <p className="mt-3 text-sm leading-6 text-slate-300">{tier.coreQuestion}</p>
+      <div className="mt-5 grid gap-2 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-slate-300">
+        <div className="flex justify-between gap-4">
+          <span>Monthly</span>
+          <strong className="text-white">
+            {formatCommercialPriceLabel(tier.monthlyPrice, "month")}
+          </strong>
+        </div>
+        <div className="flex justify-between gap-4">
+          <span>Annual</span>
+          <strong className="text-white">
+            {formatCommercialPriceLabel(tier.annualPrice, "year")}
+          </strong>
+        </div>
+        <div className="flex justify-between gap-4">
+          <span>Legacy Launch</span>
+          <strong className="text-white">
+            {formatCommercialPriceLabel(tier.legacyLaunchMonthlyPrice, "month")}
+          </strong>
+        </div>
+        {tier.id === "pro" ? (
+          <div className="flex justify-between gap-4 border-t border-white/10 pt-2">
+            <span>{LOADIQ_PRO_MODELED_TRUCK_SURCHARGE.label}</span>
+            <strong className="text-white">
+              {formatCommercialPriceLabel(
+                LOADIQ_PRO_MODELED_TRUCK_SURCHARGE.monthlyPrice,
+                "month"
+              )}
+            </strong>
+          </div>
+        ) : null}
+      </div>
+      {!compact ? (
+        <>
+          <div className="mt-5 space-y-3">
+            {tier.capabilities.map((capability) => (
+              <div key={capability} className="flex gap-3">
+                <Check className="mt-0.5 h-5 w-5 shrink-0 text-sky-300" />
+                <p className="text-sm leading-6 text-slate-300">{capability}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-5 rounded-2xl border border-sky-300/20 bg-sky-400/5 p-4 text-sm leading-6 text-sky-100">
+            {tier.upgradePath}
+          </p>
+        </>
+      ) : null}
+    </div>
   );
 }
 
@@ -368,10 +436,16 @@ export function HomeMarketingPage() {
           >
             {PRODUCT_HERO.description}
           </motion.p>
-          <motion.div variants={fadeUp} className="mt-8">
-            <PrimaryCta mode="link" href="/demo">
-              Explore Karpilo LoadIQ
+          <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-4">
+            <PrimaryCta mode="link" href="/pricing">
+              Compare Pricing
             </PrimaryCta>
+            <Link
+              href="/demo"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-100 transition hover:border-sky-300/35 hover:text-sky-200"
+            >
+              Try Demo
+            </Link>
           </motion.div>
           <motion.div variants={fadeUp} className="mt-6 max-w-xl">
             <AppStorePlaceholders />
@@ -465,26 +539,29 @@ export function HomeMarketingPage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-12 sm:px-8">
-        <div className="grid gap-4 lg:grid-cols-3">
-          {PUBLIC_PRICING_PLANS.map((plan) => (
+        <SectionIntro
+          eyebrow="Commercial Tiers"
+          title="Pick the depth of decision support the workflow needs."
+          description="The tier path moves from load viability to operational visibility, variance intelligence, and growth intelligence without defining subscription value by truck count."
+        />
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {LOADIQ_COMMERCIAL_TIER_LIST.map((tier) => (
             <Link
-              key={plan.id}
+              key={tier.id}
               href="/pricing"
               className="rounded-[1.5rem] border border-white/10 bg-[#0B1120]/80 p-5 transition hover:border-sky-300/30"
             >
               <p className="text-xs font-black uppercase tracking-[0.18em] text-sky-300">
-                {plan.name}
+                Karpilo LoadIQ {tier.name}
               </p>
-              <p className="mt-4 text-3xl font-black text-white">
-                {publicPlanPriceLabel(plan)}
+              <h3 className="mt-3 text-xl font-black tracking-[-0.04em] text-white">
+                {tier.decisionSupportDepth}
+              </h3>
+              <p className="mt-4 text-2xl font-black text-white">
+                {formatCommercialPriceLabel(tier.monthlyPrice, "month")}
               </p>
-              {"statusLabel" in plan ? (
-                <p className="mt-2 text-xs font-black uppercase tracking-[0.16em] text-red-200">
-                  {plan.statusLabel}
-                </p>
-              ) : null}
               <p className="mt-3 text-sm leading-6 text-slate-400">
-                {plan.description}
+                {tier.homepageStory}
               </p>
             </Link>
           ))}
@@ -513,8 +590,8 @@ export function HomeMarketingPage() {
           />
         </div>
         <div className="mt-6 flex justify-center">
-          <PrimaryCta mode="link" href="/demo">
-            Explore Karpilo LoadIQ
+          <PrimaryCta mode="link" href="/pricing">
+            Compare Pricing
           </PrimaryCta>
         </div>
       </section>
@@ -544,7 +621,7 @@ export function HomeMarketingPage() {
       </section>
 
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Explore Karpilo LoadIQ" href="/demo" onWaitlist={openWaitlist} />
+      <StickyMobileCta label="Compare Pricing" href="/pricing" onWaitlist={openWaitlist} />
     </AppFrame>
   );
 }
@@ -556,54 +633,42 @@ export function PricingMarketingPage() {
     <AppFrame>
       <PageHeader
         eyebrow="Pricing"
-        title="Operational pricing for clearer freight decisions."
-        description="Gold is the complete operational access tier. Platinum is a planned intelligence expansion. Pilot and Launch access preserve early-user pricing locks while checkout remains controlled server-side."
+        title="Pricing by decision-support depth."
+        description="Silver, Gold, Platinum, and Pro define how deeply Karpilo LoadIQ supports freight profitability decisions. Pilot and Legacy Launch remain rollout pricing programs while checkout remains controlled server-side."
       />
       <SubscriptionValuePanel />
       <section className="mx-auto max-w-7xl px-6 pb-16 sm:px-8">
-        <div className="grid gap-5 lg:grid-cols-3">
-          {PUBLIC_PRICING_PLANS.map((plan) => (
-            <div
-              key={plan.id}
-              className={`rounded-[1.75rem] border p-6 ${
-                "featured" in plan && plan.featured
-                  ? "border-red-400/35 bg-[#111827]/90 shadow-[0_0_44px_rgba(239,68,68,0.12)]"
-                  : "border-white/10 bg-[#0B1120]/80"
-              }`}
-            >
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-sky-300">
-                {plan.name}
+        <div className="grid gap-5 lg:grid-cols-4">
+          {LOADIQ_COMMERCIAL_TIER_LIST.map((tier) => (
+            <CommercialTierCard key={tier.id} tier={tier} />
+          ))}
+        </div>
+
+        <div className="mt-8 grid gap-4 rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-5 md:grid-cols-4">
+          {LOADIQ_COMMERCIAL_TIER_LIST.map((tier) => (
+            <div key={tier.id} className="text-sm leading-6 text-slate-300">
+              <p className="font-black uppercase tracking-[0.16em] text-sky-300">
+                {tier.name}
               </p>
-              <p className="mt-5 text-4xl font-black tracking-[-0.05em] text-white">
-                {publicPlanPriceLabel(plan)}
-              </p>
-              {"statusLabel" in plan ? (
-                <p className="mt-2 text-xs font-black uppercase tracking-[0.16em] text-red-200">
-                  {plan.statusLabel}
-                </p>
-              ) : null}
-              <p className="mt-4 leading-7 text-slate-300">{plan.description}</p>
-              <div className="mt-6 space-y-3">
-                {plan.bullets.map((bullet) => (
-                  <div key={bullet} className="flex gap-3">
-                    <Check className="mt-0.5 h-5 w-5 shrink-0 text-sky-300" />
-                    <p className="text-sm leading-6 text-slate-300">{bullet}</p>
-                  </div>
-                ))}
-              </div>
+              <p className="mt-2 text-white">{tier.homepageStory}</p>
+              <p className="mt-2 text-slate-400">{tier.upgradePath}</p>
             </div>
           ))}
         </div>
 
         <div className="mt-8 rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-5 text-sm leading-7 text-slate-400">
           Public checkout remains disabled until payment systems are explicitly
-          enabled server-side. Locked promotional pricing is handled on
-          dedicated pilot and launch pages. Karpilo LoadIQ is decision-support
-          software; it does not guarantee savings, profit, freight availability,
-          or business outcomes.
+          enabled server-side. Legacy Launch prices are rollout pricing, not a
+          separate subscription tier. Pro modeled-truck surcharge is display
+          only until a billing provider configuration is approved. Karpilo
+          LoadIQ is decision-support software; it does not guarantee savings,
+          profit, freight availability, or business outcomes.
         </div>
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
           <PrimaryCta onWaitlist={openWaitlist}>Reserve Access</PrimaryCta>
+          <PrimaryCta mode="link" href="/demo">
+            Try Demo
+          </PrimaryCta>
         </div>
         <div className="mx-auto mt-6 max-w-2xl">
           <AppStorePlaceholders />
