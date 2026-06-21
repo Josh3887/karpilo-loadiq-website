@@ -13,9 +13,9 @@ export const LOADIQ_BRAND = {
 } as const;
 
 export const LOADIQ_URLS = {
-  website: "https://www.karpiloloadiq.com",
-  app: process.env.NEXT_PUBLIC_LOADIQ_APP_URL ?? "https://app.karpiloloadiq.com",
-  companyWebsite: "https://www.karpiloendeavortechnologies.com",
+  website: "https://karpilo-liq.com",
+  app: process.env.NEXT_PUBLIC_LOADIQ_APP_URL ?? "https://app.karpilo-liq.com",
+  companyWebsite: "https://karpiloendeavor.com",
   facebook: "https://www.facebook.com/",
 } as const;
 
