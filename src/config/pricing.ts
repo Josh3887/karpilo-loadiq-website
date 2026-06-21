@@ -1,6 +1,19 @@
 export type PublicPlanId = "silver" | "gold" | "platinum" | "pro";
+export type LaunchPricingPlanId = "founder_50" | "launch_500" | "standard_public";
 export type InternalPlanTier = "founder" | "launch" | "standard" | "platinum";
 export type BillingInterval = "month" | "year";
+export type LaunchPricingPlan = {
+  id: LaunchPricingPlanId;
+  eyebrow: string;
+  name: string;
+  monthlyPrice: number;
+  annualPrice: number;
+  capacityLabel: string;
+  lockLabel: string;
+  description: string;
+  bullets: readonly string[];
+  highlighted?: boolean;
+};
 export type LoadIqCommercialTierId = PublicPlanId;
 export type LoadIqCommercialTier = {
   id: LoadIqCommercialTierId;
@@ -46,10 +59,62 @@ export const LAUNCH_ACCESS = {
 } as const;
 
 export const STANDARD_ACCESS = {
-  name: "Gold",
-  monthlyPrice: 39.99,
-  annualPrice: 399,
+  name: "Standard Public Access",
+  monthlyPrice: 24.99,
+  annualPrice: 189.99,
 } as const;
+
+export const PUBLIC_PRICING_PHASES: readonly LaunchPricingPlan[] = [
+  {
+    id: "founder_50",
+    eyebrow: "Founding 50 Pilot",
+    name: "Founding Operator Access",
+    monthlyPrice: FOUNDER_ACCESS.monthlyPrice,
+    annualPrice: FOUNDER_ACCESS.annualPrice,
+    capacityLabel: "First 50 approved operators",
+    lockLabel: "Lifetime pilot pricing lock while active",
+    description:
+      "Reserved for approved pilot operators while the Founding 50 program is available.",
+    bullets: [
+      "Waitlist and qualification controlled server-side",
+      "Payment stays disabled unless launch gates prove ready",
+      "Pricing lock applies only within the qualifying entitlement scope",
+    ],
+  },
+  {
+    id: "launch_500",
+    eyebrow: "Launch 500",
+    name: "Launch Operator Access",
+    monthlyPrice: LAUNCH_ACCESS.monthlyPrice,
+    annualPrice: LAUNCH_ACCESS.annualPrice,
+    capacityLabel: "First 500 launch operators",
+    lockLabel: "Legacy launch pricing lock while active",
+    description:
+      "Reserved for the broader launch cohort after Founding 50 pilot allocation.",
+    bullets: [
+      "Separate from Founding 50 pilot access",
+      "Launch pricing applies only while the qualifying subscription remains active",
+      "Billing provider setup must match server-side eligibility records",
+    ],
+    highlighted: true,
+  },
+  {
+    id: "standard_public",
+    eyebrow: "Standard Public",
+    name: STANDARD_ACCESS.name,
+    monthlyPrice: STANDARD_ACCESS.monthlyPrice,
+    annualPrice: STANDARD_ACCESS.annualPrice,
+    capacityLabel: "General public access",
+    lockLabel: "No lifetime pricing lock",
+    description:
+      "Standard public pricing after pilot and launch promotional access are no longer available.",
+    bullets: [
+      "No pilot or legacy launch lock",
+      "Checkout remains waitlist-only until server gates are proven ready",
+      "Public text does not override Supabase reservation or entitlement records",
+    ],
+  },
+] as const;
 
 export const PLATINUM_ACCESS = {
   name: "Platinum",

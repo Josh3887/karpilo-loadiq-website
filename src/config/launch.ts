@@ -142,8 +142,8 @@ export const launch500Program = {
 } as const;
 
 export const standardPricing = {
-  monthlyPrice: 29.99,
-  annualPrice: 299.99,
+  monthlyPrice: 24.99,
+  annualPrice: 189.99,
   lockLabel: "No lifetime lock",
 } as const;
 
