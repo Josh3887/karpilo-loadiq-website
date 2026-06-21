@@ -22,7 +22,7 @@ export const SUBSCRIPTION_TERMS_SECTIONS: LegalSection[] = [
     title: "Plan Access and Feature Gates",
     paragraphs: [
       "Karpilo LoadIQ commercial tiers are Silver, Gold, Platinum, and Pro. They describe decision-support depth and published pricing. Pilot and Legacy Launch are protected rollout or promotional access programs within their purchased entitlement scope. Checkout availability, billing provider configuration, and entitlement enforcement may roll out separately.",
-      "Any displayed Pro modeled-truck surcharge is commercial pricing communication only until supported by an approved billing provider configuration.",
+      "The displayed Pro additional-truck surcharge is $10.00/month per additional truck and remains commercial pricing communication only until supported by an approved billing provider configuration.",
       "Subscription access is tied to the account and billing platform used at purchase. Promotional access may not be transferable between accounts, platforms, businesses, or app stores.",
       "Feature availability may evolve for future billing periods, future subscribers, future product modules, enterprise licensing, or separately licensed offerings where permitted by law and platform rules.",
     ],
