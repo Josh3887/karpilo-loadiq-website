@@ -61,7 +61,7 @@ export const LOADIQ_CONTACT_CHANNELS = [
     id: "updates",
     label: "Launch Updates",
     email: LOADIQ_CONTACT.updatesEmail,
-    description: "Pilot enrollment updates, second enrollment notices, maintenance, and status updates.",
+    description: "Pilot access, launch phase updates, maintenance, and status notices.",
     monitored: true,
   },
   {
@@ -96,6 +96,7 @@ export const LOADIQ_CONTACT_CHANNELS = [
 
 export const LOADIQ_ROUTES = {
   home: "/",
+  features: "/features",
   pricing: "/pricing",
   launch: "/launch",
   pilotProgram: "/pilot-program",
@@ -134,18 +135,17 @@ export const LOADIQ_APP_STORE_PLACEHOLDERS = [
 ] as const;
 
 export const LOADIQ_NAVIGATION_LINKS = [
+  { label: "Home", href: LOADIQ_ROUTES.home },
+  { label: "Features", href: LOADIQ_ROUTES.features },
   { label: "Pricing", href: LOADIQ_ROUTES.pricing },
-  { label: "Atlas", href: LOADIQ_ROUTES.atlas },
-  { label: "Demo", href: LOADIQ_ROUTES.demo },
   { label: "Launch", href: LOADIQ_ROUTES.launch },
-  { label: "Pilot", href: LOADIQ_ROUTES.pilotProgram },
-  { label: "Founder", href: LOADIQ_ROUTES.founder },
+  { label: "Demo", href: LOADIQ_ROUTES.demo },
 ] as const;
 
 export const LOADIQ_APP_ACCESS_LINKS = [
   {
     label: "Request Access",
-    href: LOADIQ_ROUTES.pilotProgram,
+    href: LOADIQ_ROUTES.launch,
     description: "Join controlled launch intake. Access may be limited by phase availability.",
   },
   {
@@ -153,64 +153,45 @@ export const LOADIQ_APP_ACCESS_LINKS = [
     href: LOADIQ_URLS.app,
     description: "Open the app portal. Launch access may be restricted.",
   },
-  {
-    label: "Account Settings",
-    href: LOADIQ_ROUTES.accountSettings,
-    description: "Manage website-side account identity if access has already been issued.",
-  },
-  {
-    label: "Billing Support",
-    href: LOADIQ_ROUTES.billing,
-    description: "Review billing support. Public subscription signup is not currently available.",
-  },
-  {
-    label: "Login",
-    href: LOADIQ_ROUTES.login,
-    description: "Sign in if you already have issued access.",
-  },
-  {
-    label: "Controlled Signup Status",
-    href: LOADIQ_ROUTES.signup,
-    description: "Public signup is not currently available; request access instead.",
-  },
-  {
-    label: "Subscription Help",
-    href: LOADIQ_ROUTES.subscriptionHelp,
-    description: "Reach the Karpilo LoadIQ billing channel.",
-  },
 ] as const;
 
 export const LOADIQ_FOOTER_LINKS = {
   platform: [
     { label: "Home", href: LOADIQ_ROUTES.home },
+    { label: "Features", href: LOADIQ_ROUTES.features },
     { label: "Pricing", href: LOADIQ_ROUTES.pricing },
-    { label: "Demo", href: LOADIQ_ROUTES.demo },
-    { label: "Atlas", href: LOADIQ_ROUTES.atlas },
     { label: "Launch", href: LOADIQ_ROUTES.launch },
-    { label: "Pilot Program", href: LOADIQ_ROUTES.pilotProgram },
-    { label: "Second Enrollment", href: LOADIQ_ROUTES.launchPromo },
+    { label: "Demo", href: LOADIQ_ROUTES.demo },
+  ],
+  access: [
+    { label: "Request Access", href: LOADIQ_ROUTES.launch },
+    { label: "Open Portal", href: LOADIQ_URLS.app, external: true },
+  ],
+  billingSupport: [
+    { label: "Billing", href: LOADIQ_ROUTES.billing },
+    { label: "Contact", href: LOADIQ_ROUTES.contact },
+    { label: "Status", href: LOADIQ_ROUTES.status },
+    { label: "Billing Email", href: `mailto:${LOADIQ_CONTACT.billingEmail}`, external: true },
+  ],
+  legal: [
+    { label: "Legal Center", href: LOADIQ_ROUTES.legal },
+    { label: "Terms", href: "/legal/terms" },
+    { label: "Privacy", href: "/legal/privacy" },
+    { label: "Refund Policy", href: "/legal/refund-policy" },
+    { label: "Billing Policy", href: "/legal/billing-policy" },
+    { label: "Subscription Terms", href: "/legal/subscription-terms" },
   ],
   company: [
     { label: "Founder", href: LOADIQ_ROUTES.founder },
     { label: "About", href: "/about" },
-    { label: "Contact", href: LOADIQ_ROUTES.contact },
-    { label: "Status", href: LOADIQ_ROUTES.status },
-  ],
-  legal: [
-    { label: "Terms", href: "/legal/terms" },
-    { label: "Privacy", href: "/legal/privacy" },
-    { label: "Refunds", href: "/legal/refund-policy" },
-    { label: "Subscriptions", href: "/legal/subscription-terms" },
-    { label: "Safety", href: "/legal/safety-disclosure" },
-    { label: "Billing", href: "/legal/billing-policy" },
-    { label: "Pricing Lock", href: "/legal/pricing-lock-policy" },
-    { label: "Legal Center", href: LOADIQ_ROUTES.legal },
+    { label: "Company", href: LOADIQ_URLS.companyWebsite, external: true },
   ],
 } as const;
 
 export const LOADIQ_LAUNCH_KEYS = {
-  founder50: "founder_50",
-  launch500: "launch_500",
+  pilotAccess: "pilot_access",
+  launchPhase1: "launch_phase_1",
+  launchPhase2: "launch_phase_2",
   standardFuture: "standard_future",
   safetyAcknowledgmentStorageKey: "karpilo_loadiq_hands_free_acknowledged",
 } as const;

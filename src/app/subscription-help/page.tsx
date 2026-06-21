@@ -1,11 +1,13 @@
-import { WebsiteSubscriptionHelpPanel } from "@/components/account/website-access-panels";
+import { redirect } from "next/navigation";
+
+import { LOADIQ_ROUTES } from "@/config/loadiq";
 
 export const metadata = {
-  title: "Subscription Help | Karpilo LoadIQ",
+  title: "Website Billing | Karpilo LoadIQ",
   description:
-    "Request Karpilo LoadIQ subscription, trial, account access, refund review, or billing help.",
+    "Karpilo LoadIQ subscription help is handled through the canonical website billing page.",
 };
 
 export default function SubscriptionHelpPage() {
-  return <WebsiteSubscriptionHelpPanel />;
+  redirect(LOADIQ_ROUTES.billing);
 }

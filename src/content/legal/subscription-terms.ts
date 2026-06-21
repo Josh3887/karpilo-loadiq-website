@@ -21,8 +21,8 @@ export const SUBSCRIPTION_TERMS_SECTIONS: LegalSection[] = [
     id: "plan-access",
     title: "Plan Access and Feature Gates",
     paragraphs: [
-      "Karpilo LoadIQ commercial tiers are Silver, Gold, Platinum, and Pro. They describe decision-support depth and published pricing. Pilot enrollment and second enrollment are protected rollout or promotional eligibility phases within the purchased entitlement scope. Checkout availability, billing provider configuration, and entitlement enforcement may roll out separately.",
-      "Pilot enrollment covers the first 100 approved users. Second enrollment covers the next 500 approved users. Both enrollment phases may support monthly enrollment discount pricing across the available commercial tiers when confirmed by server-side reservation, entitlement, and billing-provider records.",
+      "Karpilo LoadIQ commercial tiers are Silver, Gold, Platinum, and Pro. They describe decision-support depth and published pricing. Pilot Access, Launch Phase 1, and Launch Phase 2 are protected rollout or promotional eligibility phases within the purchased entitlement scope. Checkout availability, billing provider configuration, and entitlement enforcement may roll out separately.",
+      "Pilot Access covers slots 1-100. Launch Phase 1 covers slots 101-350, and Launch Phase 2 covers slots 351-600. These controlled rollout phases may support monthly enrollment discount pricing across the available commercial tiers when confirmed by server-side reservation, entitlement, and billing-provider records.",
       "The displayed Pro additional-truck surcharge is $10.00/month per additional truck and remains commercial pricing communication only until supported by an approved billing provider configuration.",
       "Subscription access is tied to the account and billing platform used at purchase. Promotional access may not be transferable between accounts, platforms, businesses, or app stores.",
       "Feature availability may evolve for future billing periods, future subscribers, future product modules, enterprise licensing, or separately licensed offerings where permitted by law and platform rules.",
@@ -32,8 +32,8 @@ export const SUBSCRIPTION_TERMS_SECTIONS: LegalSection[] = [
     id: "pilot-launch-scope",
     title: "Enrollment Entitlement Scope",
     paragraphs: [
-      "Pilot enrollment or second enrollment lifetime or grandfathered access applies to the qualifying account, selected commercial tier, purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family features made generally available for that entitlement class.",
-      "Pilot enrollment and second enrollment access do not grant ownership of Karpilo LoadIQ, unlimited future platform access, automatic access to all future enterprise products, Karpilo FleetOS systems, fleet-management modules, Pro/FleetOS capabilities, API products, team accounts, or separately licensed future offerings.",
+      "Pilot Access, Launch Phase 1, Launch Phase 2, lifetime, or grandfathered access applies to the qualifying account, selected commercial tier, purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family features made generally available for that entitlement class.",
+      "Controlled launch access does not grant ownership of Karpilo LoadIQ, unlimited future platform access, automatic access to all future enterprise products, Karpilo FleetOS systems, fleet-management modules, Pro/FleetOS capabilities, API products, team accounts, or separately licensed future offerings.",
       "Karpilo Endeavor Technologies LLC reserves the right to create future pricing, future enterprise licensing, future feature segmentation, future operational modules, and separately licensed products without converting every legacy entitlement into those future offerings.",
     ],
   },

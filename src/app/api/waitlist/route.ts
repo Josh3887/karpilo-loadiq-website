@@ -10,8 +10,9 @@ const notifyEmail =
   LOADIQ_CONTACT.newsletterEmail;
 
 const allowedCohorts = [
-  LOADIQ_LAUNCH_KEYS.founder50,
-  LOADIQ_LAUNCH_KEYS.launch500,
+  LOADIQ_LAUNCH_KEYS.pilotAccess,
+  LOADIQ_LAUNCH_KEYS.launchPhase1,
+  LOADIQ_LAUNCH_KEYS.launchPhase2,
   LOADIQ_LAUNCH_KEYS.standardFuture,
 ] as const;
 const allowedBillingProviders = [
@@ -30,11 +31,14 @@ const pricingByCohort: Record<
     pricingLockTier: string;
   }
 > = {
-  founder_50: {
+  pilot_access: {
     pricingLockTier: "pilot_enrollment",
   },
-  launch_500: {
-    pricingLockTier: "second_enrollment",
+  launch_phase_1: {
+    pricingLockTier: "launch_phase_1",
+  },
+  launch_phase_2: {
+    pricingLockTier: "launch_phase_2",
   },
   standard_future: {
     pricingLockTier: "standard",
@@ -42,15 +46,16 @@ const pricingByCohort: Record<
 };
 
 const rolloutPhaseByCohort: Record<Cohort, string> = {
-  founder_50: "PRELAUNCH_WAITLIST",
-  launch_500: "FOUNDER_PILOT",
+  pilot_access: "PRELAUNCH_WAITLIST",
+  launch_phase_1: "LAUNCH_PHASE_1",
+  launch_phase_2: "LAUNCH_PHASE_2",
   standard_future: "GENERAL_AVAILABILITY",
 };
 
 function normalizeCohort(value: unknown): Cohort {
   return allowedCohorts.includes(value as Cohort)
     ? (value as Cohort)
-    : LOADIQ_LAUNCH_KEYS.founder50;
+    : LOADIQ_LAUNCH_KEYS.pilotAccess;
 }
 
 function normalizeBillingProvider(value: unknown): BillingProvider {
@@ -293,7 +298,7 @@ export async function POST(request: Request) {
       email,
       company,
       fleet_size: fleetSize,
-      founder_access: cohort === LOADIQ_LAUNCH_KEYS.founder50,
+      founder_access: cohort === LOADIQ_LAUNCH_KEYS.pilotAccess,
       program_interest: cohort,
       metadata: {
         intended_billing_provider: intendedBillingProvider,

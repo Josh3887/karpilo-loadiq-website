@@ -22,7 +22,6 @@ import {
 
 import { AppStorePlaceholders } from "@/components/app-store/app-store-placeholders";
 import { DemoVideoPlayer } from "@/components/demo/DemoVideoPlayer";
-import { CurrentNationalDieselAverageCard } from "@/components/fuel/current-national-diesel-average-card";
 import SiteFooter from "@/components/navigation/site-footer";
 import SiteHeader from "@/components/navigation/site-header";
 import { UniversalBackButton } from "@/components/navigation/universal-back-button";
@@ -30,6 +29,7 @@ import { RolloutCommandCenter } from "@/components/rollout/rollout-command-cente
 import WaitlistModal from "@/components/waitlist/waitlist-modal";
 import { LOADIQ_BRAND, LOADIQ_ROUTES, LOADIQ_URLS } from "@/config/loadiq";
 import {
+  FEATURE_WORKFLOW_GROUPS,
   PRODUCT_DISCLAIMER_SNIPPET,
   PRODUCT_FEATURE_GROUPS,
   PRODUCT_HERO,
@@ -53,7 +53,8 @@ import {
   educationCards,
   founderStory,
   founderWelcomeCopy,
-  launch500Program,
+  launchPhase1Program,
+  launchPhase2Program,
   pilotPaymentGate,
   pilotProgram,
 } from "@/config/launch";
@@ -97,6 +98,60 @@ const subscriptionValuePoints = [
     title: "Margin discipline",
     description:
       "The goal is not a guaranteed outcome. The goal is clearer numbers so operators can evaluate freight with less guesswork and more operating context.",
+  },
+] as const;
+
+const operatorProblemPoints = [
+  "Gross revenue is not profit.",
+  "RPM can lie when deadhead is ignored.",
+  "Fuel price changes the load before the wheels turn.",
+  "Fixed and variable costs decide whether the rate really works.",
+  "Accessorials, tolls, factoring, dispatch fees, and pay structure can distort the real number.",
+] as const;
+
+const loadIqDoesPoints = [
+  "Estimates load profitability from user-entered freight assumptions.",
+  "Calculates gross RPM, projected net, and true RPM after deadhead.",
+  "Evaluates fuel exposure and operating cost pressure.",
+  "Supports break-even awareness before an independent load decision.",
+  "Helps operators compare freight assumptions without acting as a broker or dispatcher.",
+] as const;
+
+const productBoundaryPoints = [
+  "Not a dispatch platform, broker, or load board.",
+  "Not an ELD, routing authority, or compliance advisor.",
+  "Not a tax, legal, accounting, or insurance advisor.",
+  "Not a guaranteed-profit system.",
+] as const;
+
+const requestAccessPoints = [
+  "Request Access places the operator into controlled launch consideration.",
+  "Access is limited by phase availability, approval status, and provider readiness.",
+  "Slot assignment and billing eligibility must be confirmed server-side.",
+  "Public signup and public checkout are not currently available.",
+] as const;
+
+const issuedUserPoints = [
+  "Issued users access the app portal at app.karpilo-liq.com.",
+  "Saved calculations, operating profiles, app settings, and the app dashboard belong in the app portal.",
+  "The public website explains the product, pricing, launch order, support, and legal boundaries.",
+] as const;
+
+const billingChannelPoints = [
+  {
+    title: "Website / Stripe Billing",
+    description:
+      "Website subscriptions are processed through Stripe. Stripe subscribers may manage payment method, invoices, cancellation, and plan billing through the Stripe billing portal when available.",
+  },
+  {
+    title: "Apple App Store Billing",
+    description:
+      "Apple App Store subscriptions are managed by Apple. Karpilo LoadIQ cannot directly modify Apple App Store billing from the website.",
+  },
+  {
+    title: "Google Play Billing",
+    description:
+      "Google Play subscriptions are managed by Google. Karpilo LoadIQ cannot directly modify Google Play billing from the website.",
   },
 ] as const;
 
@@ -231,28 +286,6 @@ export function PromotionBanner({
   return (
     <div className={className}>
       {content}
-    </div>
-  );
-}
-
-function SectionIntro({
-  eyebrow,
-  title,
-  description,
-}: {
-  eyebrow: string;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="mx-auto max-w-3xl text-center">
-      <p className="text-xs font-black uppercase tracking-[0.24em] text-red-300">
-        {eyebrow}
-      </p>
-      <h2 className="mt-4 text-3xl font-black tracking-[-0.045em] text-white sm:text-5xl">
-        {title}
-      </h2>
-      <p className="mt-5 text-base leading-8 text-slate-300">{description}</p>
     </div>
   );
 }
@@ -425,11 +458,20 @@ function EnrollmentPhaseCard({
   );
 }
 
-function FeatureGroupSection() {
+function FeatureGroupSection({
+  groups = PRODUCT_FEATURE_GROUPS,
+}: {
+  groups?: readonly {
+    eyebrow: string;
+    title: string;
+    description: string;
+    features: readonly { title: string; description: string }[];
+  }[];
+}) {
   return (
     <section className="mx-auto max-w-7xl px-6 py-12 sm:px-8">
       <div className="grid gap-6">
-        {PRODUCT_FEATURE_GROUPS.map((group, groupIndex) => (
+        {groups.map((group, groupIndex) => (
           <div
             key={group.eyebrow}
             className="grid gap-5 border-t border-white/10 pt-8 lg:grid-cols-[0.82fr_1.18fr]"
@@ -464,6 +506,104 @@ function FeatureGroupSection() {
                 );
               })}
             </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function TextPointSection({
+  eyebrow,
+  title,
+  description,
+  points,
+  columns = "lg:grid-cols-5",
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+  points: readonly string[];
+  columns?: string;
+}) {
+  return (
+    <section className="mx-auto max-w-7xl px-6 py-12 sm:px-8">
+      <div className="grid gap-7 border-t border-white/10 pt-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-red-300">
+            {eyebrow}
+          </p>
+          <h2 className="mt-3 text-3xl font-black tracking-[-0.045em] text-white sm:text-4xl">
+            {title}
+          </h2>
+          <p className="mt-4 leading-7 text-slate-300">{description}</p>
+        </div>
+        <div className={`grid gap-3 sm:grid-cols-2 ${columns}`}>
+          {points.map((point) => (
+            <div
+              key={point}
+              className="rounded-2xl border border-white/10 bg-[#0B1120]/80 p-4"
+            >
+              <p className="text-sm font-bold leading-6 text-slate-200">{point}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FinalCtaSection({ openWaitlist }: { openWaitlist: () => void }) {
+  return (
+    <section className="mx-auto max-w-7xl px-6 pb-20 pt-10 sm:px-8">
+      <div className="grid gap-6 rounded-[1.5rem] border border-sky-300/20 bg-[#0B1120]/85 p-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-sky-300">
+            Controlled Access
+          </p>
+          <h2 className="mt-3 text-3xl font-black tracking-[-0.045em] text-white">
+            Request access for controlled launch consideration.
+          </h2>
+          <p className="mt-4 leading-7 text-slate-300">
+            Public signup is not currently available. Issued users can access
+            the app portal, and website billing applies only to Stripe/web
+            subscribers once subscription access is issued.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-3 lg:justify-end">
+          <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
+          <PrimaryCta mode="link" href={LOADIQ_ROUTES.demo}>
+            View Demo
+          </PrimaryCta>
+          <Link
+            href={LOADIQ_URLS.app}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-12 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-sky-100 transition hover:bg-sky-400/20"
+          >
+            Open Portal
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BillingChannelSection() {
+  return (
+    <section className="mx-auto max-w-7xl px-6 py-10 sm:px-8">
+      <div className="grid gap-5 border-t border-white/10 pt-8 lg:grid-cols-3">
+        {billingChannelPoints.map((point) => (
+          <div
+            key={point.title}
+            className="rounded-2xl border border-white/10 bg-[#0B1120]/80 p-5"
+          >
+            <h3 className="text-sm font-black uppercase tracking-[0.16em] text-sky-300">
+              {point.title}
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              {point.description}
+            </p>
           </div>
         ))}
       </div>
@@ -608,8 +748,6 @@ export function HomeMarketingPage() {
         </motion.div>
       </section>
 
-      <CurrentNationalDieselAverageCard />
-
       <section className="mx-auto max-w-7xl px-6 py-12 sm:px-8">
         <RolloutCommandCenter
           onReserve={openWaitlist}
@@ -618,102 +756,31 @@ export function HomeMarketingPage() {
         />
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-14 sm:px-8">
-        <SectionIntro
-          eyebrow="Core value"
-          title="See the operating pressure before the decision."
-          description="Karpilo LoadIQ turns user-supplied freight details into clearer profitability estimates without burying operators in generic software noise."
-        />
-      </section>
+      <TextPointSection
+        eyebrow="The Problem"
+        title="The rate is only useful after the real costs show up."
+        description="A load can look strong until deadhead, fuel, overhead, fees, and pay structure expose the actual operating pressure."
+        points={operatorProblemPoints}
+      />
+
+      <TextPointSection
+        eyebrow="What LoadIQ Does"
+        title="Calculation-based freight profitability intelligence."
+        description="Karpilo LoadIQ helps operators inspect freight assumptions before making their own load decisions."
+        points={loadIqDoesPoints}
+      />
 
       <FeatureGroupSection />
 
-      <section className="mx-auto max-w-7xl px-6 py-12 sm:px-8">
-        <SectionIntro
-          eyebrow="Commercial Tiers"
-          title="Pick the depth of decision support the workflow needs."
-          description="The tier path moves from load viability to operational visibility, variance intelligence, and growth intelligence without defining subscription value by truck count."
-        />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {LOADIQ_COMMERCIAL_TIER_LIST.map((tier) => (
-            <Link
-              key={tier.id}
-              href="/pricing"
-              className="rounded-[1.5rem] border border-white/10 bg-[#0B1120]/80 p-5 transition hover:border-sky-300/30"
-            >
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-sky-300">
-                Karpilo LoadIQ {tier.name}
-              </p>
-              <h3 className="mt-3 text-xl font-black tracking-[-0.04em] text-white">
-                {tier.decisionSupportDepth}
-              </h3>
-              <p className="mt-4 text-2xl font-black text-white">
-                {formatCommercialPriceLabel(tier.monthlyPrice, "month")}
-              </p>
-              {tier.id === "pro" ? (
-                <p className="mt-2 text-xs font-bold uppercase tracking-[0.12em] text-sky-200">
-                  {LOADIQ_PRO_MODELED_TRUCK_SURCHARGE.priceLabel}
-                </p>
-              ) : null}
-              <p className="mt-3 text-sm leading-6 text-slate-400">
-                {tier.homepageStory}
-              </p>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <TextPointSection
+        eyebrow="Product Boundaries"
+        title="Decision support, not operational authority."
+        description="Karpilo LoadIQ provides calculation-based freight profitability intelligence and operational decision support."
+        points={productBoundaryPoints}
+        columns="lg:grid-cols-4"
+      />
 
-      <section className="mx-auto max-w-7xl px-6 py-14 sm:px-8">
-        <div className="grid gap-4 md:grid-cols-3">
-          <PromotionBanner
-            eyebrow="Pilot"
-            title="First 100 operators"
-            description="Pilot enrollment covers discounted tier access for the first 100 approved users."
-            href="/pilot-program"
-          />
-          <PromotionBanner
-            eyebrow="Demo"
-            title="View Karpilo LoadIQ Demo"
-            description="Use a public demo to move freight numbers and watch profitability change."
-            href="/demo"
-          />
-          <PromotionBanner
-            eyebrow="Founder"
-            title="Built on the road"
-            description="Read the story behind Karpilo LoadIQ and why it was designed for working operators."
-            href="/founder"
-          />
-        </div>
-        <div className="mt-6 flex justify-center">
-          <PrimaryCta mode="link" href="/pricing">
-            Compare Pricing
-          </PrimaryCta>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-6 pb-14 sm:px-8">
-        <div className="grid gap-5 rounded-[1.75rem] border border-white/10 bg-[#0B1120]/80 p-6 shadow-[0_0_40px_rgba(56,189,248,0.08)] md:grid-cols-[0.8fr_1.2fr] md:items-center">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-red-300">
-              Founder-led
-            </p>
-            <h2 className="mt-3 text-2xl font-black tracking-[-0.04em] text-white">
-              Built by someone actively living trucking.
-            </h2>
-          </div>
-          <div>
-            <p className="leading-7 text-slate-300">
-              Joshua Karpilo is an active driver and owner-operator with more than 13 years in trucking. Karpilo LoadIQ is shaped by real freight pressure, not boardroom theory.
-            </p>
-            <Link
-              href="/founder"
-              className="mt-4 inline-flex text-sm font-black uppercase tracking-[0.14em] text-sky-300 transition hover:text-sky-200"
-            >
-              Read the founder story
-            </Link>
-          </div>
-        </div>
-      </section>
+      <FinalCtaSection openWaitlist={openWaitlist} />
 
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
       <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
@@ -729,7 +796,7 @@ export function PricingMarketingPage() {
       <PageHeader
         eyebrow="Pricing"
         title="Pricing by decision-support depth."
-        description="Silver, Gold, Platinum, and Pro define how deeply Karpilo LoadIQ supports freight profitability decisions. Pilot enrollment and second enrollment control discount eligibility while checkout remains controlled server-side."
+        description="Silver, Gold, Platinum, and Pro define how deeply Karpilo LoadIQ supports freight profitability decisions. Pilot Access, Launch Phase 1, and Launch Phase 2 control rollout eligibility while checkout remains controlled server-side."
       />
       <SubscriptionValuePanel />
       <section className="mx-auto max-w-7xl px-6 pb-16 sm:px-8">
@@ -739,7 +806,7 @@ export function PricingMarketingPage() {
           ))}
         </div>
 
-        <div className="mt-8 grid gap-5 lg:grid-cols-2">
+        <div className="mt-8 grid gap-5 lg:grid-cols-3">
           {DISCOUNTED_ENROLLMENT_PHASES.map((phase) => (
             <EnrollmentPhaseCard key={phase.id} phase={phase} />
           ))}
@@ -763,10 +830,15 @@ export function PricingMarketingPage() {
           programs, not separate subscription tiers. Pro includes a
           $10.00/month charge per additional truck. Karpilo LoadIQ is
           decision-support software; it does not guarantee savings, profit,
-          freight availability, or business outcomes.
+          freight availability, or business outcomes. Final public pricing may
+          change before Open Market launch if the launch-readiness review
+          requires it.
         </div>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
+          <PrimaryCta mode="link" href={LOADIQ_ROUTES.launch}>
+            View Launch Phases
+          </PrimaryCta>
           <PrimaryCta mode="link" href={LOADIQ_ROUTES.demo}>
             View Demo
           </PrimaryCta>
@@ -783,6 +855,32 @@ export function PricingMarketingPage() {
           <AppStorePlaceholders />
         </div>
       </section>
+      <BillingChannelSection />
+      <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
+      <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
+    </AppFrame>
+  );
+}
+
+export function FeaturesMarketingPage() {
+  const { waitlistOpen, openWaitlist, closeWaitlist } = useWaitlistModal();
+
+  return (
+    <AppFrame>
+      <PageHeader
+        eyebrow="Features"
+        title="Freight profitability workflow, explained cleanly."
+        description="The public website explains LoadIQ's decision-support workflow. App functionality, saved calculations, operating profiles, and account settings belong in the app portal."
+      />
+      <FeatureGroupSection groups={FEATURE_WORKFLOW_GROUPS} />
+      <TextPointSection
+        eyebrow="Product Boundaries"
+        title="LoadIQ supports decisions. It does not become the operator."
+        description="Every estimate depends on user inputs, assumptions, and operating conditions. Operators remain responsible for freight, routing, compliance, safety, tax, legal, accounting, and insurance decisions."
+        points={productBoundaryPoints}
+        columns="lg:grid-cols-4"
+      />
+      <FinalCtaSection openWaitlist={openWaitlist} />
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
       <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
     </AppFrame>
@@ -823,6 +921,10 @@ function RolloutPhasePresetCard({
           <strong className="text-right text-white">{capacity}</strong>
         </div>
         <div className="flex justify-between gap-4">
+          <span>Slot range</span>
+          <strong className="text-right text-white">{phase.slotRange}</strong>
+        </div>
+        <div className="flex justify-between gap-4">
           <span>Duration</span>
           <strong className="text-right text-white">{duration}</strong>
         </div>
@@ -845,8 +947,8 @@ export function LaunchMarketingPage() {
     <AppFrame>
       <PageHeader
         eyebrow="Controlled Launch"
-        title="Karpilo LoadIQ is preparing controlled launch access."
-        description="The launch page presents the existing rollout presets as adoption pacing for infrastructure, support, billing readiness, and operator access. It is not an open public subscription marketplace."
+        title="Controlled launch access."
+        description="Pilot 100 comes first. Launch Phase 1 adds 250 approved users, Launch Phase 2 adds 250 approved users, and Open Market follows only when public signup is intentionally enabled."
       />
       <section className="mx-auto max-w-7xl px-6 pb-16 sm:px-8">
         <RolloutCommandCenter
@@ -871,10 +973,11 @@ export function LaunchMarketingPage() {
           </div>
           <div>
             <p className="text-sm leading-7 text-slate-300">
-              Users may request access or join the launch list. Access may be
-              limited by phase availability, approval status, and provider
-              readiness. The portal is available for issued or restricted-access
-              accounts, but it should not be treated as open public signup.
+              Users may request access for controlled launch consideration.
+              Access is limited by launch phase availability, approval status,
+              and provider readiness. The portal is available for issued or
+              restricted-access accounts, but it should not be treated as open
+              public signup.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
               <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
@@ -893,6 +996,40 @@ export function LaunchMarketingPage() {
           </div>
         </div>
       </section>
+      <TextPointSection
+        eyebrow="Request Access"
+        title="A request is not an instant account or checkout."
+        description="Karpilo LoadIQ must confirm launch phase availability, approval status, provider readiness, and billing eligibility before subscription access is issued."
+        points={requestAccessPoints}
+        columns="lg:grid-cols-4"
+      />
+      <TextPointSection
+        eyebrow="Issued Users"
+        title="The app portal holds the app experience."
+        description="Public website routes explain the product and launch order. App functionality belongs to the issued-user app portal."
+        points={issuedUserPoints}
+        columns="lg:grid-cols-3"
+      />
+      <TextPointSection
+        eyebrow="Pricing Relationship"
+        title="Launch phases are rollout eligibility, not subscription tiers."
+        description="Silver, Gold, Platinum, and Pro remain commercial tiers. Pilot Access, Launch Phase 1, Launch Phase 2, and Open Market describe adoption order and access pacing."
+        points={[
+          "Pilot Access covers the first 100 approved users.",
+          "Launch Phase 1 covers the next 250 approved users.",
+          "Launch Phase 2 covers the next 250 approved users.",
+          "Open Market begins only when public availability is intentionally enabled.",
+        ]}
+        columns="lg:grid-cols-4"
+      />
+      <BillingChannelSection />
+      <TextPointSection
+        eyebrow="Boundary"
+        title="LoadIQ is decision support, not a replacement for operator judgment."
+        description="The website must stay honest about what LoadIQ does and does not do."
+        points={productBoundaryPoints}
+        columns="lg:grid-cols-4"
+      />
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
       <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
     </AppFrame>
@@ -978,27 +1115,27 @@ export function LaunchPromoPage() {
   return (
     <AppFrame>
       <PageHeader
-        eyebrow="Second Enrollment"
-        title="Discounted enrollment for the next 500 approved operators."
-        description="Second enrollment follows pilot enrollment and still uses the same Silver, Gold, Platinum, and Pro commercial tiers."
+        eyebrow="Controlled Launch"
+        title="Launch Phase 1 and Launch Phase 2 now live under the launch page."
+        description="The former second-enrollment concept is now split into two 250-user controlled launch phases after Pilot Access."
       />
       <section className="mx-auto grid max-w-7xl gap-5 px-6 pb-16 sm:px-8 lg:grid-cols-[0.95fr_1.05fr]">
         <RolloutCommandCenter onReserve={openWaitlist} compact />
         <div className="rounded-[1.75rem] border border-sky-300/20 bg-[#0B1120]/85 p-6">
           <h2 className="text-2xl font-black tracking-[-0.04em] text-white">
-            {launch500Program.name}
+            Pilot 100 {"->"} Launch 250 {"->"} Launch 250 {"->"} Open Market
           </h2>
           <p className="mt-4 leading-7 text-slate-300">
-            Second enrollment is designed for the broader approved group after
-            pilot enrollment. It is a rollout phase with its own slot logic, not
-            a separate commercial tier.
+            Launch access is approval-based and separated from commercial
+            subscription tiers. The public source of truth is now the launch
+            page.
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {[
-              ["Capacity", `Next ${launch500Program.maxSlots}`],
+              ["Phase 1", `${launchPhase1Program.maxSlots} approved users`],
+              ["Phase 2", `${launchPhase2Program.maxSlots} approved users`],
               ["Tiers", "Silver, Gold, Platinum, Pro"],
-              ["Discount", launch500Program.discountLabel],
-              ["Badge", launch500Program.badge],
+              ["Action", "Request Access"],
             ].map(([label, value]) => (
               <div key={label} className="rounded-2xl border border-white/10 bg-black/25 p-4">
                 <p className="text-xs uppercase tracking-[0.14em] text-slate-500">{label}</p>

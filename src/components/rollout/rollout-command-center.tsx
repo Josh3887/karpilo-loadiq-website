@@ -130,7 +130,7 @@ export function RolloutCommandCenter({
     (phase) => phase.key === "GENERAL_AVAILABILITY",
   );
 
-  const cta = activePhase.isAcceptingReservations ? (
+  const cta = onReserve ? (
     <button
       type="button"
       onClick={onReserve}
@@ -188,7 +188,7 @@ export function RolloutCommandCenter({
           </div>
         </div>
 
-        <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+        <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {visiblePhases.map((phase) => (
             <AvailabilityCard key={phase.key} phase={phase} />
           ))}

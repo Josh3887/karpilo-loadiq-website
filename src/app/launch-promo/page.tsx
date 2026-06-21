@@ -1,5 +1,7 @@
-import { LaunchPromoPage } from "@/components/marketing/marketing-pages";
+import { redirect } from "next/navigation";
+
+import { LOADIQ_ROUTES } from "@/config/loadiq";
 
 export default function Page() {
-  return <LaunchPromoPage />;
+  redirect(LOADIQ_ROUTES.launch);
 }

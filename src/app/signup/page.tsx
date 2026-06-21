@@ -1,4 +1,6 @@
-import { WebsiteSignupPanel } from "@/components/account/website-access-panels";
+import { redirect } from "next/navigation";
+
+import { LOADIQ_ROUTES } from "@/config/loadiq";
 
 export const metadata = {
   title: "Controlled Access | Karpilo LoadIQ",
@@ -7,5 +9,5 @@ export const metadata = {
 };
 
 export default function SignupPage() {
-  return <WebsiteSignupPanel />;
+  redirect(LOADIQ_ROUTES.launch);
 }

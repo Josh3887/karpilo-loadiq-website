@@ -1,10 +1,12 @@
-import { WebsiteAccountSettingsPanel } from "@/components/account/website-access-panels";
+import { redirect } from "next/navigation";
+
+import { LOADIQ_URLS } from "@/config/loadiq";
 
 export const metadata = {
-  title: "Account Settings | Karpilo LoadIQ",
-  description: "Manage Karpilo LoadIQ website account settings.",
+  title: "App Portal | Karpilo LoadIQ",
+  description: "Karpilo LoadIQ account settings are handled through the app portal.",
 };
 
 export default function AccountSettingsPage() {
-  return <WebsiteAccountSettingsPanel />;
+  redirect(LOADIQ_URLS.app);
 }

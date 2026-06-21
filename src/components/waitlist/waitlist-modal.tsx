@@ -21,14 +21,19 @@ type WaitlistResponse = {
 
 const cohortOptions = [
   {
-    value: LOADIQ_LAUNCH_KEYS.founder50,
-    label: "Pilot enrollment",
-    description: "First 100 approved users, discounted tier eligibility",
+    value: LOADIQ_LAUNCH_KEYS.pilotAccess,
+    label: "Pilot Access",
+    description: "Slots 1-100, controlled testing and feedback",
   },
   {
-    value: LOADIQ_LAUNCH_KEYS.launch500,
-    label: "Second enrollment",
-    description: "Next 500 approved users, discounted tier eligibility",
+    value: LOADIQ_LAUNCH_KEYS.launchPhase1,
+    label: "Launch Phase 1",
+    description: "Slots 101-350, controlled launch expansion",
+  },
+  {
+    value: LOADIQ_LAUNCH_KEYS.launchPhase2,
+    label: "Launch Phase 2",
+    description: "Slots 351-600, final controlled expansion",
   },
 ] as const;
 
@@ -60,7 +65,7 @@ export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
       email: String(formData.get("email") || "").trim().toLowerCase(),
       company: String(formData.get("company") || "").trim(),
       fleet_size: String(formData.get("fleet_size") || "").trim(),
-      cohort: String(formData.get("cohort") || LOADIQ_LAUNCH_KEYS.founder50).trim(),
+      cohort: String(formData.get("cohort") || LOADIQ_LAUNCH_KEYS.pilotAccess).trim(),
       intended_billing_provider: String(
         formData.get("intended_billing_provider") || "undecided",
       ).trim(),
@@ -131,9 +136,9 @@ export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
           </h2>
 
           <p className="mt-3 leading-7 text-slate-300">
-            Pilot enrollment covers the first 100 approved users. Second
-            enrollment covers the next 500. Reservations are routed for review
-            before any billing provider is used.
+            Pilot access covers slots 1-100. Launch Phase 1 covers slots
+            101-350, and Launch Phase 2 covers slots 351-600. Requests are
+            reviewed before any billing provider is used.
           </p>
 
           {status === "success" ? (
@@ -184,7 +189,7 @@ export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
                 </span>
                 <select
                   name="cohort"
-                  defaultValue={LOADIQ_LAUNCH_KEYS.founder50}
+                  defaultValue={LOADIQ_LAUNCH_KEYS.pilotAccess}
                   className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-white outline-none transition focus:border-sky-300/50"
                 >
                   {cohortOptions.map((option) => (

@@ -55,8 +55,8 @@ export function SystemHealthBanner() {
         : AlertTriangle;
 
   return (
-    <div className="fixed inset-x-0 top-0 z-[90] border-b border-sky-300/20 bg-[#08111F]/95 px-4 py-3 text-slate-100 shadow-[0_0_42px_rgba(56,189,248,0.16)] backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+    <div className="fixed inset-x-3 bottom-3 z-[90] mx-auto max-w-4xl rounded-lg border border-sky-300/20 bg-[#08111F]/95 px-4 py-3 text-slate-100 shadow-[0_0_42px_rgba(56,189,248,0.16)] backdrop-blur-xl sm:inset-x-6 sm:bottom-6">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex min-w-0 gap-3">
           <Icon className="mt-0.5 h-5 w-5 shrink-0 text-sky-300" />
           <div className="min-w-0">

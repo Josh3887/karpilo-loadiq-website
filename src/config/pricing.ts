@@ -24,8 +24,9 @@ export type LoadIqCommercialTier = {
 };
 
 export type TieredEnrollmentPhaseId =
-  | "founding_operator_phase_1"
-  | "founding_operator_phase_2"
+  | "pilot_access"
+  | "launch_phase_1"
+  | "launch_phase_2"
   | "open_market";
 
 export type TieredEnrollmentPhase = {
@@ -163,25 +164,37 @@ export const LOADIQ_COMMERCIAL_TIER_LIST = [
 
 export const LOADIQ_TIERED_ENROLLMENT_PHASES = [
   {
-    id: "founding_operator_phase_1",
-    name: "Pilot Enrollment",
-    shortName: "First 100",
+    id: "pilot_access",
+    name: "Pilot Access",
+    shortName: "Pilot 100",
     cap: 100,
-    capacityLabel: "First 100 approved users",
+    capacityLabel: "Slots 1-100",
     purpose:
-      "Discounted pilot enrollment across all available Karpilo LoadIQ commercial tiers.",
+      "Controlled testing and feedback access for the first 100 approved users.",
     discountLabel: "Enrollment discount monthly pricing",
     lifetimePricing: true,
     selectablePlans: AVAILABLE_ENROLLMENT_TIER_IDS,
   },
   {
-    id: "founding_operator_phase_2",
-    name: "Second Enrollment",
-    shortName: "Next 500",
-    cap: 500,
-    capacityLabel: "Next 500 approved users",
+    id: "launch_phase_1",
+    name: "Launch Phase 1",
+    shortName: "Launch 250",
+    cap: 250,
+    capacityLabel: "Slots 101-350",
     purpose:
-      "Second discounted enrollment across all available Karpilo LoadIQ commercial tiers.",
+      "Controlled launch expansion for the next 250 approved users after pilot access.",
+    discountLabel: "Enrollment discount monthly pricing",
+    lifetimePricing: true,
+    selectablePlans: AVAILABLE_ENROLLMENT_TIER_IDS,
+  },
+  {
+    id: "launch_phase_2",
+    name: "Launch Phase 2",
+    shortName: "Launch 250",
+    cap: 250,
+    capacityLabel: "Slots 351-600",
+    purpose:
+      "Final controlled launch expansion for the next 250 approved users before open market.",
     discountLabel: "Enrollment discount monthly pricing",
     lifetimePricing: true,
     selectablePlans: AVAILABLE_ENROLLMENT_TIER_IDS,
@@ -204,7 +217,7 @@ export const DISCOUNTED_ENROLLMENT_PHASES =
   LOADIQ_TIERED_ENROLLMENT_PHASES.filter((phase) => phase.lifetimePricing);
 
 export const FOUNDER_ACCESS = {
-  name: "Pilot Enrollment Access",
+  name: "Pilot Access",
   maxSeats: 100,
   publicTeaser:
     "The first 100 approved users may qualify for discounted enrollment across Silver, Gold, Platinum, and Pro.",
@@ -214,7 +227,7 @@ export const FOUNDER_ACCESS = {
 } as const;
 
 export const PILOT_ACCESS = {
-  name: "Pilot Enrollment Access",
+  name: "Pilot Access",
   publicTeaser:
     "Pilot enrollment may be available for the first 100 approved early-access users across all available commercial tiers.",
   maxSeats: 100,
@@ -224,9 +237,15 @@ export const PILOT_ACCESS = {
     "Enrollment discount pricing remains locked only after server-authoritative approval, active subscription status, and purchased entitlement scope are confirmed. It is lost if canceled, deleted, transferred, or revoked under applicable terms.",
 } as const;
 
-export const LAUNCH_ACCESS = {
-  name: "Second Enrollment Access",
-  maxSeats: 500,
+export const LAUNCH_PHASE_1_ACCESS = {
+  name: "Launch Phase 1 Access",
+  maxSeats: 250,
+  selectablePlans: AVAILABLE_ENROLLMENT_TIER_IDS,
+} as const;
+
+export const LAUNCH_PHASE_2_ACCESS = {
+  name: "Launch Phase 2 Access",
+  maxSeats: 250,
   selectablePlans: AVAILABLE_ENROLLMENT_TIER_IDS,
 } as const;
 

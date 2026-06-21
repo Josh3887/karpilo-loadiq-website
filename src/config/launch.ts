@@ -3,18 +3,26 @@ export type LaunchPhaseId =
   | "pre_pilot"
   | "pilot_active"
   | "pilot_closed"
-  | "launch500_active"
+  | "launch_phase_1_active"
+  | "launch_phase_2_active"
   | "standard_active";
 
 export const launchTimeline = {
   pilotOpensAtLocal: "2026-05-13T08:00:00-07:00",
   pilotDurationDays: 30,
-  launchPromotionDurationDays: 45,
+  launchPhase1DurationDays: 30,
+  launchPhase2DurationDays: 30,
 } as const;
 
 export type LaunchDisplayPhase = {
-  id: "pre_pilot" | "pilot_active" | "pilot_full" | "launch_active" | "standard";
-  activeProgram: "pilot" | "launch" | "standard";
+  id:
+    | "pre_pilot"
+    | "pilot_active"
+    | "pilot_full"
+    | "launch_phase_1_active"
+    | "launch_phase_2_active"
+    | "standard";
+  activeProgram: "pilot" | "launch_phase_1" | "launch_phase_2" | "standard";
   title: string;
   label: string;
   targetTime: number | null;
@@ -27,11 +35,18 @@ export function getLaunchPhase(now = Date.now()): LaunchDisplayPhase {
   const pilotOpensAt = Date.parse(launchTimeline.pilotOpensAtLocal);
   const pilotEndsAt =
     pilotOpensAt + launchTimeline.pilotDurationDays * 24 * 60 * 60 * 1000;
-  const launchEndsAt =
-    pilotEndsAt + launchTimeline.launchPromotionDurationDays * 24 * 60 * 60 * 1000;
+  const launchPhase1EndsAt =
+    pilotEndsAt + launchTimeline.launchPhase1DurationDays * 24 * 60 * 60 * 1000;
+  const launchPhase2EndsAt =
+    launchPhase1EndsAt +
+    launchTimeline.launchPhase2DurationDays * 24 * 60 * 60 * 1000;
   const pilotSlots = Math.max(pilotProgram.maxSlots - pilotProgram.claimedSlots, 0);
-  const launchSlots = Math.max(
-    launch500Program.maxSlots - launch500Program.claimedSlots,
+  const launchPhase1Slots = Math.max(
+    launchPhase1Program.maxSlots - launchPhase1Program.claimedSlots,
+    0,
+  );
+  const launchPhase2Slots = Math.max(
+    launchPhase2Program.maxSlots - launchPhase2Program.claimedSlots,
     0,
   );
 
@@ -74,15 +89,28 @@ export function getLaunchPhase(now = Date.now()): LaunchDisplayPhase {
     };
   }
 
-  if (now < launchEndsAt && launchSlots > 0) {
+  if (now < launchPhase1EndsAt && launchPhase1Slots > 0) {
     return {
-      id: "launch_active",
-      activeProgram: "launch",
-      title: "Second enrollment active for the next 500 approved users.",
-      label: "Second enrollment pricing",
-      targetTime: launchEndsAt,
-      slotsRemaining: launchSlots,
-      slotsTotal: launch500Program.maxSlots,
+      id: "launch_phase_1_active",
+      activeProgram: "launch_phase_1",
+      title: "Launch Phase 1 active for the next 250 approved users.",
+      label: "Launch Phase 1",
+      targetTime: launchPhase1EndsAt,
+      slotsRemaining: launchPhase1Slots,
+      slotsTotal: launchPhase1Program.maxSlots,
+      paymentsEnabled: false,
+    };
+  }
+
+  if (now < launchPhase2EndsAt && launchPhase2Slots > 0) {
+    return {
+      id: "launch_phase_2_active",
+      activeProgram: "launch_phase_2",
+      title: "Launch Phase 2 active for the next 250 approved users.",
+      label: "Launch Phase 2",
+      targetTime: launchPhase2EndsAt,
+      slotsRemaining: launchPhase2Slots,
+      slotsTotal: launchPhase2Program.maxSlots,
       paymentsEnabled: false,
     };
   }
@@ -94,7 +122,7 @@ export function getLaunchPhase(now = Date.now()): LaunchDisplayPhase {
     label: "Public pricing active",
     targetTime: null,
     slotsRemaining: 0,
-    slotsTotal: launch500Program.maxSlots,
+    slotsTotal: launchPhase1Program.maxSlots + launchPhase2Program.maxSlots,
     paymentsEnabled: false,
   };
 }
@@ -131,13 +159,24 @@ export const pilotPaymentGate = {
     "Once all 100 pilot enrollment slots are allocated, pilot checkout must close automatically and the public flow must return to second-enrollment waitlist and launch-notification registration.",
 } as const;
 
-export const launch500Program = {
-  name: "Second Enrollment Program",
-  maxSlots: 500,
+export const launchPhase1Program = {
+  name: "Launch Phase 1",
+  maxSlots: 250,
   claimedSlots: 0,
   discountLabel: "Enrollment discount monthly pricing",
-  lockLabel: "Second enrollment pricing lock",
-  badge: "Second Enrollment",
+  lockLabel: "Launch Phase 1 pricing lock",
+  badge: "Launch Phase 1",
+  slotRange: "Slots 101-350",
+} as const;
+
+export const launchPhase2Program = {
+  name: "Launch Phase 2",
+  maxSlots: 250,
+  claimedSlots: 0,
+  discountLabel: "Enrollment discount monthly pricing",
+  lockLabel: "Launch Phase 2 pricing lock",
+  badge: "Launch Phase 2",
+  slotRange: "Slots 351-600",
 } as const;
 
 export const standardPricing = {

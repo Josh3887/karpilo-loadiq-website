@@ -25,9 +25,9 @@ export type ProductWebsiteSection = {
 
 export const PRODUCT_HERO = {
   eyebrow: "Karpilo LoadIQ",
-  title: "Freight profitability estimates built by the mile.",
+  title: "Freight profitability intelligence for load decisions.",
   description:
-    "A mobile-first estimation workspace for owner operators and independent contractors who want operational awareness before making independent freight decisions.",
+    "Calculation-based decision support for owner-operators, leased operators, independent drivers, and small trucking operations that need clearer margin, fuel, deadhead, and cost visibility before accepting freight.",
 } satisfies ProductWebsiteSection;
 
 export const PRODUCT_FEATURES = [
@@ -144,7 +144,7 @@ export const PRODUCT_FEATURE_GROUPS = [
       {
         title: "AI explanation layer",
         description:
-          "Atlas-style explanation support may help interpret estimates while leaving final decisions with the operator.",
+          "Future K-ATLS explanation modules may help interpret estimates while leaving final decisions with the operator.",
       },
       {
         title: "Seasonality and lane memory",
@@ -155,6 +155,124 @@ export const PRODUCT_FEATURE_GROUPS = [
         title: "Fleet-scale planning",
         description:
           "Future tools may support larger operating models without turning the website into FleetOS or a dispatch system.",
+      },
+    ],
+  },
+] satisfies readonly ProductFeatureGroup[];
+
+export const FEATURE_WORKFLOW_GROUPS = [
+  {
+    eyebrow: "Load Inputs",
+    title: "Start with the numbers that change the load.",
+    description:
+      "LoadIQ depends on user-supplied freight and operating assumptions. The public website explains the workflow; the app portal holds the operating experience.",
+    features: [
+      {
+        title: "Loaded miles and deadhead",
+        description:
+          "Model paid and unpaid miles together so true RPM pressure is visible before the load decision.",
+      },
+      {
+        title: "Gross pay and fuel price",
+        description:
+          "Enter freight pay and fuel assumptions, with manual control over the fuel number used in the estimate.",
+      },
+      {
+        title: "MPG and cost assumptions",
+        description:
+          "Use realistic fuel economy, fixed costs, variable costs, tolls, accessorials, factoring, dispatch fees, or pay-structure assumptions where supported.",
+      },
+    ],
+  },
+  {
+    eyebrow: "Profitability Outputs",
+    title: "Convert gross numbers into operating pressure.",
+    description:
+      "Outputs are estimates, not guarantees. They help expose pressure that gross revenue or posted RPM can hide.",
+    features: [
+      {
+        title: "Gross, net, and true RPM",
+        description:
+          "Compare rate visibility before and after deadhead, fuel, and modeled cost exposure.",
+      },
+      {
+        title: "Fuel pressure and cost exposure",
+        description:
+          "See how diesel price, distance, MPG, and operating assumptions affect projected margin.",
+      },
+      {
+        title: "Margin and break-even context",
+        description:
+          "Use break-even awareness to understand whether the load supports the operator's operating goals.",
+      },
+    ],
+  },
+  {
+    eyebrow: "Decision Support",
+    title: "Support the decision without making it for the operator.",
+    description:
+      "Karpilo LoadIQ provides calculation-based freight profitability intelligence and operational decision support.",
+    features: [
+      {
+        title: "Compare load assumptions",
+        description:
+          "Pressure-test rate, distance, fuel, and cost assumptions before accepting freight.",
+      },
+      {
+        title: "Avoid gross-rate traps",
+        description:
+          "Understand when a strong gross rate is weakened by deadhead, fuel, overhead, or time exposure.",
+      },
+      {
+        title: "Preserve operator judgment",
+        description:
+          "LoadIQ is not a broker, dispatcher, ELD, tax advisor, legal advisor, compliance advisor, accounting platform, insurance advisor, or guaranteed-profit system.",
+      },
+    ],
+  },
+  {
+    eyebrow: "Account / Launch Access",
+    title: "Request access, then use the app portal if issued.",
+    description:
+      "Public signup is not currently available. Access is limited by launch phase availability, approval, and provider readiness.",
+    features: [
+      {
+        title: "Controlled rollout",
+        description:
+          "Pilot Access covers slots 1-100, Launch Phase 1 covers 101-350, Launch Phase 2 covers 351-600, and Open Market follows only when enabled.",
+      },
+      {
+        title: "Portal handoff",
+        description:
+          "Issued users access the operational app experience through app.karpilo-liq.com, not duplicated public website routes.",
+      },
+      {
+        title: "Billing separation",
+        description:
+          "Website billing applies to Stripe/web subscribers once subscription access is issued. Apple and Google billing stay with their app stores.",
+      },
+    ],
+  },
+  {
+    eyebrow: "Planned Intelligence",
+    title: "Future intelligence stays marked as future.",
+    description:
+      "These roadmap items are not public checkout promises and should not be treated as live functionality.",
+    features: [
+      {
+        title: "Maps and mileage refinement",
+        description:
+          "Planned work may include Google Maps address verification, zip-to-zip mileage estimation, and location variance checks.",
+      },
+      {
+        title: "K-ATLS explanation modules",
+        description:
+          "Future explanation support may help operators understand estimate pressure without replacing independent judgment.",
+      },
+      {
+        title: "Seasonality and scale context",
+        description:
+          "Future tooling may support seasonality memory and fleet-scale planning while remaining separate from FleetOS or dispatch automation.",
       },
     ],
   },

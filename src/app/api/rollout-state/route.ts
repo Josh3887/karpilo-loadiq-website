@@ -44,44 +44,48 @@ function parseTime(value: string | null) {
   return Number.isFinite(time) ? time : null;
 }
 
-function phaseStatus(row: RolloutPhaseRow, now: number): RolloutPhaseStatus {
+function phaseStatus(
+  row: RolloutPhaseRow,
+  fallback: RolloutPhaseConfig,
+  now: number,
+): RolloutPhaseStatus {
   if (row.status && ["paused", "full", "closed"].includes(row.status)) {
     return row.status;
   }
 
-  const starts = parseTime(row.starts_at);
-  const ends = parseTime(row.ends_at);
+  const starts = parseTime(fallback.startsAt);
+  const ends = parseTime(fallback.endsAt);
 
   if (starts && now < starts) return "upcoming";
   if (ends && now >= ends) return "complete";
-  if (row.status === "upcoming") return "active";
 
-  return row.status || "active";
+  return "active";
 }
 
 function mergePhase(row: RolloutPhaseRow, fallback: RolloutPhaseConfig, now: number) {
-  const capacity = row.capacity ?? fallback.capacity;
+  const capacity = fallback.capacity;
   const reservedSlots = row.reserved_slots ?? 0;
-  const status = phaseStatus(row, now);
+  const status = phaseStatus(row, fallback, now);
   const remainingSlots =
     capacity === null ? null : Math.max(capacity - reservedSlots, 0);
 
   const snapshot: RolloutPhaseSnapshot = {
-    key: row.phase_key,
-    title: row.title || fallback.title,
-    shortLabel: row.short_label || fallback.shortLabel,
+    key: fallback.key,
+    title: fallback.title,
+    shortLabel: fallback.shortLabel,
     capacity,
-    durationDays: row.duration_days ?? fallback.durationDays,
-    startsAt: row.starts_at || fallback.startsAt,
-    endsAt: row.ends_at || fallback.endsAt,
-    description: row.description || fallback.description,
-    expectation: row.expectation || fallback.expectation,
-    ctaLabel: row.cta_label || fallback.ctaLabel,
-    targetRoute: row.target_route || fallback.targetRoute,
+    slotRange: fallback.slotRange,
+    durationDays: fallback.durationDays,
+    startsAt: fallback.startsAt,
+    endsAt: fallback.endsAt,
+    description: fallback.description,
+    expectation: fallback.expectation,
+    ctaLabel: fallback.ctaLabel,
+    targetRoute: fallback.targetRoute,
     status: remainingSlots === 0 && capacity !== null ? "full" : status,
     reservedSlots,
     remainingSlots,
-    targetAt: status === "upcoming" ? row.starts_at || fallback.startsAt : row.ends_at || fallback.endsAt,
+    targetAt: status === "upcoming" ? fallback.startsAt : fallback.endsAt,
     isAcceptingReservations:
       Boolean(row.accepting_reservations) &&
       !["paused", "full", "closed", "complete"].includes(status) &&

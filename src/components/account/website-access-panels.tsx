@@ -428,10 +428,10 @@ export function WebsiteLoginPanel() {
 
     setState({
       loading: false,
-      message: "Signed in. Opening Account Settings...",
+      message: "Signed in. Opening the app portal...",
       error: null,
     });
-    router.push(LOADIQ_ROUTES.accountSettings);
+    router.push(LOADIQ_URLS.app);
   }
 
   return (
@@ -469,7 +469,7 @@ export function WebsiteLoginPanel() {
         </button>
         <p className="text-sm text-slate-400">
           Need access?{" "}
-          <Link href={LOADIQ_ROUTES.pilotProgram} className="font-bold text-sky-200">
+          <Link href={LOADIQ_ROUTES.launch} className="font-bold text-sky-200">
             Request controlled access
           </Link>
         </p>
@@ -497,7 +497,7 @@ export function WebsiteSignupPanel() {
           </p>
         </div>
         <Link
-          href={LOADIQ_ROUTES.pilotProgram}
+          href={LOADIQ_ROUTES.launch}
           className="rounded-2xl border border-red-400/25 bg-red-500/10 px-4 py-4 text-center text-sm font-black uppercase tracking-[0.16em] text-red-100 transition hover:bg-red-500/20"
         >
           Request Access
@@ -688,10 +688,12 @@ export function WebsiteAccountSettingsPanel() {
             Karpilo LoadIQ identity.
           </p>
           <Link
-            href={LOADIQ_ROUTES.login}
+            href={LOADIQ_URLS.app}
+            target="_blank"
+            rel="noreferrer"
             className="rounded-2xl border border-sky-300/35 bg-sky-400/15 px-5 py-4 text-center text-sm font-black uppercase tracking-[0.18em] text-sky-100"
           >
-            Login
+            Open Portal
           </Link>
         </div>
       )}
@@ -701,12 +703,29 @@ export function WebsiteAccountSettingsPanel() {
 
 export function WebsiteBillingPanel() {
   const { user, loading, accountAccessUnavailable } = useWebsiteUser();
+  const billingChannels = [
+    {
+      title: "Website / Stripe Billing",
+      description:
+        "Website subscriptions are processed through Stripe. Stripe subscribers may manage payment method, invoices, cancellation, and plan billing through the Stripe billing portal when available.",
+    },
+    {
+      title: "Apple App Store Billing",
+      description:
+        "Apple App Store subscriptions are managed by Apple. Karpilo LoadIQ cannot directly modify Apple App Store billing from the website.",
+    },
+    {
+      title: "Google Play Billing",
+      description:
+        "Google Play subscriptions are managed by Google. Karpilo LoadIQ cannot directly modify Google Play billing from the website.",
+    },
+  ] as const;
 
   return (
     <AccessShell
-      eyebrow="Subscription Account"
-      title="Manage Karpilo LoadIQ subscription support"
-      description="Website billing access supports account readiness, subscription help, and billing questions while the operational app remains separate from the public website."
+      eyebrow="Website Billing"
+      title="Stripe/web billing support only."
+      description="The public website supports billing guidance and Stripe/web subscription management when available. App functionality, saved calculations, app settings, and user account experience belong in the app portal."
     >
       {loading ? (
         <p className="text-sm font-bold text-slate-400">Checking session...</p>
@@ -718,29 +737,35 @@ export function WebsiteBillingPanel() {
         <div className="grid gap-5">
           <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
-              Billing Identity
+              Website / Stripe Subscriber
             </p>
             <p className="mt-2 text-lg font-black text-white">
-              {user?.email ?? "Login required"}
+              {user?.email ?? "Stripe portal access appears only for eligible signed-in website subscribers."}
             </p>
           </div>
           <p className="text-sm leading-6 text-slate-400">
-            This website keeps account and subscription support available from
-            a computer. Silver, Gold, Platinum, and Pro describe Karpilo LoadIQ
-            decision-support depth, while payment details stay with the
-            authorized billing provider.
+            Silver, Gold, Platinum, and Pro describe Karpilo LoadIQ
+            decision-support depth. Website billing applies only to Stripe/web
+            subscribers once subscription access is issued. Public signup and
+            public checkout are not currently available.
           </p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {user ? (
-              <WebsiteBillingPortalButton />
-            ) : (
-              <Link
-                href={LOADIQ_ROUTES.login}
-                className="rounded-2xl border border-sky-300/35 bg-sky-400/15 px-4 py-3 text-center text-xs font-black uppercase tracking-[0.16em] text-sky-100"
+          <div className="grid gap-4 lg:grid-cols-3">
+            {billingChannels.map((channel) => (
+              <div
+                key={channel.title}
+                className="rounded-2xl border border-white/10 bg-black/20 p-4"
               >
-                Login
-              </Link>
-            )}
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-sky-300">
+                  {channel.title}
+                </p>
+                <p className="mt-3 text-sm leading-6 text-slate-400">
+                  {channel.description}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {user ? <WebsiteBillingPortalButton /> : null}
             <Link
               href={LOADIQ_URLS.app}
               target="_blank"
@@ -749,14 +774,12 @@ export function WebsiteBillingPanel() {
             >
               Open Portal
             </Link>
-            {user ? (
-              <Link
-                href={LOADIQ_ROUTES.subscriptionHelp}
-                className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-center text-xs font-black uppercase tracking-[0.16em] text-slate-200"
-              >
-                Subscription Help
-              </Link>
-            ) : null}
+            <Link
+              href={LOADIQ_ROUTES.contact}
+              className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-center text-xs font-black uppercase tracking-[0.16em] text-slate-200"
+            >
+              Billing Support
+            </Link>
           </div>
           <p className="text-xs leading-5 text-slate-500">
             Billing support:{" "}

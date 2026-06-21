@@ -1,8 +1,7 @@
 export type RolloutPhaseKey =
   | "PRELAUNCH_WAITLIST"
-  | "FOUNDER_PILOT"
-  | "CONTROLLED_PUBLIC_LAUNCH"
-  | "EXPANSION_ACCESS"
+  | "LAUNCH_PHASE_1"
+  | "LAUNCH_PHASE_2"
   | "GENERAL_AVAILABILITY";
 
 export type RolloutPhaseStatus =
@@ -18,6 +17,7 @@ export type RolloutPhaseConfig = {
   title: string;
   shortLabel: string;
   capacity: number | null;
+  slotRange: string;
   durationDays: number | null;
   startsAt: string | null;
   endsAt: string | null;
@@ -66,65 +66,64 @@ export const ROLLOUT_PHASES: RolloutPhaseConfig[] = [
     title: "Pilot enrollment readiness window.",
     shortLabel: "Pilot 100",
     capacity: 100,
+    slotRange: "Slots 1-100",
     durationDays: 30,
     startsAt: "2026-05-13T15:00:00Z",
     endsAt: "2026-06-12T15:00:00Z",
-    description: "Pilot enrollment reservations are open while launch systems are finalized.",
-    expectation: "No billing is active. The first 100 approved users may qualify for discounted tier enrollment after server-side review.",
+    description:
+      "Pilot access is the first controlled phase for 100 approved users focused on testing, feedback, and launch-readiness validation.",
+    expectation:
+      "Public signup is not currently available. Users request access, and slot assignment plus billing eligibility must be confirmed server-side.",
     ctaLabel: "Request Access",
-    targetRoute: "/pilot-program",
+    targetRoute: "/launch",
   },
   {
-    key: "FOUNDER_PILOT",
-    title: "Second enrollment planned for the next 500 users.",
-    shortLabel: "Next 500",
-    capacity: 500,
-    durationDays: 60,
+    key: "LAUNCH_PHASE_1",
+    title: "Launch Phase 1 controlled expansion.",
+    shortLabel: "Launch 250",
+    capacity: 250,
+    slotRange: "Slots 101-350",
+    durationDays: 30,
     startsAt: "2026-06-27T15:00:00Z",
+    endsAt: "2026-07-27T15:00:00Z",
+    description:
+      "Launch Phase 1 follows the pilot with the next 250 approved users while support, billing, and infrastructure gates remain controlled.",
+    expectation:
+      "Access remains approval-based. Public checkout is not open unless server-authoritative rollout and billing gates explicitly allow it.",
+    ctaLabel: "Request Access",
+    targetRoute: "/launch",
+  },
+  {
+    key: "LAUNCH_PHASE_2",
+    title: "Launch Phase 2 final controlled expansion.",
+    shortLabel: "Launch 250",
+    capacity: 250,
+    slotRange: "Slots 351-600",
+    durationDays: 30,
+    startsAt: "2026-07-27T15:00:00Z",
     endsAt: "2026-08-26T15:00:00Z",
-    description: "The second discounted enrollment cohort is planned after pilot enrollment readiness is validated.",
-    expectation: "Second enrollment timing may move while launch systems, support, and payment gates are finalized.",
+    description:
+      "Launch Phase 2 adds the next 250 approved users before Karpilo LoadIQ is considered for open-market availability.",
+    expectation:
+      "This is still controlled launch access. Payment, checkout, and subscription access remain gated by server-side approval.",
     ctaLabel: "Request Access",
-    targetRoute: "/launch-promo",
-  },
-  {
-    key: "CONTROLLED_PUBLIC_LAUNCH",
-    title: "Public launch readiness review.",
-    shortLabel: "Readiness",
-    capacity: null,
-    durationDays: 90,
-    startsAt: "2026-08-26T15:00:00Z",
-    endsAt: "2026-11-24T15:00:00Z",
-    description: "Public launch readiness is reviewed after the two discounted enrollment phases.",
-    expectation: "Open public access remains gated by infrastructure, support load, billing readiness, and publication requirements.",
-    ctaLabel: "Request Access",
-    targetRoute: "/launch-promo",
-  },
-  {
-    key: "EXPANSION_ACCESS",
-    title: "Public launch readiness window.",
-    shortLabel: "Readiness",
-    capacity: null,
-    durationDays: null,
-    startsAt: "2026-11-24T15:00:00Z",
-    endsAt: "2026-11-24T15:00:00Z",
-    description: "The controlled cohorts have completed and the app enters final public-readiness monitoring.",
-    expectation: "Open public access is held until final public launch readiness is confirmed.",
-    ctaLabel: "Request Access",
-    targetRoute: "/contact",
+    targetRoute: "/launch",
   },
   {
     key: "GENERAL_AVAILABILITY",
-    title: "App live to public.",
-    shortLabel: "Public Live",
+    title: "Open Market readiness.",
+    shortLabel: "Open Market",
     capacity: null,
+    slotRange: "After slots 1-600",
     durationDays: null,
-    startsAt: "2026-11-24T15:00:00Z",
+    startsAt: "2026-08-26T15:00:00Z",
     endsAt: null,
-    description: "Karpilo LoadIQ opens to public access 90 days from Phase 3 launch.",
-    expectation: "General availability opens only after payment, policy, support, and app publishing readiness are confirmed.",
+    description:
+      "Open Market begins only after controlled rollout capacity is complete and public signup is intentionally activated.",
+    expectation:
+      "Standard public availability and public signup are not active until payment, policy, support, and app publishing readiness are confirmed.",
     ctaLabel: "Request Access",
-    targetRoute: "/contact",
+    targetRoute: "/launch",
   },
 ] as const;
 

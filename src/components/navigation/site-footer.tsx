@@ -9,36 +9,24 @@ import {
 } from "@/config/data-providers";
 import {
   LOADIQ_BRAND,
-  LOADIQ_CONTACT_CHANNELS,
   LOADIQ_FOOTER_LINKS,
-  LOADIQ_URLS,
 } from "@/config/loadiq";
 import { PRODUCT_DISCLAIMER_SNIPPET } from "@/config/product-features";
 import { NewsletterSignup } from "@/components/newsletter/newsletter-signup";
 
 const footerLinks = {
   ...LOADIQ_FOOTER_LINKS,
-  external: [
-    ...LOADIQ_CONTACT_CHANNELS.map((channel) => ({
-      label: channel.label,
-      href: channel.monitored ? `mailto:${channel.email}` : "#",
-      detail: channel.email,
-      description: channel.description,
-      disabled: !channel.monitored,
-    })),
-    {
-      label: "Website",
-      href: LOADIQ_URLS.companyWebsite,
-      external: true,
-    },
-    { label: "Facebook", href: LOADIQ_URLS.facebook, external: true },
-  ],
 };
 
-const legalPrimaryLinks = footerLinks.legal.slice(0, 4);
-const legalPolicyLinks = footerLinks.legal.slice(4);
-const supportContactLinks = footerLinks.external.slice(0, 4);
-const updateContactLinks = footerLinks.external.slice(4);
+type FooterGroupKey = keyof typeof footerLinks;
+
+const footerGroups: Array<{ key: FooterGroupKey; label: string }> = [
+  { key: "platform", label: "Platform" },
+  { key: "access", label: "Access" },
+  { key: "billingSupport", label: "Billing & Support" },
+  { key: "legal", label: "Legal" },
+  { key: "company", label: "Company" },
+];
 
 export default function SiteFooter() {
   return (
@@ -85,125 +73,27 @@ export default function SiteFooter() {
         </div>
 
         <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 xl:grid-cols-5">
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-sky-300">
-              Platform
-            </p>
+          {footerGroups.map((group) => (
+            <div key={group.key}>
+              <p className="text-sm font-black uppercase tracking-[0.18em] text-sky-300">
+                {group.label}
+              </p>
 
-            <div className="mt-5 flex flex-col gap-3">
-              {footerLinks.platform.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-slate-400 transition hover:text-sky-300"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              <div className="mt-5 flex flex-col gap-3">
+                {footerLinks[group.key].map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    target={"external" in link && link.external ? "_blank" : undefined}
+                    rel={"external" in link && link.external ? "noreferrer" : undefined}
+                    className="text-slate-400 transition hover:text-sky-300"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
-
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-sky-300">
-              Company
-            </p>
-
-            <div className="mt-5 flex flex-col gap-3">
-              {footerLinks.company.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-slate-400 transition hover:text-sky-300"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-sky-300">
-              Legal
-            </p>
-
-            <div className="mt-5 flex flex-col gap-3">
-              {legalPrimaryLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-slate-400 transition hover:text-sky-300"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-sky-300">
-              Policies
-            </p>
-
-            <div className="mt-5 flex flex-col gap-3">
-              {legalPolicyLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-slate-400 transition hover:text-sky-300"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="sm:col-span-2 xl:col-span-1">
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-sky-300">
-              Support
-            </p>
-
-            <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-              {supportContactLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  target={"external" in link && link.external ? "_blank" : undefined}
-                  rel={"external" in link && link.external ? "noreferrer" : undefined}
-                  aria-disabled={"disabled" in link ? link.disabled : undefined}
-                  className="text-slate-400 transition hover:text-red-300"
-                >
-                  <span className="block font-semibold text-slate-300">{link.label}</span>
-                  {"detail" in link ? (
-                    <span className="block break-all text-sm text-slate-500">{link.detail}</span>
-                  ) : null}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="sm:col-span-2 xl:col-span-5">
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-sky-300">
-              Updates / Channels
-            </p>
-
-            <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-              {updateContactLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  target={"external" in link && link.external ? "_blank" : undefined}
-                  rel={"external" in link && link.external ? "noreferrer" : undefined}
-                  aria-disabled={"disabled" in link ? link.disabled : undefined}
-                  className="text-slate-400 transition hover:text-red-300"
-                >
-                  <span className="block font-semibold text-slate-300">{link.label}</span>
-                  {"detail" in link ? (
-                    <span className="block break-all text-sm text-slate-500">{link.detail}</span>
-                  ) : null}
-                </Link>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
 
         <div className="lg:col-span-2">

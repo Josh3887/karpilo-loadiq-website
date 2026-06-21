@@ -1,10 +1,12 @@
-import { WebsiteLoginPanel } from "@/components/account/website-access-panels";
+import { redirect } from "next/navigation";
+
+import { LOADIQ_URLS } from "@/config/loadiq";
 
 export const metadata = {
-  title: "Login | Karpilo LoadIQ",
-  description: "Sign in to the Karpilo LoadIQ website account layer.",
+  title: "App Portal | Karpilo LoadIQ",
+  description: "Karpilo LoadIQ app access is handled through the app portal.",
 };
 
 export default function LoginPage() {
-  return <WebsiteLoginPanel />;
+  redirect(LOADIQ_URLS.app);
 }

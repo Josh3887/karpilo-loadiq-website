@@ -55,7 +55,7 @@ export const REFUND_POLICY_SECTIONS: LegalSection[] = [
     id: "pilot-promotional-pricing",
     title: "Enrollment and Promotional Pricing",
     paragraphs: [
-      "Pilot enrollment, second enrollment, invite codes, coupons, trial offers, and other promotional plans may have special eligibility conditions. Promotional pricing is not guaranteed to remain available if a subscription is canceled, deleted, transferred, disputed, or allowed to lapse.",
+      "Pilot access, controlled launch phases, invite codes, coupons, trial offers, and other promotional plans may have special eligibility conditions. Promotional pricing is not guaranteed to remain available if a subscription is canceled, deleted, transferred, disputed, or allowed to lapse.",
       "Any lifetime or grandfathered pricing lock is limited to the qualifying account, purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family. It does not guarantee access to every future enterprise, FleetOS, Pro, API, team, or separately licensed product.",
       "Enrollment discount pricing may remain locked only while the qualifying subscription remains active and in good standing. If the account is canceled, deleted, transferred, disputed, or terminated, the promotional rate may be forfeited and may not be restorable where permitted by law and platform rules.",
     ],
