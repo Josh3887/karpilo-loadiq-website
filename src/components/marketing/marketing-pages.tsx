@@ -44,6 +44,7 @@ import {
 } from "@/config/product-demo";
 import {
   LOADIQ_COMMERCIAL_TIER_LIST,
+  PUBLIC_PRICING_PLANS,
   PUBLIC_PRICING_PHASES,
   formatCommercialPriceLabel,
 } from "@/config/pricing";
@@ -347,6 +348,54 @@ function LaunchPricingCard({
   );
 }
 
+function StandardPublicPricingCard({
+  plan,
+}: {
+  plan: (typeof PUBLIC_PRICING_PLANS)[number];
+}) {
+  return (
+    <div
+      className={`rounded-[1.75rem] border p-6 ${
+        plan.featured
+          ? "border-red-400/35 bg-[#111827]/90 shadow-[0_0_44px_rgba(239,68,68,0.12)]"
+          : "border-white/10 bg-[#0B1120]/80"
+      }`}
+    >
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-sky-300">
+        Gold / Standard Public
+      </p>
+      <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h3 className="text-2xl font-black tracking-[-0.04em] text-white">
+            {plan.name}
+          </h3>
+          <p className="mt-3 text-sm leading-6 text-slate-300">
+            {plan.description}
+          </p>
+        </div>
+        <div className="shrink-0 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-right">
+          <p className="font-mono text-2xl font-black text-white">
+            {formatCommercialPriceLabel(plan.price, plan.interval)}
+          </p>
+          {plan.savingsLabel && (
+            <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-sky-200">
+              {plan.savingsLabel}
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="mt-5 space-y-3">
+        {plan.bullets.map((bullet) => (
+          <div key={bullet} className="flex gap-3">
+            <Check className="mt-0.5 h-5 w-5 shrink-0 text-sky-300" />
+            <p className="text-sm leading-6 text-slate-300">{bullet}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function StickyMobileCta({
   label,
   onWaitlist,
@@ -614,12 +663,29 @@ export function PricingMarketingPage() {
     <AppFrame>
       <PageHeader
         eyebrow="Pricing"
-        title="Pilot, launch, and standard public pricing."
-        description="Founding 50, Launch 500, and Standard Public Access are rollout pricing phases. Checkout and pricing-lock eligibility remain controlled server-side."
+        title="Standard public pricing and rollout programs."
+        description="The app billing model maps public checkout to Standard Public Monthly and Standard Public Annual through Gold access. Founding 50 Pilot and Launch 500 remain rollout programs controlled by server-side eligibility."
       />
       <SubscriptionValuePanel />
       <section className="mx-auto max-w-7xl px-6 pb-16 sm:px-8">
-        <div className="grid gap-5 lg:grid-cols-3">
+        <div className="grid gap-5 lg:grid-cols-2">
+          {PUBLIC_PRICING_PLANS.map((plan) => (
+            <StandardPublicPricingCard key={plan.id} plan={plan} />
+          ))}
+        </div>
+
+        <div className="mt-8 rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-5">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-red-300">
+            Rollout pricing reference
+          </p>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-400">
+            Pilot and Legacy Launch are reservation programs, not commercial tier
+            names. The website can describe them, but Supabase entitlement and
+            launch-readiness records remain the authority for eligibility.
+          </p>
+        </div>
+
+        <div className="mt-5 grid gap-5 lg:grid-cols-3">
           {PUBLIC_PRICING_PHASES.map((plan) => (
             <LaunchPricingCard key={plan.id} plan={plan} />
           ))}

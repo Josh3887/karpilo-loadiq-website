@@ -605,7 +605,7 @@ export const legalPages: Record<string, LegalPage> = {
         title: "Supabase Is Pricing-Lock Authority",
         paragraphs: [
           "Pricing-lock eligibility is controlled by Karpilo LoadIQ's Supabase reservation and entitlement records. Stripe coupons, app-store products, frontend text, emails, or screenshots do not override the server-side authority.",
-          "Public Karpilo LoadIQ launch pricing is displayed as Founding 50 Pilot Access at $14.99/month or $129.99/year, Launch 500 Access at $19.99/month or $149.99/year, and Standard Public Access at $24.99/month or $189.99/year. Checkout availability, pricing-lock eligibility, and billing provider availability remain controlled by server-side reservation, entitlement, and launch-readiness records.",
+          "Public checkout language maps Standard Public Access through Gold at $24.99/month or $189.99/year. Founding 50 Pilot Access at $14.99/month or $129.99/year and Launch 500 Access at $19.99/month or $149.99/year are rollout programs, not commercial tier names. Checkout availability, pricing-lock eligibility, and billing provider availability remain controlled by server-side reservation, entitlement, and launch-readiness records.",
           "Pricing-lock eligibility applies only to the qualifying account, purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family. Future enterprise licensing, Karpilo FleetOS capabilities, team accounts, APIs, or separately licensed modules may require separate pricing and terms.",
         ],
       },
