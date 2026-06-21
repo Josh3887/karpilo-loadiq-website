@@ -4,10 +4,10 @@
 
 This document is the website-facing pricing and enrollment source before page copy or component code is changed.
 
-Repository evidence from the app separates these concepts:
+Repository evidence and current launch direction separate these concepts:
 
 - Commercial tier: Silver, Gold, Platinum, and Pro.
-- Rollout phase: pilot enrollment, second enrollment, and open market.
+- Rollout phase: Pilot Access, Launch Phase 1, Launch Phase 2, and Open Market.
 - Entitlement: the server-confirmed access scope attached to a qualifying account.
 - Billing provider: Stripe/Web, Apple App Store, Google Play, or a future provider.
 
@@ -30,19 +30,28 @@ Current website evidence defines monthly enrollment discounts. It does not defin
 
 ## Tiered Enrollment Phases
 
-1. Pilot Enrollment
+1. Pilot Access
    - Capacity: first 100 approved users.
+   - Slot range: slots 1-100.
    - Available commercial tiers: Silver, Gold, Platinum, and Pro.
    - Pricing behavior: eligible approved users may receive the enrollment discount monthly price for their selected tier.
    - Payment mode: disabled until server-authoritative validation and billing provider configuration are complete.
 
-2. Second Enrollment
-   - Capacity: next 500 approved users after pilot enrollment.
+2. Launch Phase 1
+   - Capacity: next 250 approved users after Pilot Access.
+   - Slot range: slots 101-350.
    - Available commercial tiers: Silver, Gold, Platinum, and Pro.
    - Pricing behavior: eligible approved users may receive the enrollment discount monthly price for their selected tier.
    - Payment mode: disabled until server-authoritative validation and billing provider configuration are complete.
 
-3. Open Market
+3. Launch Phase 2
+   - Capacity: next 250 approved users after Launch Phase 1.
+   - Slot range: slots 351-600.
+   - Available commercial tiers: Silver, Gold, Platinum, and Pro.
+   - Pricing behavior: eligible approved users may receive the enrollment discount monthly price for their selected tier.
+   - Payment mode: disabled until server-authoritative validation and billing provider configuration are complete.
+
+4. Open Market
    - Capacity: no published slot cap.
    - Available commercial tiers: Silver, Gold, Platinum, and Pro.
    - Pricing behavior: public monthly and annual commercial prices.
@@ -53,7 +62,7 @@ Current website evidence defines monthly enrollment discounts. It does not defin
 1. Hero: app positioning, operational proof, app icon HUD, and payment-disabled prelaunch status.
 2. Rollout command center: phase-aware reservation status without implying checkout is active.
 3. Commercial tiers: Silver, Gold, Platinum, and Pro.
-4. Tiered enrollment: first 100 approved users, then next 500 approved users.
+4. Tiered enrollment: first 100 approved users, then two 250-user launch phases.
 5. Founder story: Joshua Karpilo and active trucking experience.
 6. Feature grid: config-driven LoadIQ capabilities.
 7. Interactive demo: public freight-estimation preview.
@@ -87,15 +96,21 @@ Public phases:
 3. `pilot_closed`
    - Label: pilot enrollment fully allocated.
    - Payment mode: pilot checkout disabled.
-   - Allowed actions: second enrollment waitlist and launch update signup.
+   - Allowed actions: launch phase waitlist and launch update signup.
 
-4. `launch500_active`
-   - Label: second enrollment active.
-   - Slots: next 500 approved users.
+4. `launch_phase_1_active`
+   - Label: Launch Phase 1 active.
+   - Slots: 101-350.
    - Available tiers: Silver, Gold, Platinum, and Pro.
    - Discount display: enrollment discount monthly price by selected tier.
 
-5. `standard_active`
+5. `launch_phase_2_active`
+   - Label: Launch Phase 2 active.
+   - Slots: 351-600.
+   - Available tiers: Silver, Gold, Platinum, and Pro.
+   - Discount display: enrollment discount monthly price by selected tier.
+
+6. `standard_active`
    - Label: public pricing active.
    - Available tiers: Silver, Gold, Platinum, and Pro.
    - Pricing: public monthly and annual prices.
@@ -106,7 +121,8 @@ Before checkout depends on launch state, replace static slot counts with a Supab
 
 - `launch_phase_status`
 - `pilot_enrollment_slots`
-- `second_enrollment_slots`
+- `launch_phase_1_slots`
+- `launch_phase_2_slots`
 - `pricing_entitlements`
 - `subscription_price_locks`
 - `billing_events`
@@ -156,7 +172,8 @@ Required schema direction before paid checkout:
 Recommended columns/flags:
 
 - `pilot_enrollment_user boolean`
-- `second_enrollment_user boolean`
+- `launch_phase_1_user boolean`
+- `launch_phase_2_user boolean`
 - `lifetime_price_locked boolean`
 - `enrollment_phase text`
 - `commercial_tier text`
@@ -230,7 +247,7 @@ Joshua Karpilo
 - Pre-launch CTAs must be interest-only: "Reserve Eligibility," "Get Launch Updates," and "Request Pilot Consideration."
 - Enrollment-active CTAs can become eligibility/payment-oriented only after server validation.
 - Avoid fake urgency. Use qualification and real slot limits.
-- Use system language: "Pilot Enrollment Active," "Second Enrollment Active," and "Public Pricing Active."
+- Use system language: "Pilot Access Active," "Launch Phase 1 Active," "Launch Phase 2 Active," and "Public Pricing Active."
 - Mobile should keep one sticky CTA, short copy, and large tap targets.
 - Keep legal and pricing disclosures visible but not alarmist.
 
