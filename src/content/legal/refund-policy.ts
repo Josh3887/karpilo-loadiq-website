@@ -44,7 +44,7 @@ export const REFUND_POLICY_SECTIONS: LegalSection[] = [
       "Partial subscription usage during an active billing period.",
       "Failure to cancel before a renewal charge.",
       "User dissatisfaction after extensive use of paid features.",
-      "Promotional, founder, or pilot pricing after activation and access delivery.",
+      "Promotional or enrollment discount pricing after activation and access delivery.",
       "Repeated refund requests, trial cycling, or refund-pattern abuse.",
       "Policy violations, misuse, fraudulent activity, chargeback abuse, or account termination for Terms of Service violations.",
       "Loss of access caused by user-side device, browser, network, credential, or payment method issues after reasonable support guidance is provided.",
@@ -53,11 +53,11 @@ export const REFUND_POLICY_SECTIONS: LegalSection[] = [
   },
   {
     id: "pilot-promotional-pricing",
-    title: "Pilot, Founder, and Promotional Pricing",
+    title: "Enrollment and Promotional Pricing",
     paragraphs: [
-      "Pilot Operator Access, Founding Operator Access, invite codes, coupons, trial offers, and other promotional plans may have special eligibility conditions. Promotional pricing is not guaranteed to remain available if a subscription is canceled, deleted, transferred, disputed, or allowed to lapse.",
+      "Pilot enrollment, second enrollment, invite codes, coupons, trial offers, and other promotional plans may have special eligibility conditions. Promotional pricing is not guaranteed to remain available if a subscription is canceled, deleted, transferred, disputed, or allowed to lapse.",
       "Any lifetime or grandfathered pricing lock is limited to the qualifying account, purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family. It does not guarantee access to every future enterprise, FleetOS, Pro, API, team, or separately licensed product.",
-      "Pilot or legacy pricing may remain locked only while the qualifying subscription remains active and in good standing. If the account is canceled, deleted, transferred, disputed, or terminated, the promotional rate may be forfeited and may not be restorable where permitted by law and platform rules.",
+      "Enrollment discount pricing may remain locked only while the qualifying subscription remains active and in good standing. If the account is canceled, deleted, transferred, disputed, or terminated, the promotional rate may be forfeited and may not be restorable where permitted by law and platform rules.",
     ],
   },
   {

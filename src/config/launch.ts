@@ -39,8 +39,8 @@ export function getLaunchPhase(now = Date.now()): LaunchDisplayPhase {
     return {
       id: "pre_pilot",
       activeProgram: "pilot",
-      title: "Pre-Launch Pilot opens for the first 50 users.",
-      label: "Pre-launch pilot",
+      title: "Pilot enrollment opens for the first 100 approved users.",
+      label: "Pilot enrollment readiness",
       targetTime: Number.isFinite(pilotOpensAt) ? pilotOpensAt : null,
       slotsRemaining: pilotSlots,
       slotsTotal: pilotProgram.maxSlots,
@@ -52,8 +52,8 @@ export function getLaunchPhase(now = Date.now()): LaunchDisplayPhase {
     return {
       id: "pilot_active",
       activeProgram: "pilot",
-      title: "Pre-Launch Pilot enrollment active.",
-      label: "Founding 50 enrollment live",
+      title: "Pilot enrollment active.",
+      label: "First 100 enrollment live",
       targetTime: pilotEndsAt,
       slotsRemaining: pilotSlots,
       slotsTotal: pilotProgram.maxSlots,
@@ -65,7 +65,7 @@ export function getLaunchPhase(now = Date.now()): LaunchDisplayPhase {
     return {
       id: "pilot_full",
       activeProgram: "pilot",
-      title: "Founding 50 Pilot fully allocated.",
+      title: "Pilot enrollment fully allocated.",
       label: "Pilot allocation full",
       targetTime: pilotEndsAt,
       slotsRemaining: 0,
@@ -78,8 +78,8 @@ export function getLaunchPhase(now = Date.now()): LaunchDisplayPhase {
     return {
       id: "launch_active",
       activeProgram: "launch",
-      title: "Launch promotion active for the first 500 users.",
-      label: "Launch operator pricing",
+      title: "Second enrollment active for the next 500 approved users.",
+      label: "Second enrollment pricing",
       targetTime: launchEndsAt,
       slotsRemaining: launchSlots,
       slotsTotal: launch500Program.maxSlots,
@@ -100,50 +100,48 @@ export function getLaunchPhase(now = Date.now()): LaunchDisplayPhase {
 }
 
 export const pilotProgram = {
-  name: "Founding 50 Pilot Program",
-  maxSlots: 50,
+  name: "Pilot Enrollment Program",
+  maxSlots: 100,
   claimedSlots: 0,
-  monthlyPrice: 14.99,
-  annualPrice: 129.99,
+  discountLabel: "Enrollment discount monthly pricing",
   lockLabel: "Lifetime pricing lock",
-  badge: "Founding Operator",
+  badge: "Pilot Enrollment",
   lockRules: [
     "Pricing remains locked while the account stays active and in good standing.",
     "Lock may be lost after account deletion, fraud, abuse, or terms violations.",
-    "Pilot access is approval-based and limited to the first 50 qualified users.",
+    "Pilot enrollment is approval-based and limited to the first 100 qualified users.",
+    "Eligible users may select Silver, Gold, Platinum, or Pro after server-authoritative validation.",
   ],
 } as const;
 
 export const pilotPaymentGate = {
   requiredFlags: [
-    "pilot_payments_enabled",
-    "pilot_slots_remaining",
-    "pilot_subscription_locked",
-    "founding_operator_assigned",
+    "payments_enabled",
+    "phase_slots_remaining",
+    "subscription_locked",
+    "approved_enrollment_assigned",
     "waitlist_only_mode",
   ],
   failSafeMode: "waitlist_only",
   preLaunchPolicy:
     "Before the pilot countdown reaches zero, visitors may join the waitlist, request pilot consideration, and subscribe to updates. Payment collection must remain disabled.",
   activePolicy:
-    "Pilot checkout may activate only after server-authoritative validation confirms the pilot window is open and a Founding 50 slot is available.",
+    "Pilot checkout may activate only after server-authoritative validation confirms the pilot window is open, a first-100 slot is available, and the selected commercial tier is eligible.",
   fullPolicy:
-    "Once all 50 Founding Operator slots are allocated, pilot checkout must close automatically and the public flow must return to waitlist and launch-notification registration.",
+    "Once all 100 pilot enrollment slots are allocated, pilot checkout must close automatically and the public flow must return to second-enrollment waitlist and launch-notification registration.",
 } as const;
 
 export const launch500Program = {
-  name: "First 500 Launch Operators",
+  name: "Second Enrollment Program",
   maxSlots: 500,
   claimedSlots: 0,
-  monthlyPrice: 19.99,
-  annualPrice: 149.99,
-  lockLabel: "Legacy pricing lock",
-  badge: "Launch Operator",
+  discountLabel: "Enrollment discount monthly pricing",
+  lockLabel: "Second enrollment pricing lock",
+  badge: "Second Enrollment",
 } as const;
 
 export const standardPricing = {
-  monthlyPrice: 24.99,
-  annualPrice: 189.99,
+  pricingMode: "Silver, Gold, Platinum, and Pro public pricing",
   lockLabel: "No lifetime lock",
 } as const;
 
@@ -168,7 +166,7 @@ export const founderWelcomeCopy = [
   "This app is my contribution back to the people who keep this country moving. My goal is simple: help drivers understand the numbers with more clarity and operational context.",
   "Karpilo LoadIQ is only the beginning. It is the foundation for a larger operational ecosystem still being built carefully behind the scenes.",
   "As an early supporter, your feedback matters. Some of the best ideas in trucking do not come from boardrooms. They come from truck stops, loading docks, breakdowns, and honest conversations between people who live this work.",
-  "Thank you for believing in the vision early. Your loyalty during this pilot phase earns you a lifetime pricing lock for the qualifying Karpilo LoadIQ entitlement scope, as long as your account remains active and in good standing.",
+  "Thank you for believing in the vision early. Your loyalty during a qualifying enrollment phase may earn a pricing lock for the selected Karpilo LoadIQ entitlement scope, as long as your account remains active and in good standing.",
   "Welcome to the beginning of a new journey.",
   "Joshua Karpilo",
 ] as const;

@@ -61,7 +61,7 @@ export const LOADIQ_CONTACT_CHANNELS = [
     id: "updates",
     label: "Launch Updates",
     email: LOADIQ_CONTACT.updatesEmail,
-    description: "Founder pilot updates, launch cohort notices, maintenance, and status updates.",
+    description: "Pilot enrollment updates, second enrollment notices, maintenance, and status updates.",
     monitored: true,
   },
   {

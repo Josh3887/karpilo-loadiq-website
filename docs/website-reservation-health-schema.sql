@@ -206,9 +206,9 @@ insert into public.launch_program_state (
   waitlist_only_mode
 )
 values
-  ('founder_50', 'Founding 50 Pilot Program', 'pre_pilot', 50, 14.99, 129.99, true, false, true, true),
-  ('launch_500', 'First 500 Launch Operators', 'queued', 500, 19.99, 149.99, true, false, true, true),
-  ('standard_future', 'Standard Future Users', 'future_standard', 2147483647, 24.99, 189.99, true, false, false, true)
+  ('founder_50', 'Pilot Enrollment Program', 'pre_pilot', 100, 0.00, 0.00, true, false, true, true),
+  ('launch_500', 'Second Enrollment Program', 'queued', 500, 0.00, 0.00, true, false, true, true),
+  ('standard_future', 'Standard Future Users', 'future_standard', 2147483647, 0.00, 0.00, true, false, false, true)
 on conflict (program_key) do nothing;
 
 create or replace function public.submit_website_reservation(
@@ -287,7 +287,9 @@ begin
     raise exception 'No reservation slots remain for this cohort';
   end if;
 
-  entitlement_active := p_requested_cohort in ('founder_50', 'launch_500');
+  -- Tiered enrollment reservations are eligibility intent only. Final pricing
+  -- entitlements require selected commercial tier and provider price mapping.
+  entitlement_active := false;
 
   insert into public.website_reservations (
     name,
@@ -310,8 +312,8 @@ begin
     p_requested_cohort,
     p_intended_billing_provider,
     case
-      when p_requested_cohort = 'founder_50' then 'founder_50'
-      when p_requested_cohort = 'launch_500' then 'launch_500'
+      when p_requested_cohort = 'founder_50' then 'pilot_enrollment'
+      when p_requested_cohort = 'launch_500' then 'second_enrollment'
       else 'standard'
     end,
     'submitted',

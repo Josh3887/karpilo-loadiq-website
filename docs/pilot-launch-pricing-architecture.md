@@ -1,69 +1,112 @@
-# Karpilo LoadIQ Pilot Launch + Pricing Architecture
+# Karpilo LoadIQ Tiered Enrollment + Pricing Architecture
+
+## Source Of Truth
+
+This document is the website-facing pricing and enrollment source before page copy or component code is changed.
+
+Repository evidence from the app separates these concepts:
+
+- Commercial tier: Silver, Gold, Platinum, and Pro.
+- Rollout phase: pilot enrollment, second enrollment, and open market.
+- Entitlement: the server-confirmed access scope attached to a qualifying account.
+- Billing provider: Stripe/Web, Apple App Store, Google Play, or a future provider.
+
+Website copy must not collapse these concepts into one label. A visitor may be in a discounted enrollment phase and still choose one of the available commercial tiers.
+
+## Commercial Tier Pricing
+
+Public commercial pricing:
+
+| Tier | Public monthly | Public annual | Enrollment discount monthly | Commercial meaning |
+| --- | ---: | ---: | ---: | --- |
+| Silver | $19.99/mo | $199/yr | $14.99/mo | Load viability decision support |
+| Gold | $39.99/mo | $399/yr | $24.99/mo | Operational visibility |
+| Platinum | $69.99/mo | $699/yr | $49.99/mo | Variance intelligence |
+| Pro | $149.99/mo | $1499/yr | $99.99/mo | Growth intelligence |
+
+Pro also has a $10.00/month charge per additional truck when the billing provider configuration supports that pricing model.
+
+Current website evidence defines monthly enrollment discounts. It does not define discounted annual enrollment prices. Do not invent discounted annual pricing in public copy, legal copy, checkout copy, or server records.
+
+## Tiered Enrollment Phases
+
+1. Pilot Enrollment
+   - Capacity: first 100 approved users.
+   - Available commercial tiers: Silver, Gold, Platinum, and Pro.
+   - Pricing behavior: eligible approved users may receive the enrollment discount monthly price for their selected tier.
+   - Payment mode: disabled until server-authoritative validation and billing provider configuration are complete.
+
+2. Second Enrollment
+   - Capacity: next 500 approved users after pilot enrollment.
+   - Available commercial tiers: Silver, Gold, Platinum, and Pro.
+   - Pricing behavior: eligible approved users may receive the enrollment discount monthly price for their selected tier.
+   - Payment mode: disabled until server-authoritative validation and billing provider configuration are complete.
+
+3. Open Market
+   - Capacity: no published slot cap.
+   - Available commercial tiers: Silver, Gold, Platinum, and Pro.
+   - Pricing behavior: public monthly and annual commercial prices.
+   - Payment mode: enabled only after billing, policy, support, and app-publishing gates are complete.
 
 ## Homepage Architecture
 
-1. Hero: phase-aware launch status, lifetime pricing CTA, app icon HUD, operational proof bullets.
-2. Launch Program: Founding 50 Pilot rules, slot language, pricing, lifetime lock conditions.
-3. Founder Story: “Built On The Road” section centered on Joshua Karpilo and active trucking experience.
-4. Feature Grid: config-driven LoadIQ capabilities.
-5. Interactive Demo: public sliders for miles, deadhead, revenue, fuel, overhead, true RPM, leakage, and projected net.
-6. Product Demo: richer fictional Nashville to Kansas City demo from `product-demo.ts`.
-7. Education: operational intelligence concepts for drivers.
-8. How It Works: step-by-step LoadIQ workflow.
-9. Pricing: public plans plus early access framing.
-10. Future Ecosystem: subtle Karpilo FleetOS, Karpilo Atlas, and Atlas Freight Intelligence teasers.
-11. FAQ, final CTA, footer legal infrastructure.
+1. Hero: app positioning, operational proof, app icon HUD, and payment-disabled prelaunch status.
+2. Rollout command center: phase-aware reservation status without implying checkout is active.
+3. Commercial tiers: Silver, Gold, Platinum, and Pro.
+4. Tiered enrollment: first 100 approved users, then next 500 approved users.
+5. Founder story: Joshua Karpilo and active trucking experience.
+6. Feature grid: config-driven LoadIQ capabilities.
+7. Interactive demo: public freight-estimation preview.
+8. Future ecosystem: Karpilo FleetOS, Karpilo Atlas, and Atlas Freight Intelligence teasers only.
+9. FAQ, final CTA, footer legal infrastructure.
 
-## Countdown Architecture
+## Public Rendering Model
 
-The website uses `src/config/launch.ts` as the public rendering model:
+The website uses config objects for presentation only:
 
-- `pilotOpensAtUtc`
-- `officialLaunchAtUtc`
-- `pilotProgram`
-- `launch500Program`
-- `standardPricing`
+- `src/config/pricing.ts`: commercial tier pricing, enrollment discount monthly price, available enrollment phases.
+- `src/config/launch.ts`: launch display state, phase labels, and user-facing rollout language.
+- `src/config/rollout.ts`: fallback public rollout snapshot when Supabase rollout state is unavailable.
 
 Public phases:
 
 1. `pre_pilot`
-   - Label: “Founding Operator Pilot Opens In:”
-   - CTA: Join Waitlist / Notify Me At Pilot Launch / Become A Founding Operator
-   - Target: `pilotOpensAtUtc`
-   - Payment mode: disabled
-   - Allowed actions: waitlist, notification signup, pilot consideration request
-   - Blocked actions: checkout, subscription activation, payment collection
+   - Label: Pilot enrollment readiness.
+   - CTA: reserve eligibility.
+   - Payment mode: disabled.
+   - Allowed actions: waitlist, notification signup, pilot consideration request.
+   - Blocked actions: checkout, subscription activation, payment collection.
 
 2. `pilot_active`
-   - Label: “Pilot Operations Active”
-   - Slots: `XX / 50 Founding Slots Remaining`
-   - Target: `officialLaunchAtUtc`
-   - Pricing: `$14.99/month`, `$129.99/year`
-   - Payment mode: enabled only after server-authoritative slot validation
-   - CTA: Join Founding 50 Pilot / Lock Lifetime Pricing / Start Pilot Access
+   - Label: Pilot enrollment active.
+   - Slots: first 100 approved users.
+   - Available tiers: Silver, Gold, Platinum, and Pro.
+   - Discount display: enrollment discount monthly price by selected tier.
+   - Payment mode: enabled only after server-authoritative eligibility validation.
 
 3. `pilot_closed`
-   - Label: “Founding 50 Pilot Fully Allocated”
-   - Payment mode: pilot checkout disabled
-   - Allowed actions: official launch waitlist and public launch notification signup
+   - Label: pilot enrollment fully allocated.
+   - Payment mode: pilot checkout disabled.
+   - Allowed actions: second enrollment waitlist and launch update signup.
 
 4. `launch500_active`
-   - Label: “Official Launch Active”
-   - Slots: `XXX / 500 Legacy Pricing Slots Remaining`
-   - Pricing: `$19.99/month`, `$149.99/year`
+   - Label: second enrollment active.
+   - Slots: next 500 approved users.
+   - Available tiers: Silver, Gold, Platinum, and Pro.
+   - Discount display: enrollment discount monthly price by selected tier.
 
 5. `standard_active`
-   - Label: “Standard Public Access Now Active”
-   - Pricing: `$24.99/month`, `$189.99/year`
-   - No lifetime lock
+   - Label: public pricing active.
+   - Available tiers: Silver, Gold, Platinum, and Pro.
+   - Pricing: public monthly and annual prices.
 
 ## Server-Authoritative Requirements
 
 Before checkout depends on launch state, replace static slot counts with a Supabase-backed server authority:
 
 - `launch_phase_status`
-- `pilot_slots`
-- `launch500_slots`
+- `pilot_enrollment_slots`
+- `second_enrollment_slots`
 - `pricing_entitlements`
 - `subscription_price_locks`
 - `billing_events`
@@ -72,42 +115,56 @@ Use UTC timestamps and server-side validation. The browser countdown is presenta
 
 Required payment-gating flags:
 
-- `pilot_payments_enabled boolean`
-- `pilot_slots_remaining integer`
-- `pilot_subscription_locked boolean`
-- `founding_operator_assigned boolean`
+- `payments_enabled boolean`
+- `phase_slots_remaining integer`
+- `subscription_locked boolean`
+- `approved_enrollment_assigned boolean`
 - `waitlist_only_mode boolean`
 
 Fail-safe rule:
 
-- If countdown validation fails, payment sync fails, slot counts fail, Stripe webhooks fail, or the active phase cannot be proven, the app must enter waitlist-only mode.
-- Waitlist-only mode must never create checkout sessions, activate subscriptions, assign grandfathered pricing, or reserve paid pilot slots.
+- If countdown validation fails, payment sync fails, slot counts fail, webhooks fail, or the active phase cannot be proven, the app must enter waitlist-only mode.
+- Waitlist-only mode must never create checkout sessions, activate subscriptions, assign discounted pricing, or reserve paid enrollment slots.
 
 Concurrency-safe enrollment flow:
 
-1. User requests pilot checkout.
-2. Server calls a protected Supabase RPC such as `claim_founding_50_slot`.
-3. RPC runs in a transaction, checks server UTC time, verifies `pilot_payments_enabled = true`, locks the allocation set, confirms slots remain, and inserts one immutable enrollment record.
-4. RPC returns an enrollment ID and eligible Stripe/App Store/Google Play product mapping.
-5. Server creates checkout using only the returned entitlement.
+1. User requests enrollment checkout.
+2. Server calls a protected Supabase RPC for the active enrollment phase.
+3. RPC runs in a transaction, checks server UTC time, verifies payments are enabled, locks the allocation set, confirms slots remain, and inserts one immutable enrollment record.
+4. RPC returns an enrollment ID, eligible commercial tier IDs, and approved provider price mapping.
+5. Server creates checkout using only the returned entitlement and provider price ID.
 6. Webhook reconciles payment status back to the same enrollment record.
 
 Never let frontend state, local countdown time, or query-string parameters select a discounted price.
+
+## Reservation Schema Gap
+
+The current website reservation schema stores cohort-level `monthly_price` and `annual_price` on `pricing_entitlements`.
+
+That is not sufficient for tiered enrollment across Silver, Gold, Platinum, and Pro because price depends on the selected commercial tier. Until the schema captures a selected tier and tier-specific provider price mapping, public reservations should be treated as eligibility intent, not a finalized price lock.
+
+Required schema direction before paid checkout:
+
+- Add a selected commercial tier field such as `selected_commercial_tier`.
+- Constrain it to `silver`, `gold`, `platinum`, and `pro`.
+- Store enrollment phase separately from commercial tier.
+- Store provider price IDs separately from public display prices.
+- Preserve cohort phase, commercial tier, entitlement status, billing provider, and provider subscription status as separate fields.
 
 ## Supabase Recommendations
 
 Recommended columns/flags:
 
-- `pilot_user boolean`
-- `founding_operator boolean`
+- `pilot_enrollment_user boolean`
+- `second_enrollment_user boolean`
 - `lifetime_price_locked boolean`
-- `launch500_user boolean`
-- `legacy_pricing_locked boolean`
-- `pricing_lock_tier text`
+- `enrollment_phase text`
+- `commercial_tier text`
 - `pricing_lock_started_at timestamptz`
 - `pricing_lock_valid_until timestamptz`
 - `pricing_lock_revoked_at timestamptz`
 - `pricing_lock_revocation_reason text`
+- `provider_price_map jsonb`
 
 Race-condition prevention:
 
@@ -119,27 +176,27 @@ Race-condition prevention:
 
 Recommended tables:
 
-- `launch_program_state`: one row per program with UTC open/close timestamps, payment-enabled flags, slot limits, waitlist-only mode, and audit metadata.
-- `founding_operator_enrollments`: immutable user allocation records with unique `user_id`, slot number, price tier, provider, status, assigned timestamp, and revoked timestamp.
+- `launch_program_state`: one row per enrollment phase with UTC open/close timestamps, payment-enabled flags, slot limits, waitlist-only mode, and audit metadata.
+- `enrollment_reservations`: immutable user allocation records with unique `user_id`, slot number, enrollment phase, commercial tier, provider, status, assigned timestamp, and revoked timestamp.
 - `pricing_entitlements`: durable pricing lock records used by app features and billing reconciliation.
 - `billing_event_audit`: append-only Stripe/App Store/Google Play webhook and entitlement events.
 
-Recommended RPC behavior for `claim_founding_50_slot`:
+Recommended RPC behavior:
 
 - Use `security definer` with a constrained search path.
-- Reject anonymous users unless the product intentionally supports pre-account reservations.
+- Reject anonymous checkout unless the product intentionally supports pre-account reservations.
 - Check `auth.uid()` against the requested user.
-- Lock the pilot program row with `for update`.
+- Lock the enrollment phase row with `for update`.
 - Count or increment allocated slots inside the same transaction.
-- Insert with unique constraints preventing duplicate pilot allocations.
+- Validate selected commercial tier against the active enrollment phase.
 - Return a deterministic failure when slots are full.
 - Do not create or expose payment provider secrets.
 
 ## Stripe / App Store / Google Play Strategy
 
-- Stripe Checkout should receive server-validated price IDs only.
-- Do not compute eligibility in the browser.
-- Store grandfathered eligibility before checkout session creation.
+- Checkout should receive server-validated price IDs only.
+- Do not compute discount eligibility in the browser.
+- Store discounted eligibility before checkout session creation.
 - Webhooks should reconcile subscription status and preserve lock metadata.
 - Apple/Google subscriptions need platform-specific product IDs mapped to the same internal entitlement tiers.
 - If app-store pricing cannot exactly mirror web pricing, disclose platform-specific pricing and preserve internal entitlement classification separately.
@@ -162,7 +219,7 @@ LoadIQ is only the beginning. It is the foundation for a larger operational ecos
 
 As an early supporter, your feedback matters. Some of the best ideas in trucking do not come from boardrooms. They come from truck stops, loading docks, breakdowns, and honest conversations between people who live this work.
 
-Thank you for believing in the vision early. Your loyalty during this pilot phase earns you a lifetime pricing lock as one of our founding operators, as long as your account remains active and in good standing.
+Thank you for believing in the vision early. Your loyalty during a qualifying enrollment phase may earn a pricing lock for the selected Karpilo LoadIQ commercial tier, as long as your account remains active and in good standing.
 
 Welcome to the beginning of a new journey.
 
@@ -170,10 +227,10 @@ Joshua Karpilo
 
 ## UX Recommendations
 
-- Pre-launch CTAs must be interest-only: “Join Waitlist,” “Notify Me At Pilot Launch,” and “Become A Founding Operator.”
-- Pilot-active CTAs can become eligibility/payment-oriented only after server validation: “Join Founding 50 Pilot,” “Lock Lifetime Pricing,” and “Start Pilot Access.”
+- Pre-launch CTAs must be interest-only: "Reserve Eligibility," "Get Launch Updates," and "Request Pilot Consideration."
+- Enrollment-active CTAs can become eligibility/payment-oriented only after server validation.
 - Avoid fake urgency. Use qualification and real slot limits.
-- Use system language: “Pilot Operations Active,” “System Initialization Complete,” “Legacy Pricing Active.”
+- Use system language: "Pilot Enrollment Active," "Second Enrollment Active," and "Public Pricing Active."
 - Mobile should keep one sticky CTA, short copy, and large tap targets.
 - Keep legal and pricing disclosures visible but not alarmist.
 
@@ -194,7 +251,7 @@ Joshua Karpilo
 ## Trust Strategy
 
 - Founder-led credibility.
-- Transparent pricing phases.
+- Transparent enrollment phases.
 - Clear no-guarantee language.
 - Stripe/App Store/Google Play policy-aware subscription terms.
 - Data-source attribution and disclaimers.

@@ -1,5 +1,9 @@
 export type PublicPlanId = "silver" | "gold" | "platinum" | "pro";
-export type InternalPlanTier = "founder" | "launch" | "standard" | "platinum";
+export type InternalPlanTier =
+  | "pilot_enrollment"
+  | "second_enrollment"
+  | "standard"
+  | PublicPlanId;
 export type BillingInterval = "month" | "year";
 export type LoadIqCommercialTierId = PublicPlanId;
 export type LoadIqCommercialTier = {
@@ -10,55 +14,28 @@ export type LoadIqCommercialTier = {
   homepageStory: string;
   monthlyPrice: number;
   annualPrice: number;
-  legacyLaunchMonthlyPrice: number;
+  enrollmentDiscountMonthlyPrice: number;
   upgradePath: string;
   capabilities: readonly string[];
   displayOnly: true;
 };
 
-export const FOUNDER_ACCESS = {
-  name: "Founding 50 Pilot Access",
-  maxSeats: 50,
-  publicTeaser: "First 50 approved operators may qualify for Founding 50 Pilot Access.",
-  hiddenPricingEnabled: false,
-  inviteCodeRequired: false,
-  monthlyPrice: 14.99,
-  annualPrice: 129.99,
-} as const;
+export type TieredEnrollmentPhaseId =
+  | "founding_operator_phase_1"
+  | "founding_operator_phase_2"
+  | "open_market";
 
-export const PILOT_ACCESS = {
-  name: "Founding 50 Pilot Access",
-  publicTeaser:
-    "Pilot Operator Access may be available for the first 50 approved early-access users.",
-  maxSeats: 50,
-  durationDays: 30,
-  monthlyPrice: 14.99,
-  annualPrice: 129.99,
-  lifetimeLockRule:
-    "Pilot pricing remains locked while the subscription stays active and applies only within the purchased entitlement scope and current Karpilo LoadIQ product family. It is lost if canceled, deleted, or transferred.",
-} as const;
-
-export const LAUNCH_ACCESS = {
-  name: "Launch 500 Access",
-  maxSeats: 500,
-  monthlyPrice: 19.99,
-  annualPrice: 149.99,
-} as const;
-
-export const STANDARD_ACCESS = {
-  name: "Gold",
-  monthlyPrice: 39.99,
-  annualPrice: 399,
-} as const;
-
-export const PLATINUM_ACCESS = {
-  name: "Platinum",
-  status: "Display Only",
-  monthlyPrice: 69.99,
-  annualPrice: 699,
-  priceLabel: "$69.99/mo or $699/year",
-  annualPositioning: "Variance Intelligence for profitability pattern context.",
-} as const;
+export type TieredEnrollmentPhase = {
+  id: TieredEnrollmentPhaseId;
+  name: string;
+  shortName: string;
+  cap: number | null;
+  capacityLabel: string;
+  purpose: string;
+  discountLabel: string;
+  lifetimePricing: boolean;
+  selectablePlans: readonly LoadIqCommercialTierId[];
+};
 
 export const LOADIQ_PRO_MODELED_TRUCK_SURCHARGE = {
   label: "Additional truck",
@@ -66,6 +43,13 @@ export const LOADIQ_PRO_MODELED_TRUCK_SURCHARGE = {
   priceLabel: "$10.00/mo per additional truck",
   displayOnly: true,
 } as const;
+
+export const AVAILABLE_ENROLLMENT_TIER_IDS = [
+  "silver",
+  "gold",
+  "platinum",
+  "pro",
+] as const satisfies readonly LoadIqCommercialTierId[];
 
 export const LOADIQ_COMMERCIAL_TIERS = {
   silver: {
@@ -76,7 +60,7 @@ export const LOADIQ_COMMERCIAL_TIERS = {
     homepageStory: "Know if the load is worth hauling.",
     monthlyPrice: 19.99,
     annualPrice: 199,
-    legacyLaunchMonthlyPrice: 14.99,
+    enrollmentDiscountMonthlyPrice: 14.99,
     upgradePath:
       "Upgrade to Gold when one-off load checks become repeat freight decisions.",
     capabilities: [
@@ -95,7 +79,7 @@ export const LOADIQ_COMMERCIAL_TIERS = {
     homepageStory: "Know which freight to repeat.",
     monthlyPrice: 39.99,
     annualPrice: 399,
-    legacyLaunchMonthlyPrice: 24.99,
+    enrollmentDiscountMonthlyPrice: 24.99,
     upgradePath:
       "Upgrade to Platinum when saved patterns and actuals need deeper variance explanation.",
     capabilities: [
@@ -115,7 +99,7 @@ export const LOADIQ_COMMERCIAL_TIERS = {
     homepageStory: "Know why profitability changes.",
     monthlyPrice: 69.99,
     annualPrice: 699,
-    legacyLaunchMonthlyPrice: 49.99,
+    enrollmentDiscountMonthlyPrice: 49.99,
     upgradePath:
       "Upgrade to Pro when variance intelligence needs to support scale, capital, and growth planning.",
     capabilities: [
@@ -134,7 +118,7 @@ export const LOADIQ_COMMERCIAL_TIERS = {
     homepageStory: "Know when your operation is ready to grow.",
     monthlyPrice: 149.99,
     annualPrice: 1499,
-    legacyLaunchMonthlyPrice: 99.99,
+    enrollmentDiscountMonthlyPrice: 99.99,
     upgradePath:
       "Use Pro when repeatable per-truck modeling, capital planning, reserve goals, and growth thresholds become necessary.",
     capabilities: [
@@ -154,22 +138,97 @@ export const LOADIQ_COMMERCIAL_TIER_LIST = [
   LOADIQ_COMMERCIAL_TIERS.pro,
 ] as const;
 
+export const LOADIQ_TIERED_ENROLLMENT_PHASES = [
+  {
+    id: "founding_operator_phase_1",
+    name: "Pilot Enrollment",
+    shortName: "First 100",
+    cap: 100,
+    capacityLabel: "First 100 approved users",
+    purpose:
+      "Discounted pilot enrollment across all available Karpilo LoadIQ commercial tiers.",
+    discountLabel: "Enrollment discount monthly pricing",
+    lifetimePricing: true,
+    selectablePlans: AVAILABLE_ENROLLMENT_TIER_IDS,
+  },
+  {
+    id: "founding_operator_phase_2",
+    name: "Second Enrollment",
+    shortName: "Next 500",
+    cap: 500,
+    capacityLabel: "Next 500 approved users",
+    purpose:
+      "Second discounted enrollment across all available Karpilo LoadIQ commercial tiers.",
+    discountLabel: "Enrollment discount monthly pricing",
+    lifetimePricing: true,
+    selectablePlans: AVAILABLE_ENROLLMENT_TIER_IDS,
+  },
+  {
+    id: "open_market",
+    name: "Open Market",
+    shortName: "Public",
+    cap: null,
+    capacityLabel: "No published slot cap",
+    purpose:
+      "Public commercial access after launch readiness, billing, and support gates are complete.",
+    discountLabel: "No enrollment discount",
+    lifetimePricing: false,
+    selectablePlans: AVAILABLE_ENROLLMENT_TIER_IDS,
+  },
+] as const satisfies readonly TieredEnrollmentPhase[];
+
+export const DISCOUNTED_ENROLLMENT_PHASES =
+  LOADIQ_TIERED_ENROLLMENT_PHASES.filter((phase) => phase.lifetimePricing);
+
+export const FOUNDER_ACCESS = {
+  name: "Pilot Enrollment Access",
+  maxSeats: 100,
+  publicTeaser:
+    "The first 100 approved users may qualify for discounted enrollment across Silver, Gold, Platinum, and Pro.",
+  hiddenPricingEnabled: false,
+  inviteCodeRequired: false,
+  selectablePlans: AVAILABLE_ENROLLMENT_TIER_IDS,
+} as const;
+
+export const PILOT_ACCESS = {
+  name: "Pilot Enrollment Access",
+  publicTeaser:
+    "Pilot enrollment may be available for the first 100 approved early-access users across all available commercial tiers.",
+  maxSeats: 100,
+  durationDays: 30,
+  selectablePlans: AVAILABLE_ENROLLMENT_TIER_IDS,
+  lifetimeLockRule:
+    "Enrollment discount pricing remains locked only after server-authoritative approval, active subscription status, and purchased entitlement scope are confirmed. It is lost if canceled, deleted, transferred, or revoked under applicable terms.",
+} as const;
+
+export const LAUNCH_ACCESS = {
+  name: "Second Enrollment Access",
+  maxSeats: 500,
+  selectablePlans: AVAILABLE_ENROLLMENT_TIER_IDS,
+} as const;
+
+export const STANDARD_ACCESS = {
+  name: "Open Market Access",
+  selectablePlans: AVAILABLE_ENROLLMENT_TIER_IDS,
+} as const;
+
+export const PLATINUM_ACCESS = {
+  name: "Platinum",
+  status: "Display Only",
+  monthlyPrice: 69.99,
+  annualPrice: 699,
+  priceLabel: "$69.99/mo or $699/year",
+  annualPositioning: "Variance Intelligence for profitability pattern context.",
+} as const;
+
 export const PUBLIC_PRICING_PLANS = LOADIQ_COMMERCIAL_TIER_LIST;
 
-export const INTERNAL_FOUNDER_PLANS = [
-  {
-    tier: "founder",
-    name: "Founder Monthly",
-    price: PILOT_ACCESS.monthlyPrice,
-    interval: "month" as BillingInterval,
-  },
-  {
-    tier: "founder",
-    name: "Founder Annual",
-    price: PILOT_ACCESS.annualPrice,
-    interval: "year" as BillingInterval,
-  },
-] as const;
+export const INTERNAL_FOUNDER_PLANS = LOADIQ_COMMERCIAL_TIER_LIST.map((tier) => ({
+  tier: tier.id,
+  name: `Pilot Enrollment ${tier.name}`,
+  price: tier.enrollmentDiscountMonthlyPrice,
+  interval: "month" as BillingInterval,
+}));
 
 export function formatPriceLabel(price: number, interval: BillingInterval) {
   if (price === 0) return "$0";

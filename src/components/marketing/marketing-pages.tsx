@@ -43,7 +43,9 @@ import {
   demoSteps,
 } from "@/config/product-demo";
 import {
+  DISCOUNTED_ENROLLMENT_PHASES,
   LOADIQ_COMMERCIAL_TIER_LIST,
+  LOADIQ_COMMERCIAL_TIERS,
   LOADIQ_PRO_MODELED_TRUCK_SURCHARGE,
   formatCommercialPriceLabel,
 } from "@/config/pricing";
@@ -54,7 +56,6 @@ import {
   launch500Program,
   pilotPaymentGate,
   pilotProgram,
-  standardPricing,
 } from "@/config/launch";
 
 const APP_ICON_SRC = LOADIQ_BRAND.appIcon;
@@ -330,9 +331,12 @@ function CommercialTierCard({
           </strong>
         </div>
         <div className="flex justify-between gap-4">
-          <span>Legacy Launch</span>
+          <span>Enrollment discount</span>
           <strong className="text-white">
-            {formatCommercialPriceLabel(tier.legacyLaunchMonthlyPrice, "month")}
+            {formatCommercialPriceLabel(
+              tier.enrollmentDiscountMonthlyPrice,
+              "month",
+            )}
           </strong>
         </div>
         {tier.id === "pro" ? (
@@ -359,6 +363,46 @@ function CommercialTierCard({
           </p>
         </>
       ) : null}
+    </div>
+  );
+}
+
+function EnrollmentPhaseCard({
+  phase,
+}: {
+  phase: (typeof DISCOUNTED_ENROLLMENT_PHASES)[number];
+}) {
+  const tierNames = phase.selectablePlans
+    .map((tierId) => LOADIQ_COMMERCIAL_TIERS[tierId].name)
+    .join(", ");
+
+  return (
+    <div className="rounded-[1.5rem] border border-sky-300/20 bg-sky-400/5 p-5">
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-sky-300">
+        {phase.shortName}
+      </p>
+      <h3 className="mt-3 text-2xl font-black tracking-[-0.04em] text-white">
+        {phase.name}
+      </h3>
+      <p className="mt-3 text-sm leading-6 text-slate-300">{phase.purpose}</p>
+      <div className="mt-5 grid gap-2 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-slate-300">
+        <div className="flex justify-between gap-4">
+          <span>Capacity</span>
+          <strong className="text-right text-white">{phase.capacityLabel}</strong>
+        </div>
+        <div className="flex justify-between gap-4">
+          <span>Available tiers</span>
+          <strong className="text-right text-white">{tierNames}</strong>
+        </div>
+        <div className="flex justify-between gap-4">
+          <span>Discount</span>
+          <strong className="text-right text-white">{phase.discountLabel}</strong>
+        </div>
+      </div>
+      <p className="mt-4 text-sm leading-6 text-slate-400">
+        Eligibility, slot assignment, and provider price mapping must be
+        confirmed server-side before checkout can activate.
+      </p>
     </div>
   );
 }
@@ -574,8 +618,8 @@ export function HomeMarketingPage() {
         <div className="grid gap-4 md:grid-cols-3">
           <PromotionBanner
             eyebrow="Pilot"
-            title="First 50 operators"
-            description="Pilot details, slot logic, and early operator appreciation live on one focused page."
+            title="First 100 operators"
+            description="Pilot enrollment covers discounted tier access for the first 100 approved users."
             href="/pilot-program"
           />
           <PromotionBanner
@@ -636,13 +680,19 @@ export function PricingMarketingPage() {
       <PageHeader
         eyebrow="Pricing"
         title="Pricing by decision-support depth."
-        description="Silver, Gold, Platinum, and Pro define how deeply Karpilo LoadIQ supports freight profitability decisions. Pilot and Legacy Launch remain rollout pricing programs while checkout remains controlled server-side."
+        description="Silver, Gold, Platinum, and Pro define how deeply Karpilo LoadIQ supports freight profitability decisions. Pilot enrollment and second enrollment control discount eligibility while checkout remains controlled server-side."
       />
       <SubscriptionValuePanel />
       <section className="mx-auto max-w-7xl px-6 pb-16 sm:px-8">
         <div className="grid gap-5 lg:grid-cols-4">
           {LOADIQ_COMMERCIAL_TIER_LIST.map((tier) => (
             <CommercialTierCard key={tier.id} tier={tier} />
+          ))}
+        </div>
+
+        <div className="mt-8 grid gap-5 lg:grid-cols-2">
+          {DISCOUNTED_ENROLLMENT_PHASES.map((phase) => (
+            <EnrollmentPhaseCard key={phase.id} phase={phase} />
           ))}
         </div>
 
@@ -660,11 +710,11 @@ export function PricingMarketingPage() {
 
         <div className="mt-8 rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-5 text-sm leading-7 text-slate-400">
           Public checkout remains disabled until payment systems are explicitly
-          enabled server-side. Legacy Launch prices are rollout pricing, not a
-          separate subscription tier. Pro includes a $10.00/month charge per
-          additional truck. Karpilo LoadIQ is decision-support software; it does
-          not guarantee savings, profit, freight availability, or business
-          outcomes.
+          enabled server-side. Enrollment discounts are rollout eligibility
+          programs, not separate subscription tiers. Pro includes a
+          $10.00/month charge per additional truck. Karpilo LoadIQ is
+          decision-support software; it does not guarantee savings, profit,
+          freight availability, or business outcomes.
         </div>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           <PrimaryCta onWaitlist={openWaitlist}>Reserve Access</PrimaryCta>
@@ -688,9 +738,9 @@ export function PilotProgramPage() {
   return (
     <AppFrame>
       <PageHeader
-        eyebrow="Founding 50 Pilot"
-        title="Controlled pilot access for the first 50 approved operators."
-        description="This page is the only place for pilot-specific pricing lock details, founder appreciation, and early operator messaging."
+        eyebrow="Pilot Enrollment"
+        title="Discounted pilot enrollment for the first 100 approved operators."
+        description="Pilot enrollment is a rollout phase. Silver, Gold, Platinum, and Pro remain the commercial tiers."
       />
       <section className="mx-auto grid max-w-7xl gap-5 px-6 pb-16 sm:px-8 lg:grid-cols-[0.95fr_1.05fr]">
         <RolloutCommandCenter onReserve={openWaitlist} compact />
@@ -700,13 +750,15 @@ export function PilotProgramPage() {
             {pilotProgram.name}
           </h2>
           <p className="mt-4 leading-7 text-slate-300">
-            The pilot is for operational refinement, not fake urgency. Approved early operators help shape the system and may qualify for the Founding Operator lifetime pricing lock.
+            The pilot is for operational refinement, not fake urgency. Approved
+            early operators help shape the system and may qualify for
+            discounted enrollment on their selected commercial tier.
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {[
-              ["Pilot monthly", `$${pilotProgram.monthlyPrice}`],
-              ["Pilot annual", `$${pilotProgram.annualPrice}`],
-              ["Slots", `First ${pilotProgram.maxSlots}`],
+              ["Capacity", `First ${pilotProgram.maxSlots}`],
+              ["Tiers", "Silver, Gold, Platinum, Pro"],
+              ["Discount", pilotProgram.discountLabel],
               ["Badge", pilotProgram.badge],
             ].map(([label, value]) => (
               <div key={label} className="rounded-2xl border border-white/10 bg-black/25 p-4">
@@ -740,7 +792,7 @@ export function PilotProgramPage() {
             Karpilo LoadIQ is being shaped by operators who understand the road, the pressure, and the cost of unclear freight decisions. Pilot feedback matters because the product is being built for people actually living the work.
           </p>
           <div className="mt-6">
-            <PrimaryCta onWaitlist={openWaitlist}>Claim Pilot Access</PrimaryCta>
+            <PrimaryCta onWaitlist={openWaitlist}>Reserve Pilot Eligibility</PrimaryCta>
           </div>
           <div className="mt-6">
             <AppStorePlaceholders />
@@ -748,7 +800,7 @@ export function PilotProgramPage() {
         </div>
       </section>
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Claim Pilot Access" onWaitlist={openWaitlist} />
+      <StickyMobileCta label="Reserve Pilot Eligibility" onWaitlist={openWaitlist} />
     </AppFrame>
   );
 }
@@ -759,9 +811,9 @@ export function LaunchPromoPage() {
   return (
     <AppFrame>
       <PageHeader
-        eyebrow="Launch Promotion"
-        title="First 500 Launch Operators."
-        description="The launch promotion is separate from the pilot. Pilot users are not launch users, and launch users do not occupy Founding 50 slots."
+        eyebrow="Second Enrollment"
+        title="Discounted enrollment for the next 500 approved operators."
+        description="Second enrollment follows pilot enrollment and still uses the same Silver, Gold, Platinum, and Pro commercial tiers."
       />
       <section className="mx-auto grid max-w-7xl gap-5 px-6 pb-16 sm:px-8 lg:grid-cols-[0.95fr_1.05fr]">
         <RolloutCommandCenter onReserve={openWaitlist} compact />
@@ -770,14 +822,16 @@ export function LaunchPromoPage() {
             {launch500Program.name}
           </h2>
           <p className="mt-4 leading-7 text-slate-300">
-            Official launch pricing is designed for the first broader wave of operators after pilot operations close. It is a separate launch tier with its own slot logic and legacy pricing lock.
+            Second enrollment is designed for the broader approved group after
+            pilot enrollment. It is a rollout phase with its own slot logic, not
+            a separate commercial tier.
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {[
-              ["Launch monthly", `$${launch500Program.monthlyPrice}`],
-              ["Launch annual", `$${launch500Program.annualPrice}`],
-              ["Launch slots", `First ${launch500Program.maxSlots}`],
-              ["Standard monthly", `$${standardPricing.monthlyPrice}`],
+              ["Capacity", `Next ${launch500Program.maxSlots}`],
+              ["Tiers", "Silver, Gold, Platinum, Pro"],
+              ["Discount", launch500Program.discountLabel],
+              ["Badge", launch500Program.badge],
             ].map(([label, value]) => (
               <div key={label} className="rounded-2xl border border-white/10 bg-black/25 p-4">
                 <p className="text-xs uppercase tracking-[0.14em] text-slate-500">{label}</p>

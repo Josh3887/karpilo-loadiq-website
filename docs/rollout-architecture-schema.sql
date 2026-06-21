@@ -169,7 +169,7 @@ values
     45,
     'active',
     true,
-    'Interest capture, infrastructure readiness, and operator expectation setting before founder access opens.',
+    'Interest capture, infrastructure readiness, and operator expectation setting before pilot enrollment opens.',
     'No billing is active. Visitors may reserve eligibility and follow deployment updates.',
     'Reserve Eligibility',
     '/pilot-program'
@@ -177,17 +177,17 @@ values
   (
     'FOUNDER_PILOT',
     1,
-    'Founder Pilot',
-    'Founder 50',
-    50,
+    'Pilot Enrollment',
+    'Pilot 100',
+    100,
     '2026-06-27T13:00:00Z',
     '2026-08-11T13:00:00Z',
     45,
     'upcoming',
     true,
-    'First 50 approved users shape the operational pilot while deployment pressure remains controlled.',
+    'The first 100 approved users shape the operational pilot while deployment pressure remains controlled.',
     'Access is limited, reviewed, and may pause if infrastructure or support load requires it.',
-    'Join Founder Pilot List',
+    'Join Pilot Enrollment',
     '/pilot-program'
   ),
   (
@@ -201,7 +201,7 @@ values
     60,
     'upcoming',
     true,
-    'A measured public launch cohort expands access after founder pilot learning is incorporated.',
+    'A measured public launch cohort expands access after discounted enrollment learning is incorporated.',
     'Launch access remains capacity-limited and may be throttled during operational events.',
     'Join Launch Queue',
     '/launch-promo'

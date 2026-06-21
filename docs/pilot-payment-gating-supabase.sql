@@ -153,10 +153,10 @@ insert into public.launch_program_state (
 )
 values (
   'founding_50_pilot',
-  'Founding 50 Pilot Program',
+  'Pilot Enrollment Program',
   '2026-06-01T15:00:00Z',
   '2026-07-31T15:00:00Z',
-  50,
+  100,
   0,
   false,
   true,
@@ -212,7 +212,7 @@ begin
           waitlist_only_mode = true
       where program_key = 'founding_50_pilot';
 
-    raise exception 'Founding 50 Pilot is fully allocated';
+    raise exception 'Pilot enrollment is fully allocated';
   end if;
 
   select e.id, e.slot_number, e.pricing_tier, e.billing_provider, program_row.provider_price_map

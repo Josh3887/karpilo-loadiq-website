@@ -28,28 +28,16 @@ const pricingByCohort: Record<
   Cohort,
   {
     pricingLockTier: string;
-    monthlyPrice: number;
-    annualPrice: number;
-    createsLock: boolean;
   }
 > = {
   founder_50: {
-    pricingLockTier: "founder_50",
-    monthlyPrice: 14.99,
-    annualPrice: 129.99,
-    createsLock: true,
+    pricingLockTier: "pilot_enrollment",
   },
   launch_500: {
-    pricingLockTier: "launch_500",
-    monthlyPrice: 19.99,
-    annualPrice: 149.99,
-    createsLock: true,
+    pricingLockTier: "second_enrollment",
   },
   standard_future: {
     pricingLockTier: "standard",
-    monthlyPrice: 24.99,
-    annualPrice: 189.99,
-    createsLock: false,
   },
 };
 
@@ -161,7 +149,8 @@ export async function POST(request: Request) {
           status: "submitted",
           source: "website-waitlist-modal",
           metadata: {
-            legacy_founder_access: true,
+            tiered_enrollment: cohort !== LOADIQ_LAUNCH_KEYS.standardFuture,
+            pricing_authority: "server_required_before_checkout",
           },
         })
         .select("id")
@@ -201,26 +190,9 @@ export async function POST(request: Request) {
         console.error("RESERVATION_EVENT_INSERT_ERROR:", eventError);
       }
 
-      if (pricing.createsLock && !reservationAlreadyExists) {
-        const { error: entitlementError } = await supabaseServer
-          .from("pricing_entitlements")
-          .insert({
-            reservation_id: reservationId,
-            email,
-            cohort,
-            pricing_lock_tier: pricing.pricingLockTier,
-            monthly_price: pricing.monthlyPrice,
-            annual_price: pricing.annualPrice,
-            intended_billing_provider: intendedBillingProvider,
-            status: "pending_review",
-            active: false,
-            source: "website_reservation",
-          });
-
-        if (entitlementError) {
-          console.error("PRICING_ENTITLEMENT_INSERT_ERROR:", entitlementError);
-        }
-      }
+      // Tiered enrollment pricing depends on the selected commercial tier.
+      // This fallback path records eligibility intent only; final entitlements
+      // must be created by server-authoritative approval and provider mapping.
     }
 
     let rolloutWaitlistId: string | null = null;
@@ -321,7 +293,7 @@ export async function POST(request: Request) {
       email,
       company,
       fleet_size: fleetSize,
-      founder_access: true,
+      founder_access: cohort === LOADIQ_LAUNCH_KEYS.founder50,
       program_interest: cohort,
       metadata: {
         intended_billing_provider: intendedBillingProvider,
@@ -348,9 +320,9 @@ export async function POST(request: Request) {
         messageType: "reservation_notification",
         to: notifyEmail,
         replyTo: email,
-        subject: "New Karpilo LoadIQ Founding Operator Reservation",
+        subject: "New Karpilo LoadIQ Enrollment Reservation",
         text: `
-New founding operator reservation:
+New enrollment reservation:
 
 Name: ${name}
 Email: ${email}

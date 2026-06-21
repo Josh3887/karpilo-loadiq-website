@@ -22,8 +22,13 @@ type WaitlistResponse = {
 const cohortOptions = [
   {
     value: LOADIQ_LAUNCH_KEYS.founder50,
-    label: "Founder 50 pilot",
-    description: "$14.99/mo or $129.99/yr, first 50 approved reservations",
+    label: "Pilot enrollment",
+    description: "First 100 approved users, discounted tier eligibility",
+  },
+  {
+    value: LOADIQ_LAUNCH_KEYS.launch500,
+    label: "Second enrollment",
+    description: "Next 500 approved users, discounted tier eligibility",
   },
 ] as const;
 
@@ -118,7 +123,7 @@ export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
 
         <div className="relative z-10">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-red-300">
-            Founding Operator Access
+            Enrollment Eligibility
           </p>
 
           <h2 className="mt-4 text-3xl font-black tracking-[-0.04em] text-white">
@@ -126,15 +131,16 @@ export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
           </h2>
 
           <p className="mt-3 leading-7 text-slate-300">
-            Founder 50 reservations are open for the first 50 approved users and
-            routed for direct founder review before any billing provider is used.
+            Pilot enrollment covers the first 100 approved users. Second
+            enrollment covers the next 500. Reservations are routed for review
+            before any billing provider is used.
           </p>
 
           {status === "success" ? (
             <div className="mt-8 rounded-2xl border border-sky-300/20 bg-sky-400/10 p-5">
               <p className="font-bold text-sky-200">
-                Reservation received. You’re on the Karpilo LoadIQ founding
-                access list.
+                Reservation received. You are on the Karpilo LoadIQ enrollment
+                eligibility list.
               </p>
 
               <button

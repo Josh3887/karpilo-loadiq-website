@@ -497,13 +497,14 @@ export const legalPages: Record<string, LegalPage> = {
     title: "Pilot Program Terms",
     navLabel: "Pilot Terms",
     description:
-      "Founding 50 Pilot Program rules, lifetime lock expectations, qualification, and transition to public launch pricing.",
+      "Pilot enrollment rules, pricing-lock expectations, qualification, and transition to second enrollment and public launch pricing.",
     sections: [
       {
-        id: "founding-50",
-        title: "Founding 50 Pilot Program",
+        id: "pilot-enrollment",
+        title: "Pilot Enrollment Program",
         paragraphs: [
-          "The Founding 50 Pilot Program is limited to the first 50 approved users. Pilot pricing is currently structured at $14.99/month or $129.99/year while the account remains active and in good standing.",
+          "The Pilot Enrollment Program is limited to the first 100 approved users. Eligible approved users may receive enrollment discount monthly pricing for the selected Karpilo LoadIQ commercial tier.",
+          "Current enrollment discount monthly pricing is Silver at $14.99/month, Gold at $24.99/month, Platinum at $49.99/month, and Pro at $99.99/month. Pro may also include a $10.00/month charge per additional truck when supported by the applicable billing provider configuration.",
           "Pilot access is qualification-based. Submitting interest does not guarantee approval, access, billing availability, app store availability, or a pricing lock.",
           "Pilot access is limited to the purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family.",
         ],
@@ -519,9 +520,10 @@ export const legalPages: Record<string, LegalPage> = {
       },
       {
         id: "launch500",
-        title: "Legacy Launch Transition",
+        title: "Second Enrollment Transition",
         paragraphs: [
-          "After pilot capacity or pilot timing ends, users may transition into Legacy Launch rollout pricing where available. Specific pricing-lock eligibility remains controlled by Karpilo LoadIQ server-side reservation and entitlement records, not by public website text alone.",
+          "After pilot enrollment capacity or pilot timing ends, users may transition into second enrollment where available. Second enrollment is limited to the next 500 approved users and uses the same available commercial tiers: Silver, Gold, Platinum, and Pro.",
+          "Specific pricing-lock eligibility remains controlled by Karpilo LoadIQ server-side reservation and entitlement records, not by public website text alone.",
         ],
       },
     ],
@@ -570,7 +572,7 @@ export const legalPages: Record<string, LegalPage> = {
         id: "billing-channels",
         title: "Billing Channels",
         paragraphs: [
-          "Stripe/Web, Apple App Store, and Google Play are billing channels only. They do not independently determine founder pilot eligibility, launch cohort eligibility, or pricing-lock authority.",
+          "Stripe/Web, Apple App Store, and Google Play are billing channels only. They do not independently determine pilot enrollment eligibility, second enrollment eligibility, selected commercial tier, or pricing-lock authority.",
           "Supabase-controlled reservation and entitlement records are the internal authority for cohort status and pricing-lock eligibility. Billing providers may still control receipts, payment retries, taxes, cancellation tools, disputes, and refund paths for purchases processed through their systems.",
         ],
       },
@@ -578,7 +580,7 @@ export const legalPages: Record<string, LegalPage> = {
         id: "trial-availability",
         title: "Trial Availability",
         paragraphs: [
-          "Pilot access, Legacy Launch access, and public Karpilo LoadIQ commercial tiers may support a 7-day free trial where the applicable billing provider and checkout flow allow it.",
+          "Pilot enrollment, second enrollment, and public Karpilo LoadIQ commercial tiers may support a 7-day free trial where the applicable billing provider and checkout flow allow it.",
           "A checkout or platform screen should disclose the trial duration, conversion date, recurring price, billing interval, and cancellation method before the user is charged.",
           "Karpilo LoadIQ does not offer a permanent free tier initially.",
         ],
@@ -598,14 +600,14 @@ export const legalPages: Record<string, LegalPage> = {
     title: "Pricing Lock Policy",
     navLabel: "Pricing Lock",
     description:
-      "How founder pilot and launch cohort pricing-lock eligibility is controlled, preserved, and lost.",
+      "How pilot enrollment and second enrollment pricing-lock eligibility is controlled, preserved, and lost.",
     sections: [
       {
         id: "authority",
         title: "Supabase Is Pricing-Lock Authority",
         paragraphs: [
           "Pricing-lock eligibility is controlled by Karpilo LoadIQ's Supabase reservation and entitlement records. Stripe coupons, app-store products, frontend text, emails, or screenshots do not override the server-side authority.",
-          "Public Karpilo LoadIQ commercial pricing is displayed as Silver at $19.99/month or $199/year, Gold at $39.99/month or $399/year, Platinum at $69.99/month or $699/year, and Pro at $149.99/month or $1499/year plus $10.00/month per additional truck. Legacy Launch display pricing is Silver at $14.99/month, Gold at $24.99/month, Platinum at $49.99/month, and Pro at $99.99/month. Checkout availability, pricing-lock eligibility, and billing provider availability remain controlled by server-side reservation, entitlement, and launch-readiness records.",
+          "Public Karpilo LoadIQ commercial pricing is displayed as Silver at $19.99/month or $199/year, Gold at $39.99/month or $399/year, Platinum at $69.99/month or $699/year, and Pro at $149.99/month or $1499/year plus $10.00/month per additional truck. Enrollment discount monthly pricing is displayed as Silver at $14.99/month, Gold at $24.99/month, Platinum at $49.99/month, and Pro at $99.99/month for eligible approved users in pilot enrollment or second enrollment. Checkout availability, pricing-lock eligibility, selected commercial tier, and billing provider availability remain controlled by server-side reservation, entitlement, and launch-readiness records.",
           "Pricing-lock eligibility applies only to the qualifying account, purchased entitlement scope, applicable subscription class, and current Karpilo LoadIQ product family. Future enterprise licensing, Karpilo FleetOS capabilities, team accounts, APIs, or separately licensed modules may require separate pricing and terms.",
         ],
       },

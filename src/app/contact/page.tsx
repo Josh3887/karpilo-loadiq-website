@@ -104,7 +104,7 @@ export default function ContactPage() {
           </h1>
 
           <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300">
-            Reach out for founding operator access, early release updates,
+            Reach out for pilot enrollment access, early release updates,
             partnership interest, fleet feedback, or launch questions.
           </p>
 
