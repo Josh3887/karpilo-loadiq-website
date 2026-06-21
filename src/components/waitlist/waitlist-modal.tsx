@@ -127,7 +127,7 @@ export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
           </p>
 
           <h2 className="mt-4 text-3xl font-black tracking-[-0.04em] text-white">
-            Reserve Your Spot
+            Request Access
           </h2>
 
           <p className="mt-3 leading-7 text-slate-300">
@@ -139,8 +139,8 @@ export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
           {status === "success" ? (
             <div className="mt-8 rounded-2xl border border-sky-300/20 bg-sky-400/10 p-5">
               <p className="font-bold text-sky-200">
-                Reservation received. You are on the Karpilo LoadIQ enrollment
-                eligibility list.
+                Request received. You are on the Karpilo LoadIQ controlled
+                launch access list.
               </p>
 
               <button
@@ -222,8 +222,8 @@ export default function WaitlistModal({ open, onClose }: WaitlistModalProps) {
                 className="w-full rounded-full bg-gradient-to-r from-red-600 via-red-500 to-red-700 px-8 py-4 text-sm font-black uppercase tracking-[0.18em] text-white shadow-[0_0_38px_rgba(239,68,68,0.42)] transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {status === "loading"
-                  ? "Reserving..."
-                  : "Reserve Eligibility"}
+                  ? "Requesting..."
+                  : "Request Access"}
               </button>
             </form>
           )}

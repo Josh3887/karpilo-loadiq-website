@@ -97,6 +97,7 @@ export const LOADIQ_CONTACT_CHANNELS = [
 export const LOADIQ_ROUTES = {
   home: "/",
   pricing: "/pricing",
+  launch: "/launch",
   pilotProgram: "/pilot-program",
   launchPromo: "/launch-promo",
   demo: "/demo",
@@ -136,36 +137,41 @@ export const LOADIQ_NAVIGATION_LINKS = [
   { label: "Pricing", href: LOADIQ_ROUTES.pricing },
   { label: "Atlas", href: LOADIQ_ROUTES.atlas },
   { label: "Demo", href: LOADIQ_ROUTES.demo },
+  { label: "Launch", href: LOADIQ_ROUTES.launch },
   { label: "Pilot", href: LOADIQ_ROUTES.pilotProgram },
-  { label: "Launch", href: LOADIQ_ROUTES.launchPromo },
   { label: "Founder", href: LOADIQ_ROUTES.founder },
 ] as const;
 
 export const LOADIQ_APP_ACCESS_LINKS = [
   {
-    label: "Prepare Mobile App Access",
-    href: LOADIQ_ROUTES.accountSettings,
-    description: "Review account readiness for future mobile app access.",
+    label: "Request Access",
+    href: LOADIQ_ROUTES.pilotProgram,
+    description: "Join controlled launch intake. Access may be limited by phase availability.",
+  },
+  {
+    label: "Open Portal",
+    href: LOADIQ_URLS.app,
+    description: "Open the app portal. Launch access may be restricted.",
   },
   {
     label: "Account Settings",
     href: LOADIQ_ROUTES.accountSettings,
-    description: "Manage website account identity.",
+    description: "Manage website-side account identity if access has already been issued.",
   },
   {
-    label: "Manage Billing",
+    label: "Billing Support",
     href: LOADIQ_ROUTES.billing,
-    description: "Review subscription access and billing support.",
+    description: "Review billing support. Public subscription signup is not currently available.",
   },
   {
     label: "Login",
     href: LOADIQ_ROUTES.login,
-    description: "Sign in on the website.",
+    description: "Sign in if you already have issued access.",
   },
   {
-    label: "Signup",
+    label: "Controlled Signup Status",
     href: LOADIQ_ROUTES.signup,
-    description: "Create Karpilo LoadIQ access.",
+    description: "Public signup is not currently available; request access instead.",
   },
   {
     label: "Subscription Help",
@@ -180,8 +186,9 @@ export const LOADIQ_FOOTER_LINKS = {
     { label: "Pricing", href: LOADIQ_ROUTES.pricing },
     { label: "Demo", href: LOADIQ_ROUTES.demo },
     { label: "Atlas", href: LOADIQ_ROUTES.atlas },
+    { label: "Launch", href: LOADIQ_ROUTES.launch },
     { label: "Pilot Program", href: LOADIQ_ROUTES.pilotProgram },
-    { label: "Launch Promotion", href: LOADIQ_ROUTES.launchPromo },
+    { label: "Second Enrollment", href: LOADIQ_ROUTES.launchPromo },
   ],
   company: [
     { label: "Founder", href: LOADIQ_ROUTES.founder },

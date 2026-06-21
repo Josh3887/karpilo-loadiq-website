@@ -5,6 +5,13 @@ export type ProductFeature = {
   description: string;
 };
 
+export type ProductFeatureGroup = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  features: readonly ProductFeature[];
+};
+
 export type ProductFaq = {
   question: string;
   answer: string;
@@ -65,6 +72,93 @@ export const PRODUCT_FEATURES = [
       "A dark operational interface designed for fast checks from the cab, desk, or dispatch call.",
   },
 ] satisfies ProductFeature[];
+
+export const PRODUCT_FEATURE_GROUPS = [
+  {
+    eyebrow: "Built / Active",
+    title: "Operational estimates operators can inspect now.",
+    description:
+      "These surfaces are represented in the current website or app code and are safe to present as active LoadIQ capabilities.",
+    features: [
+      {
+        title: "Profitability calculator",
+        description:
+          "Estimate gross revenue, fuel exposure, operating costs, projected net, break-even RPM, and margin pressure from user-entered freight details.",
+      },
+      {
+        title: "True RPM and deadhead inputs",
+        description:
+          "Combine loaded miles and unpaid deadhead so the real revenue-per-mile pressure is visible before an independent freight decision.",
+      },
+      {
+        title: "Fuel exposure controls",
+        description:
+          "Use manual fuel inputs and supported diesel reference data as estimation context, not guaranteed pump-price authority.",
+      },
+      {
+        title: "Public demo workflow",
+        description:
+          "Move freight numbers on the website demo to see how projected net, fuel cost, and true RPM react.",
+      },
+    ],
+  },
+  {
+    eyebrow: "Launch / In Progress",
+    title: "Controlled launch systems being prepared.",
+    description:
+      "These items are launch-readiness workstreams and should not be described as open public purchasing or unrestricted account access.",
+    features: [
+      {
+        title: "Request-access intake",
+        description:
+          "Operators can request access or join the launch list while approval and phase availability remain controlled.",
+      },
+      {
+        title: "Tier and phase alignment",
+        description:
+          "Silver, Gold, Platinum, and Pro stay separate from rollout phase eligibility and server-side entitlement records.",
+      },
+      {
+        title: "Subscription readiness",
+        description:
+          "Billing language, support paths, and provider handoff are being organized before public subscription signup opens.",
+      },
+      {
+        title: "Portal handoff",
+        description:
+          "The public website routes operators toward the app portal while making clear that launch access may be restricted.",
+      },
+    ],
+  },
+  {
+    eyebrow: "Planned / Roadmap",
+    title: "Future tooling that must stay clearly future-facing.",
+    description:
+      "These concepts are not presented as live public website features. They describe planned direction where product authority is still being designed.",
+    features: [
+      {
+        title: "Address and mileage intelligence",
+        description:
+          "Future address verification, zip-to-zip mileage estimation, and location variance tools may improve distance context.",
+      },
+      {
+        title: "AI explanation layer",
+        description:
+          "Atlas-style explanation support may help interpret estimates while leaving final decisions with the operator.",
+      },
+      {
+        title: "Seasonality and lane memory",
+        description:
+          "Future intelligence may help operators understand recurring freight patterns, seasonal pressure, and estimate drift.",
+      },
+      {
+        title: "Fleet-scale planning",
+        description:
+          "Future tools may support larger operating models without turning the website into FleetOS or a dispatch system.",
+      },
+    ],
+  },
+] satisfies readonly ProductFeatureGroup[];
 
 export const PRODUCT_FAQS = [
   {

@@ -10,8 +10,11 @@ export type LoadIqCommercialTier = {
   id: LoadIqCommercialTierId;
   name: string;
   decisionSupportDepth: string;
+  intendedUser: string;
+  operationalMaturity: string;
   coreQuestion: string;
   homepageStory: string;
+  launchAvailability: string;
   monthlyPrice: number;
   annualPrice: number;
   enrollmentDiscountMonthlyPrice: number;
@@ -56,8 +59,13 @@ export const LOADIQ_COMMERCIAL_TIERS = {
     id: "silver",
     name: "Silver",
     decisionSupportDepth: "Load Viability",
+    intendedUser:
+      "Owner-operators or leased operators who need quick load-level viability checks.",
+    operationalMaturity: "Single-load decision support",
     coreQuestion: "Is this load worth hauling?",
     homepageStory: "Know if the load is worth hauling.",
+    launchAvailability:
+      "Available by controlled launch phase. Public subscription signup is not currently available.",
     monthlyPrice: 19.99,
     annualPrice: 199,
     enrollmentDiscountMonthlyPrice: 14.99,
@@ -75,8 +83,13 @@ export const LOADIQ_COMMERCIAL_TIERS = {
     id: "gold",
     name: "Gold",
     decisionSupportDepth: "Operational Visibility",
+    intendedUser:
+      "Operators who compare repeat freight, lane pressure, and operating assumptions across a working week.",
+    operationalMaturity: "Repeat freight visibility",
     coreQuestion: "What freight should I repeat, avoid, or adjust?",
     homepageStory: "Know which freight to repeat.",
+    launchAvailability:
+      "Available by controlled launch phase. Public subscription signup is not currently available.",
     monthlyPrice: 39.99,
     annualPrice: 399,
     enrollmentDiscountMonthlyPrice: 24.99,
@@ -94,9 +107,14 @@ export const LOADIQ_COMMERCIAL_TIERS = {
     id: "platinum",
     name: "Platinum",
     decisionSupportDepth: "Variance Intelligence",
+    intendedUser:
+      "Operators reviewing why estimates and actual results differ across fuel, route, maintenance, and expense patterns.",
+    operationalMaturity: "Estimate-to-actual interpretation",
     coreQuestion:
       "Why are my estimates wrong and what patterns are affecting profitability?",
     homepageStory: "Know why profitability changes.",
+    launchAvailability:
+      "Available by controlled launch phase. Public subscription signup is not currently available.",
     monthlyPrice: 69.99,
     annualPrice: 699,
     enrollmentDiscountMonthlyPrice: 49.99,
@@ -114,8 +132,13 @@ export const LOADIQ_COMMERCIAL_TIERS = {
     id: "pro",
     name: "Pro",
     decisionSupportDepth: "Growth Intelligence",
+    intendedUser:
+      "Small operations that need scale, capital, reserve, and per-truck planning context.",
+    operationalMaturity: "Advanced operating intelligence",
     coreQuestion: "Can this operation scale safely and profitably?",
     homepageStory: "Know when your operation is ready to grow.",
+    launchAvailability:
+      "Available by controlled launch phase. Public subscription signup is not currently available.",
     monthlyPrice: 149.99,
     annualPrice: 1499,
     enrollmentDiscountMonthlyPrice: 99.99,

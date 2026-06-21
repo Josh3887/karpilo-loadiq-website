@@ -1,8 +1,9 @@
 import { WebsiteSignupPanel } from "@/components/account/website-access-panels";
 
 export const metadata = {
-  title: "Signup | Karpilo LoadIQ",
-  description: "Create Karpilo LoadIQ website access with shared Supabase identity.",
+  title: "Controlled Access | Karpilo LoadIQ",
+  description:
+    "Public signup is not currently available. Request controlled Karpilo LoadIQ launch access or open the app portal if access has already been issued.",
 };
 
 export default function SignupPage() {

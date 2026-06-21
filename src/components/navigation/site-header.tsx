@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 
+import { DevelopmentReadinessBanner } from "@/components/development/development-readiness-banner";
 import {
   LOADIQ_APP_ACCESS_LINKS,
   LOADIQ_BRAND,
@@ -95,7 +96,7 @@ export default function SiteHeader() {
             onClick={() => setCommandOpen(false)}
             className="rounded-full border border-red-500/30 bg-red-500/10 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-red-100 transition hover:bg-red-500/20"
           >
-            Pilot Access
+            Request Access
           </Link>
 
           {commandOpen ? (
@@ -137,6 +138,8 @@ export default function SiteHeader() {
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
+
+      <DevelopmentReadinessBanner />
 
       {open ? (
         <div className="border-t border-white/10 bg-[#020617]/98 px-6 py-5 shadow-[0_24px_60px_rgba(0,0,0,0.45)] lg:hidden">

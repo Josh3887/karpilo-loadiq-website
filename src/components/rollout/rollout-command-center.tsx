@@ -136,7 +136,7 @@ export function RolloutCommandCenter({
       onClick={onReserve}
       className="w-full rounded-full bg-gradient-to-r from-red-600 via-red-500 to-red-700 px-6 py-4 text-xs font-black uppercase tracking-[0.14em] text-white shadow-[0_0_32px_rgba(239,68,68,0.34)] transition hover:scale-[1.01] sm:w-auto"
     >
-      {activePhase.ctaLabel}
+      Request Access
     </button>
   ) : (
     <Link

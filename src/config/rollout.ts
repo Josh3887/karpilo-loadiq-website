@@ -71,7 +71,7 @@ export const ROLLOUT_PHASES: RolloutPhaseConfig[] = [
     endsAt: "2026-06-12T15:00:00Z",
     description: "Pilot enrollment reservations are open while launch systems are finalized.",
     expectation: "No billing is active. The first 100 approved users may qualify for discounted tier enrollment after server-side review.",
-    ctaLabel: "Reserve Eligibility",
+    ctaLabel: "Request Access",
     targetRoute: "/pilot-program",
   },
   {
@@ -84,7 +84,7 @@ export const ROLLOUT_PHASES: RolloutPhaseConfig[] = [
     endsAt: "2026-08-26T15:00:00Z",
     description: "The second discounted enrollment cohort is planned after pilot enrollment readiness is validated.",
     expectation: "Second enrollment timing may move while launch systems, support, and payment gates are finalized.",
-    ctaLabel: "Join Second Enrollment",
+    ctaLabel: "Request Access",
     targetRoute: "/launch-promo",
   },
   {
@@ -97,7 +97,7 @@ export const ROLLOUT_PHASES: RolloutPhaseConfig[] = [
     endsAt: "2026-11-24T15:00:00Z",
     description: "Public launch readiness is reviewed after the two discounted enrollment phases.",
     expectation: "Open public access remains gated by infrastructure, support load, billing readiness, and publication requirements.",
-    ctaLabel: "Get Launch Updates",
+    ctaLabel: "Request Access",
     targetRoute: "/launch-promo",
   },
   {
@@ -110,7 +110,7 @@ export const ROLLOUT_PHASES: RolloutPhaseConfig[] = [
     endsAt: "2026-11-24T15:00:00Z",
     description: "The controlled cohorts have completed and the app enters final public-readiness monitoring.",
     expectation: "Open public access is held until final public launch readiness is confirmed.",
-    ctaLabel: "Get Launch Updates",
+    ctaLabel: "Request Access",
     targetRoute: "/contact",
   },
   {
@@ -123,7 +123,7 @@ export const ROLLOUT_PHASES: RolloutPhaseConfig[] = [
     endsAt: null,
     description: "Karpilo LoadIQ opens to public access 90 days from Phase 3 launch.",
     expectation: "General availability opens only after payment, policy, support, and app publishing readiness are confirmed.",
-    ctaLabel: "Get Launch Updates",
+    ctaLabel: "Request Access",
     targetRoute: "/contact",
   },
 ] as const;

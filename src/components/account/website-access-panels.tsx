@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
-import { LOADIQ_CONTACT, LOADIQ_ROUTES } from "@/config/loadiq";
+import { LOADIQ_CONTACT, LOADIQ_ROUTES, LOADIQ_URLS } from "@/config/loadiq";
 import {
   getSupabaseBrowserClient,
   hasSupabaseBrowserConfig,
@@ -469,8 +469,8 @@ export function WebsiteLoginPanel() {
         </button>
         <p className="text-sm text-slate-400">
           Need access?{" "}
-          <Link href={LOADIQ_ROUTES.signup} className="font-bold text-sky-200">
-            Create Karpilo LoadIQ access
+          <Link href={LOADIQ_ROUTES.pilotProgram} className="font-bold text-sky-200">
+            Request controlled access
           </Link>
         </p>
       </form>
@@ -479,93 +479,48 @@ export function WebsiteLoginPanel() {
 }
 
 export function WebsiteSignupPanel() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [state, setState] = useState<PanelState>(initialPanelState);
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setState({ loading: true, message: null, error: null });
-    const supabase = getSupabaseBrowserClient();
-
-    if (!supabase) {
-      setState({
-        loading: false,
-        message: null,
-        error: SUPABASE_UNAVAILABLE_MESSAGE,
-      });
-      return;
-    }
-
-    const redirectTo = `${window.location.origin}${LOADIQ_ROUTES.accountSettings}`;
-    const { error } = await supabase.auth.signUp({
-      email: email.trim().toLowerCase(),
-      password,
-      options: {
-        emailRedirectTo: redirectTo,
-        data: {
-          source: "website_signup",
-          product: "Karpilo LoadIQ",
-        },
-      },
-    });
-
-    if (error) {
-      setState({ loading: false, message: null, error: error.message });
-      return;
-    }
-
-    setState({
-      loading: false,
-      message:
-        "Signup started. Check your email if confirmation is required, then return to Account Settings.",
-      error: null,
-    });
-    router.refresh();
-  }
-
   return (
     <AccessShell
-      eyebrow="Website Signup"
-      title="Create Karpilo LoadIQ access"
-      description="Signup creates the shared Supabase Auth identity for website account access. Reservation, pricing lock, and billing rules remain server-controlled records."
+      eyebrow="Controlled Access"
+      title="Public signup is not currently available."
+      description="Karpilo LoadIQ is preparing for controlled launch access. Operators may request access, view the public demo, or open the app portal if access has already been issued."
     >
-      <form className="grid gap-5" onSubmit={handleSubmit}>
-        <Field
-          label="Email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          required
-          value={email}
-          onChange={setEmail}
-        />
-        <Field
-          label="Password"
-          name="password"
-          type="password"
-          autoComplete="new-password"
-          required
-          minLength={8}
-          value={password}
-          onChange={setPassword}
-        />
-        <FormStatus state={state} />
-        <button
-          type="submit"
-          disabled={state.loading}
-          className="rounded-2xl border border-sky-300/35 bg-sky-400/15 px-5 py-4 text-sm font-black uppercase tracking-[0.18em] text-sky-100 transition hover:bg-sky-400/25 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {state.loading ? "Creating Access..." : "Signup"}
-        </button>
+      <div className="grid gap-5">
+        <div className="rounded-2xl border border-red-400/25 bg-red-500/10 p-4">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-red-200">
+            Access Status
+          </p>
+          <p className="mt-3 text-sm leading-6 text-slate-300">
+            Early access is currently limited. Public signup is not available at
+            this time, and launch access may be restricted by phase availability,
+            approval status, and billing-provider readiness.
+          </p>
+        </div>
         <Link
           href={LOADIQ_ROUTES.pilotProgram}
-          className="rounded-2xl border border-red-400/25 bg-red-500/10 px-4 py-3 text-sm font-black uppercase tracking-[0.16em] text-red-100 transition hover:bg-red-500/20"
+          className="rounded-2xl border border-red-400/25 bg-red-500/10 px-4 py-4 text-center text-sm font-black uppercase tracking-[0.16em] text-red-100 transition hover:bg-red-500/20"
         >
-          Reserve Pilot Eligibility
+          Request Access
         </Link>
-      </form>
+        <Link
+          href={LOADIQ_ROUTES.demo}
+          className="rounded-2xl border border-sky-300/35 bg-sky-400/15 px-4 py-4 text-center text-sm font-black uppercase tracking-[0.16em] text-sky-100 transition hover:bg-sky-400/25"
+        >
+          View Demo
+        </Link>
+        <Link
+          href={LOADIQ_URLS.app}
+          target="_blank"
+          rel="noreferrer"
+          className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-4 text-center text-sm font-black uppercase tracking-[0.16em] text-slate-200 transition hover:border-sky-300/30"
+        >
+          Open Portal
+        </Link>
+        <p className="text-xs leading-5 text-slate-500">
+          The portal may support issued accounts or restricted launch access.
+          It should not be interpreted as open public subscription availability.
+        </p>
+      </div>
     </AccessShell>
   );
 }
@@ -787,10 +742,12 @@ export function WebsiteBillingPanel() {
               </Link>
             )}
             <Link
-              href={LOADIQ_ROUTES.accountSettings}
+              href={LOADIQ_URLS.app}
+              target="_blank"
+              rel="noreferrer"
               className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-center text-xs font-black uppercase tracking-[0.16em] text-slate-200"
             >
-              Prepare Mobile App Access
+              Open Portal
             </Link>
             {user ? (
               <Link

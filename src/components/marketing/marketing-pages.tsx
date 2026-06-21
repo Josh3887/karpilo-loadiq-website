@@ -28,10 +28,10 @@ import SiteHeader from "@/components/navigation/site-header";
 import { UniversalBackButton } from "@/components/navigation/universal-back-button";
 import { RolloutCommandCenter } from "@/components/rollout/rollout-command-center";
 import WaitlistModal from "@/components/waitlist/waitlist-modal";
-import { LOADIQ_BRAND } from "@/config/loadiq";
+import { LOADIQ_BRAND, LOADIQ_ROUTES, LOADIQ_URLS } from "@/config/loadiq";
 import {
   PRODUCT_DISCLAIMER_SNIPPET,
-  PRODUCT_FEATURES,
+  PRODUCT_FEATURE_GROUPS,
   PRODUCT_HERO,
 } from "@/config/product-features";
 import {
@@ -57,6 +57,7 @@ import {
   pilotPaymentGate,
   pilotProgram,
 } from "@/config/launch";
+import { ROLLOUT_PHASES } from "@/config/rollout";
 
 const APP_ICON_SRC = LOADIQ_BRAND.appIcon;
 
@@ -317,6 +318,20 @@ function CommercialTierCard({
         {tier.decisionSupportDepth}
       </h3>
       <p className="mt-3 text-sm leading-6 text-slate-300">{tier.coreQuestion}</p>
+      <div className="mt-4 grid gap-2 rounded-2xl border border-white/10 bg-white/[0.035] p-4 text-xs leading-5 text-slate-300">
+        <div>
+          <span className="font-black uppercase tracking-[0.14em] text-slate-500">
+            Intended user
+          </span>
+          <p className="mt-1 text-slate-200">{tier.intendedUser}</p>
+        </div>
+        <div>
+          <span className="font-black uppercase tracking-[0.14em] text-slate-500">
+            Maturity
+          </span>
+          <p className="mt-1 text-slate-200">{tier.operationalMaturity}</p>
+        </div>
+      </div>
       <div className="mt-5 grid gap-2 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-slate-300">
         <div className="flex justify-between gap-4">
           <span>Monthly</span>
@@ -363,6 +378,9 @@ function CommercialTierCard({
           </p>
         </>
       ) : null}
+      <p className="mt-5 rounded-2xl border border-red-300/20 bg-red-500/10 p-4 text-xs font-bold leading-6 text-red-100">
+        {tier.launchAvailability}
+      </p>
     </div>
   );
 }
@@ -404,6 +422,52 @@ function EnrollmentPhaseCard({
         confirmed server-side before checkout can activate.
       </p>
     </div>
+  );
+}
+
+function FeatureGroupSection() {
+  return (
+    <section className="mx-auto max-w-7xl px-6 py-12 sm:px-8">
+      <div className="grid gap-6">
+        {PRODUCT_FEATURE_GROUPS.map((group, groupIndex) => (
+          <div
+            key={group.eyebrow}
+            className="grid gap-5 border-t border-white/10 pt-8 lg:grid-cols-[0.82fr_1.18fr]"
+          >
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-red-300">
+                {group.eyebrow}
+              </p>
+              <h2 className="mt-3 text-3xl font-black tracking-[-0.045em] text-white">
+                {group.title}
+              </h2>
+              <p className="mt-4 leading-7 text-slate-300">{group.description}</p>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {group.features.map((feature, featureIndex) => {
+                const Icon =
+                  featureIcons[(groupIndex * 4 + featureIndex) % featureIcons.length];
+
+                return (
+                  <div
+                    key={feature.title}
+                    className="rounded-2xl border border-white/10 bg-[#0B1120]/80 p-5"
+                  >
+                    <Icon className="mb-4 h-6 w-6 text-sky-300" />
+                    <h3 className="text-lg font-black tracking-[-0.03em] text-white">
+                      {feature.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-6 text-slate-400">
+                      {feature.description}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -453,7 +517,6 @@ function useWaitlistModal() {
 
 export function HomeMarketingPage() {
   const { waitlistOpen, openWaitlist, closeWaitlist } = useWaitlistModal();
-  const featureSnapshot = PRODUCT_FEATURES.slice(0, 4);
 
   return (
     <AppFrame>
@@ -478,21 +541,28 @@ export function HomeMarketingPage() {
             {PRODUCT_HERO.description}
           </motion.p>
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-4">
-            <PrimaryCta mode="link" href="/pricing">
-              Compare Pricing
-            </PrimaryCta>
+            <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
             <Link
-              href="/demo"
+              href={LOADIQ_ROUTES.demo}
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-100 transition hover:border-sky-300/35 hover:text-sky-200"
             >
-              Try Demo
+              View Demo
+            </Link>
+            <Link
+              href={LOADIQ_URLS.app}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-sky-100 transition hover:bg-sky-400/20"
+            >
+              Open Portal
             </Link>
           </motion.div>
           <motion.div variants={fadeUp} className="mt-6 max-w-xl">
             <AppStorePlaceholders />
           </motion.div>
           <motion.p variants={fadeUp} className="mt-4 text-xs leading-6 text-slate-500">
-            Pre-launch payment systems are disabled. Early interest flows through waitlist and pilot consideration only.
+            Public signup is not currently available. Early access is limited
+            by controlled launch phase, approval status, and provider readiness.
           </motion.p>
         </motion.div>
 
@@ -556,28 +626,7 @@ export function HomeMarketingPage() {
         />
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-12 sm:px-8">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {featureSnapshot.map((feature, index) => {
-            const Icon = featureIcons[index % featureIcons.length];
-            return (
-              <Link
-                key={feature.title}
-                href="/demo"
-                className="rounded-2xl border border-white/10 bg-[#0B1120]/80 p-5 transition hover:-translate-y-1 hover:border-sky-300/30 hover:shadow-[0_0_36px_rgba(56,189,248,0.14)]"
-              >
-                <Icon className="mb-4 h-6 w-6 text-sky-300" />
-                <h3 className="text-lg font-black tracking-[-0.03em] text-white">
-                  {feature.title}
-                </h3>
-                <p className="mt-3 text-sm leading-6 text-slate-400">
-                  {feature.description}
-                </p>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
+      <FeatureGroupSection />
 
       <section className="mx-auto max-w-7xl px-6 py-12 sm:px-8">
         <SectionIntro
@@ -624,7 +673,7 @@ export function HomeMarketingPage() {
           />
           <PromotionBanner
             eyebrow="Demo"
-            title="Try Karpilo LoadIQ"
+            title="View Karpilo LoadIQ Demo"
             description="Use a public demo to move freight numbers and watch profitability change."
             href="/demo"
           />
@@ -667,7 +716,7 @@ export function HomeMarketingPage() {
       </section>
 
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Compare Pricing" href="/pricing" onWaitlist={openWaitlist} />
+      <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
     </AppFrame>
   );
 }
@@ -717,17 +766,135 @@ export function PricingMarketingPage() {
           freight availability, or business outcomes.
         </div>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
-          <PrimaryCta onWaitlist={openWaitlist}>Reserve Access</PrimaryCta>
-          <PrimaryCta mode="link" href="/demo">
-            Try Demo
+          <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
+          <PrimaryCta mode="link" href={LOADIQ_ROUTES.demo}>
+            View Demo
           </PrimaryCta>
+          <Link
+            href={LOADIQ_URLS.app}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-12 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-sky-100 transition hover:bg-sky-400/20"
+          >
+            Open Portal
+          </Link>
         </div>
         <div className="mx-auto mt-6 max-w-2xl">
           <AppStorePlaceholders />
         </div>
       </section>
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Reserve Access" onWaitlist={openWaitlist} />
+      <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
+    </AppFrame>
+  );
+}
+
+function RolloutPhasePresetCard({
+  phase,
+  index,
+}: {
+  phase: (typeof ROLLOUT_PHASES)[number];
+  index: number;
+}) {
+  const capacity =
+    phase.capacity === null ? "Controlled by readiness" : `${phase.capacity} slots`;
+  const duration =
+    phase.durationDays === null ? "No fixed public duration" : `${phase.durationDays} days`;
+
+  return (
+    <article className="rounded-[1.5rem] border border-white/10 bg-[#0B1120]/80 p-5">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-sky-300">
+            {phase.shortLabel}
+          </p>
+          <h3 className="mt-3 text-xl font-black tracking-[-0.035em] text-white">
+            {phase.title}
+          </h3>
+        </div>
+        <span className="rounded-full border border-red-300/25 bg-red-500/10 px-3 py-1 font-mono text-xs font-black text-red-100">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+      </div>
+      <p className="mt-4 text-sm leading-6 text-slate-300">{phase.description}</p>
+      <div className="mt-5 grid gap-2 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-slate-300">
+        <div className="flex justify-between gap-4">
+          <span>Capacity</span>
+          <strong className="text-right text-white">{capacity}</strong>
+        </div>
+        <div className="flex justify-between gap-4">
+          <span>Duration</span>
+          <strong className="text-right text-white">{duration}</strong>
+        </div>
+        <div className="flex justify-between gap-4">
+          <span>Public action</span>
+          <strong className="text-right text-white">Request Access</strong>
+        </div>
+      </div>
+      <p className="mt-4 rounded-2xl border border-sky-300/15 bg-sky-400/5 p-4 text-sm leading-6 text-slate-400">
+        {phase.expectation}
+      </p>
+    </article>
+  );
+}
+
+export function LaunchMarketingPage() {
+  const { waitlistOpen, openWaitlist, closeWaitlist } = useWaitlistModal();
+
+  return (
+    <AppFrame>
+      <PageHeader
+        eyebrow="Controlled Launch"
+        title="Karpilo LoadIQ is preparing controlled launch access."
+        description="The launch page presents the existing rollout presets as adoption pacing for infrastructure, support, billing readiness, and operator access. It is not an open public subscription marketplace."
+      />
+      <section className="mx-auto max-w-7xl px-6 pb-16 sm:px-8">
+        <RolloutCommandCenter
+          onReserve={openWaitlist}
+          showPublicLaunchCountdown
+        />
+
+        <div className="mt-8 grid gap-5 lg:grid-cols-2">
+          {ROLLOUT_PHASES.map((phase, index) => (
+            <RolloutPhasePresetCard key={phase.key} phase={phase} index={index} />
+          ))}
+        </div>
+
+        <div className="mt-8 grid gap-5 rounded-[1.5rem] border border-red-300/20 bg-red-500/10 p-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-red-200">
+              Signup State
+            </p>
+            <h2 className="mt-3 text-2xl font-black tracking-[-0.04em] text-white">
+              Public signup is not currently available.
+            </h2>
+          </div>
+          <div>
+            <p className="text-sm leading-7 text-slate-300">
+              Users may request access or join the launch list. Access may be
+              limited by phase availability, approval status, and provider
+              readiness. The portal is available for issued or restricted-access
+              accounts, but it should not be treated as open public signup.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
+              <PrimaryCta mode="link" href={LOADIQ_ROUTES.demo}>
+                View Demo
+              </PrimaryCta>
+              <Link
+                href={LOADIQ_URLS.app}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-12 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-sky-100 transition hover:bg-sky-400/20"
+              >
+                Open Portal
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+      <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
+      <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
     </AppFrame>
   );
 }
@@ -792,7 +959,7 @@ export function PilotProgramPage() {
             Karpilo LoadIQ is being shaped by operators who understand the road, the pressure, and the cost of unclear freight decisions. Pilot feedback matters because the product is being built for people actually living the work.
           </p>
           <div className="mt-6">
-            <PrimaryCta onWaitlist={openWaitlist}>Reserve Pilot Eligibility</PrimaryCta>
+            <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
           </div>
           <div className="mt-6">
             <AppStorePlaceholders />
@@ -800,7 +967,7 @@ export function PilotProgramPage() {
         </div>
       </section>
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Reserve Pilot Eligibility" onWaitlist={openWaitlist} />
+      <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
     </AppFrame>
   );
 }
@@ -840,12 +1007,12 @@ export function LaunchPromoPage() {
             ))}
           </div>
           <div className="mt-6">
-            <PrimaryCta onWaitlist={openWaitlist}>Join Launch List</PrimaryCta>
+            <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
           </div>
         </div>
       </section>
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Join Launch List" onWaitlist={openWaitlist} />
+      <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
     </AppFrame>
   );
 }
