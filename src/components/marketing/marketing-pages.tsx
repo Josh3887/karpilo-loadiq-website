@@ -553,7 +553,7 @@ function TextPointSection({
   );
 }
 
-function FinalCtaSection({ openWaitlist }: { openWaitlist: () => void }) {
+function FinalCtaSection() {
   return (
     <section className="mx-auto max-w-7xl px-6 pb-20 pt-10 sm:px-8">
       <div className="grid gap-6 rounded-[1.5rem] border border-sky-300/20 bg-[#0B1120]/85 p-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
@@ -571,12 +571,12 @@ function FinalCtaSection({ openWaitlist }: { openWaitlist: () => void }) {
           </p>
         </div>
         <div className="flex flex-wrap gap-3 lg:justify-end">
-          <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
+          <PrimaryCta mode="link" href={LOADIQ_URLS.appRequestAccess}>Request Access</PrimaryCta>
           <PrimaryCta mode="link" href={LOADIQ_ROUTES.demo}>
             View Demo
           </PrimaryCta>
           <Link
-            href={LOADIQ_URLS.app}
+            href={LOADIQ_URLS.appPortal}
             target="_blank"
             rel="noreferrer"
             className="inline-flex min-h-12 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-sky-100 transition hover:bg-sky-400/20"
@@ -681,7 +681,7 @@ export function HomeMarketingPage() {
             {PRODUCT_HERO.description}
           </motion.p>
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-4">
-            <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
+            <PrimaryCta mode="link" href={LOADIQ_URLS.appRequestAccess}>Request Access</PrimaryCta>
             <Link
               href={LOADIQ_ROUTES.demo}
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-100 transition hover:border-sky-300/35 hover:text-sky-200"
@@ -689,7 +689,7 @@ export function HomeMarketingPage() {
               View Demo
             </Link>
             <Link
-              href={LOADIQ_URLS.app}
+              href={LOADIQ_URLS.appPortal}
               target="_blank"
               rel="noreferrer"
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-sky-100 transition hover:bg-sky-400/20"
@@ -780,10 +780,14 @@ export function HomeMarketingPage() {
         columns="lg:grid-cols-4"
       />
 
-      <FinalCtaSection openWaitlist={openWaitlist} />
+      <FinalCtaSection />
 
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
+      <StickyMobileCta
+        label="Request Access"
+        onWaitlist={openWaitlist}
+        href={LOADIQ_URLS.appRequestAccess}
+      />
     </AppFrame>
   );
 }
@@ -835,7 +839,7 @@ export function PricingMarketingPage() {
           requires it.
         </div>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
-          <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
+          <PrimaryCta mode="link" href={LOADIQ_URLS.appRequestAccess}>Request Access</PrimaryCta>
           <PrimaryCta mode="link" href={LOADIQ_ROUTES.launch}>
             View Launch Phases
           </PrimaryCta>
@@ -843,7 +847,7 @@ export function PricingMarketingPage() {
             View Demo
           </PrimaryCta>
           <Link
-            href={LOADIQ_URLS.app}
+            href={LOADIQ_URLS.appPortal}
             target="_blank"
             rel="noreferrer"
             className="inline-flex min-h-12 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-sky-100 transition hover:bg-sky-400/20"
@@ -857,7 +861,11 @@ export function PricingMarketingPage() {
       </section>
       <BillingChannelSection />
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
+      <StickyMobileCta
+        label="Request Access"
+        onWaitlist={openWaitlist}
+        href={LOADIQ_URLS.appRequestAccess}
+      />
     </AppFrame>
   );
 }
@@ -880,9 +888,13 @@ export function FeaturesMarketingPage() {
         points={productBoundaryPoints}
         columns="lg:grid-cols-4"
       />
-      <FinalCtaSection openWaitlist={openWaitlist} />
+      <FinalCtaSection />
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
+      <StickyMobileCta
+        label="Request Access"
+        onWaitlist={openWaitlist}
+        href={LOADIQ_URLS.appRequestAccess}
+      />
     </AppFrame>
   );
 }
@@ -980,12 +992,12 @@ export function LaunchMarketingPage() {
               public signup.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
-              <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
+              <PrimaryCta mode="link" href={LOADIQ_URLS.appRequestAccess}>Request Access</PrimaryCta>
               <PrimaryCta mode="link" href={LOADIQ_ROUTES.demo}>
                 View Demo
               </PrimaryCta>
               <Link
-                href={LOADIQ_URLS.app}
+                href={LOADIQ_URLS.appPortal}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex min-h-12 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-sky-100 transition hover:bg-sky-400/20"
@@ -1031,7 +1043,11 @@ export function LaunchMarketingPage() {
         columns="lg:grid-cols-4"
       />
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
+      <StickyMobileCta
+        label="Request Access"
+        onWaitlist={openWaitlist}
+        href={LOADIQ_URLS.appRequestAccess}
+      />
     </AppFrame>
   );
 }
@@ -1096,7 +1112,7 @@ export function PilotProgramPage() {
             Karpilo LoadIQ is being shaped by operators who understand the road, the pressure, and the cost of unclear freight decisions. Pilot feedback matters because the product is being built for people actually living the work.
           </p>
           <div className="mt-6">
-            <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
+            <PrimaryCta mode="link" href={LOADIQ_URLS.appRequestAccess}>Request Access</PrimaryCta>
           </div>
           <div className="mt-6">
             <AppStorePlaceholders />
@@ -1104,7 +1120,11 @@ export function PilotProgramPage() {
         </div>
       </section>
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
+      <StickyMobileCta
+        label="Request Access"
+        onWaitlist={openWaitlist}
+        href={LOADIQ_URLS.appRequestAccess}
+      />
     </AppFrame>
   );
 }
@@ -1144,12 +1164,16 @@ export function LaunchPromoPage() {
             ))}
           </div>
           <div className="mt-6">
-            <PrimaryCta onWaitlist={openWaitlist}>Request Access</PrimaryCta>
+            <PrimaryCta mode="link" href={LOADIQ_URLS.appRequestAccess}>Request Access</PrimaryCta>
           </div>
         </div>
       </section>
       <WaitlistModal open={waitlistOpen} onClose={closeWaitlist} />
-      <StickyMobileCta label="Request Access" onWaitlist={openWaitlist} />
+      <StickyMobileCta
+        label="Request Access"
+        onWaitlist={openWaitlist}
+        href={LOADIQ_URLS.appRequestAccess}
+      />
     </AppFrame>
   );
 }

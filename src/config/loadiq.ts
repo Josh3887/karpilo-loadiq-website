@@ -1,6 +1,9 @@
 import { BRAND } from "@/config/brand";
 import { EMAIL_ADDRESSES } from "@/config/email";
 
+const LOADIQ_APP_BASE_URL =
+  process.env.NEXT_PUBLIC_LOADIQ_APP_URL ?? "https://app.karpilo-liq.com";
+
 export const LOADIQ_BRAND = {
   companyName: BRAND.legalCompanyName,
   productName: BRAND.productName,
@@ -14,7 +17,13 @@ export const LOADIQ_BRAND = {
 
 export const LOADIQ_URLS = {
   website: "https://karpilo-liq.com",
-  app: process.env.NEXT_PUBLIC_LOADIQ_APP_URL ?? "https://app.karpilo-liq.com",
+  app: LOADIQ_APP_BASE_URL,
+  appLogin: `${LOADIQ_APP_BASE_URL}/login`,
+  appRequestAccess: `${LOADIQ_APP_BASE_URL}/request-access`,
+  appPortal: `${LOADIQ_APP_BASE_URL}/portal`,
+  appBilling: `${LOADIQ_APP_BASE_URL}/portal/billing`,
+  appSettings: `${LOADIQ_APP_BASE_URL}/portal/settings`,
+  appFitCheck: `${LOADIQ_APP_BASE_URL}/portal/fit-check`,
   companyWebsite: "https://karpiloendeavor.com",
   facebook: "https://www.facebook.com/",
 } as const;
@@ -145,12 +154,12 @@ export const LOADIQ_NAVIGATION_LINKS = [
 export const LOADIQ_APP_ACCESS_LINKS = [
   {
     label: "Request Access",
-    href: LOADIQ_ROUTES.launch,
+    href: LOADIQ_URLS.appRequestAccess,
     description: "Join controlled launch intake. Access may be limited by phase availability.",
   },
   {
     label: "Open Portal",
-    href: LOADIQ_URLS.app,
+    href: LOADIQ_URLS.appPortal,
     description: "Open the app portal. Launch access may be restricted.",
   },
 ] as const;
@@ -164,8 +173,8 @@ export const LOADIQ_FOOTER_LINKS = {
     { label: "Demo", href: LOADIQ_ROUTES.demo },
   ],
   access: [
-    { label: "Request Access", href: LOADIQ_ROUTES.launch },
-    { label: "Open Portal", href: LOADIQ_URLS.app, external: true },
+    { label: "Request Access", href: LOADIQ_URLS.appRequestAccess, external: true },
+    { label: "Open Portal", href: LOADIQ_URLS.appPortal, external: true },
   ],
   billingSupport: [
     { label: "Billing", href: LOADIQ_ROUTES.billing },

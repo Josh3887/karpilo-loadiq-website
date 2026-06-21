@@ -431,7 +431,7 @@ export function WebsiteLoginPanel() {
       message: "Signed in. Opening the app portal...",
       error: null,
     });
-    router.push(LOADIQ_URLS.app);
+    router.push(LOADIQ_URLS.appPortal);
   }
 
   return (
@@ -469,7 +469,12 @@ export function WebsiteLoginPanel() {
         </button>
         <p className="text-sm text-slate-400">
           Need access?{" "}
-          <Link href={LOADIQ_ROUTES.launch} className="font-bold text-sky-200">
+          <Link
+            href={LOADIQ_URLS.appRequestAccess}
+            target="_blank"
+            rel="noreferrer"
+            className="font-bold text-sky-200"
+          >
             Request controlled access
           </Link>
         </p>
@@ -497,7 +502,9 @@ export function WebsiteSignupPanel() {
           </p>
         </div>
         <Link
-          href={LOADIQ_ROUTES.launch}
+          href={LOADIQ_URLS.appRequestAccess}
+          target="_blank"
+          rel="noreferrer"
           className="rounded-2xl border border-red-400/25 bg-red-500/10 px-4 py-4 text-center text-sm font-black uppercase tracking-[0.16em] text-red-100 transition hover:bg-red-500/20"
         >
           Request Access
@@ -509,7 +516,7 @@ export function WebsiteSignupPanel() {
           View Demo
         </Link>
         <Link
-          href={LOADIQ_URLS.app}
+          href={LOADIQ_URLS.appPortal}
           target="_blank"
           rel="noreferrer"
           className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-4 text-center text-sm font-black uppercase tracking-[0.16em] text-slate-200 transition hover:border-sky-300/30"
@@ -688,7 +695,7 @@ export function WebsiteAccountSettingsPanel() {
             Karpilo LoadIQ identity.
           </p>
           <Link
-            href={LOADIQ_URLS.app}
+            href={LOADIQ_URLS.appPortal}
             target="_blank"
             rel="noreferrer"
             className="rounded-2xl border border-sky-300/35 bg-sky-400/15 px-5 py-4 text-center text-sm font-black uppercase tracking-[0.18em] text-sky-100"
@@ -767,7 +774,7 @@ export function WebsiteBillingPanel() {
           <div className="grid gap-3 sm:grid-cols-3">
             {user ? <WebsiteBillingPortalButton /> : null}
             <Link
-              href={LOADIQ_URLS.app}
+              href={LOADIQ_URLS.appPortal}
               target="_blank"
               rel="noreferrer"
               className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-center text-xs font-black uppercase tracking-[0.16em] text-slate-200"

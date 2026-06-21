@@ -9,14 +9,14 @@ import { DevelopmentReadinessBanner } from "@/components/development/development
 import {
   LOADIQ_BRAND,
   LOADIQ_NAVIGATION_LINKS,
-  LOADIQ_ROUTES,
   LOADIQ_URLS,
+  LOADIQ_ROUTES,
 } from "@/config/loadiq";
 
 const mobileNavigationLinks = [
   ...LOADIQ_NAVIGATION_LINKS,
-  { label: "Request Access", href: LOADIQ_ROUTES.launch },
-  { label: "Open Portal", href: LOADIQ_URLS.app, external: true },
+  { label: "Request Access", href: LOADIQ_URLS.appRequestAccess, external: true },
+  { label: "Open Portal", href: LOADIQ_URLS.appPortal, external: true },
 ];
 
 export default function SiteHeader() {
@@ -68,13 +68,15 @@ export default function SiteHeader() {
 
         <div className="hidden items-center gap-3 sm:flex">
           <Link
-            href={LOADIQ_ROUTES.launch}
+            href={LOADIQ_URLS.appRequestAccess}
+            target="_blank"
+            rel="noreferrer"
             className="rounded-full border border-red-500/30 bg-red-500/10 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-red-100 transition hover:bg-red-500/20"
           >
             Request Access
           </Link>
           <Link
-            href={LOADIQ_URLS.app}
+            href={LOADIQ_URLS.appPortal}
             target="_blank"
             rel="noreferrer"
             className="rounded-full border border-sky-400/30 bg-sky-400/10 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-sky-100 transition hover:bg-sky-400/20"

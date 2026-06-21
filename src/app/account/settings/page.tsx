@@ -8,5 +8,5 @@ export const metadata = {
 };
 
 export default function AccountSettingsPage() {
-  redirect(LOADIQ_URLS.app);
+  redirect(LOADIQ_URLS.appSettings);
 }
