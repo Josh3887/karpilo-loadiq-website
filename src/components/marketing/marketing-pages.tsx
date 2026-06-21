@@ -22,6 +22,7 @@ import {
 
 import { AppStorePlaceholders } from "@/components/app-store/app-store-placeholders";
 import { DemoVideoPlayer } from "@/components/demo/DemoVideoPlayer";
+import { CurrentNationalDieselAverageCard } from "@/components/fuel/current-national-diesel-average-card";
 import SiteFooter from "@/components/navigation/site-footer";
 import SiteHeader from "@/components/navigation/site-header";
 import { UniversalBackButton } from "@/components/navigation/universal-back-button";
@@ -115,6 +116,20 @@ const loadIqDoesPoints = [
   "Evaluates fuel exposure and operating cost pressure.",
   "Supports break-even awareness before an independent load decision.",
   "Helps operators compare freight assumptions without acting as a broker or dispatcher.",
+] as const;
+
+const fuelSignalPoints = [
+  "Fuel price affects CPM before a load ever pays.",
+  "Deadhead burns the same fuel whether the miles are paid or unpaid.",
+  "Gross revenue can look strong while fuel and overhead weaken margin.",
+  "A national diesel reference is only a market signal; operators still need their own pump-price assumptions.",
+] as const;
+
+const builtForPoints = [
+  "Leased owner-operators comparing the real take-home pressure behind a rate.",
+  "Authority owners who need fuel, RPM, CPM, and margin visibility before committing equipment.",
+  "Small fleet operators reviewing whether repeat freight supports the operation.",
+  "Operators who want clearer load profitability signals without handing decision authority to software.",
 ] as const;
 
 const productBoundaryPoints = [
@@ -553,6 +568,95 @@ function TextPointSection({
   );
 }
 
+function FuelMarketSignalSection() {
+  return (
+    <section className="mx-auto max-w-7xl px-6 py-10 sm:px-8">
+      <div className="grid gap-6 border-t border-white/10 pt-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-sky-300">
+            Market Signal
+          </p>
+          <h2 className="mt-3 text-3xl font-black tracking-[-0.045em] text-white sm:text-4xl">
+            Fuel can turn a good-looking load weak.
+          </h2>
+          <p className="mt-4 leading-7 text-slate-300">
+            The website restores the national diesel average as a trust signal
+            because fuel pressure sits under CPM, RPM, deadhead, and
+            gross-to-net reality.
+          </p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {fuelSignalPoints.map((point) => (
+            <div
+              key={point}
+              className="rounded-2xl border border-white/10 bg-[#0B1120]/80 p-4"
+            >
+              <p className="text-sm font-bold leading-6 text-slate-200">{point}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="mt-6">
+        <CurrentNationalDieselAverageCard />
+      </div>
+    </section>
+  );
+}
+
+function BuiltForSection() {
+  return (
+    <TextPointSection
+      eyebrow="Built For"
+      title="Operators who need clearer numbers before decisions cost money."
+      description="Karpilo LoadIQ is built for owner-operators, leased operators, authority owners, and small fleet operators evaluating load profitability."
+      points={builtForPoints}
+      columns="lg:grid-cols-4"
+    />
+  );
+}
+
+function HomepagePricingPreviewSection() {
+  return (
+    <section className="mx-auto max-w-7xl px-6 py-12 sm:px-8">
+      <div className="grid gap-5 border-t border-white/10 pt-8">
+        <div className="grid gap-5 lg:grid-cols-[0.75fr_1.25fr] lg:items-end">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-red-300">
+              Pricing Preview
+            </p>
+            <h2 className="mt-3 text-3xl font-black tracking-[-0.045em] text-white sm:text-4xl">
+              Silver, Gold, Platinum, and Pro stay informational until app checkout is ready.
+            </h2>
+            <p className="mt-4 leading-7 text-slate-300">
+              Plans describe decision-support depth. Launch phases control
+              rollout pacing. Public checkout remains unavailable until it is
+              safely enabled in the app portal.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3 lg:justify-end">
+            <PrimaryCta mode="link" href={LOADIQ_ROUTES.pricing}>
+              View Pricing
+            </PrimaryCta>
+            <Link
+              href={LOADIQ_URLS.appRequestAccess}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-sky-100 transition hover:bg-sky-400/20"
+            >
+              Request Access
+            </Link>
+          </div>
+        </div>
+        <div className="grid gap-5 lg:grid-cols-4">
+          {LOADIQ_COMMERCIAL_TIER_LIST.map((tier) => (
+            <CommercialTierCard key={tier.id} tier={tier} compact />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function FinalCtaSection() {
   return (
     <section className="mx-auto max-w-7xl px-6 pb-20 pt-10 sm:px-8">
@@ -683,18 +787,18 @@ export function HomeMarketingPage() {
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-4">
             <PrimaryCta mode="link" href={LOADIQ_URLS.appRequestAccess}>Request Access</PrimaryCta>
             <Link
-              href={LOADIQ_ROUTES.demo}
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-100 transition hover:border-sky-300/35 hover:text-sky-200"
-            >
-              View Demo
-            </Link>
-            <Link
-              href={LOADIQ_URLS.appPortal}
+              href={LOADIQ_URLS.appLogin}
               target="_blank"
               rel="noreferrer"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-slate-100 transition hover:border-sky-300/35 hover:text-sky-200"
+            >
+              Login to Portal
+            </Link>
+            <Link
+              href={LOADIQ_ROUTES.pricing}
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-sky-100 transition hover:bg-sky-400/20"
             >
-              Open Portal
+              View Pricing
             </Link>
           </motion.div>
           <motion.div variants={fadeUp} className="mt-6 max-w-xl">
@@ -748,12 +852,23 @@ export function HomeMarketingPage() {
         </motion.div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-12 sm:px-8">
-        <RolloutCommandCenter
-          onReserve={openWaitlist}
-          compact
-          showPublicLaunchCountdown
-        />
+      <FuelMarketSignalSection />
+
+      <section className="mx-auto grid max-w-7xl gap-6 px-6 py-12 sm:px-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-red-300">
+            Launch Access
+          </p>
+          <h2 className="mt-3 text-3xl font-black tracking-[-0.045em] text-white sm:text-4xl">
+            Controlled access before open market.
+          </h2>
+          <p className="mt-4 leading-7 text-slate-300">
+            Beta, Legacy Launch, Founding Operator Phase 1, Founding Operator
+            Phase 2, and Open Market are rollout states. They are not
+            subscription tiers or separate apps.
+          </p>
+        </div>
+        <RolloutCommandCenter onReserve={openWaitlist} compact showPublicLaunchCountdown />
       </section>
 
       <TextPointSection
@@ -770,7 +885,11 @@ export function HomeMarketingPage() {
         points={loadIqDoesPoints}
       />
 
+      <BuiltForSection />
+
       <FeatureGroupSection />
+
+      <HomepagePricingPreviewSection />
 
       <TextPointSection
         eyebrow="Product Boundaries"

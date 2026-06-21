@@ -24,7 +24,7 @@ export default function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/88 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 sm:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-8 sm:py-5">
         <Link
           href={LOADIQ_ROUTES.home}
           className="flex items-center gap-4"
@@ -32,7 +32,7 @@ export default function SiteHeader() {
             setOpen(false);
           }}
         >
-          <div className="relative h-12 w-12 overflow-hidden rounded-2xl border border-red-500/30 bg-[#0B1120] shadow-[0_0_28px_rgba(239,68,68,0.18)]">
+          <div className="relative h-10 w-10 overflow-hidden rounded-xl border border-red-500/30 bg-[#0B1120] shadow-[0_0_28px_rgba(239,68,68,0.18)] sm:h-12 sm:w-12 sm:rounded-2xl">
             <Image
               src={LOADIQ_BRAND.appIcon}
               alt={LOADIQ_BRAND.productName}
@@ -44,11 +44,11 @@ export default function SiteHeader() {
           </div>
 
           <div>
-            <p className="text-sm font-black uppercase tracking-[0.28em] text-sky-100">
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-sky-100 sm:text-sm sm:tracking-[0.28em]">
               Karpilo LoadIQ
             </p>
 
-            <p className="text-xs uppercase tracking-[0.32em] text-slate-500">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-slate-500 sm:text-xs sm:tracking-[0.32em]">
               {LOADIQ_BRAND.productMark}
             </p>
           </div>

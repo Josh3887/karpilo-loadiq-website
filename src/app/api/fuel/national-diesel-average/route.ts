@@ -22,6 +22,9 @@ type EiaDieselResponse = {
 const EIA_ULSD_PATH =
   "/petroleum/pri/gnd/data/?frequency=weekly&data[0]=value&facets[product][]=EPD2DXL0&facets[duoarea][]=NUS&facets[series][]=EMD_EPD2DXL0_PTE_NUS_DPG&facets[process][]=PTE&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5000";
 
+// Website homepage signal only: EIA publishes a delayed weekly national
+// diesel reference, so this route caches successful responses briefly and
+// returns a safe unavailable state whenever the key or source is unavailable.
 const unavailableResponse: DieselAverageResponse = {
   price: null,
   unit: "USD/gal",

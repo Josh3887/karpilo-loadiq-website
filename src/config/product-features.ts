@@ -25,9 +25,9 @@ export type ProductWebsiteSection = {
 
 export const PRODUCT_HERO = {
   eyebrow: "Karpilo LoadIQ",
-  title: "Freight profitability intelligence for load decisions.",
+  title: "Know the load before the load owns you.",
   description:
-    "Calculation-based decision support for owner-operators, leased operators, independent drivers, and small trucking operations that need clearer margin, fuel, deadhead, and cost visibility before accepting freight.",
+    "Karpilo LoadIQ helps trucking operators evaluate fuel exposure, deadhead, RPM, CPM, gross-to-net reality, and profitability signals before making business decisions.",
 } satisfies ProductWebsiteSection;
 
 export const PRODUCT_FEATURES = [
