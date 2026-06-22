@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
+import { PostHogPageview } from "@/components/analytics/posthog-pageview";
 import { CookieConsentBanner } from "@/components/legal/cookie-consent-banner";
 import { DevelopmentNoticePopup } from "@/components/development/development-notice-popup";
 import { DriverSafetyAcknowledgment } from "@/components/legal/driver-safety-acknowledgment";
@@ -68,6 +70,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <Suspense fallback={null}>
+          <PostHogPageview />
+        </Suspense>
         <SystemHealthBanner />
         {children}
         <DevelopmentNoticePopup />
