@@ -22,6 +22,7 @@ const fadeUp = {
 
 const intakeTypeOptions = [
   { value: "support", label: "Support" },
+  { value: "billing_support", label: "Billing" },
   { value: "feedback", label: "Feedback" },
   { value: "pilot_inquiry", label: "Pilot inquiry" },
   { value: "launch_inquiry", label: "Launch inquiry" },

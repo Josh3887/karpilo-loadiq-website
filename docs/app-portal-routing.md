@@ -4,7 +4,9 @@
 
 `karpilo-liq.com` is the public Karpilo LoadIQ marketing website. It explains the product, launch phases, pricing language, trust boundaries, and controlled access status.
 
-`app.karpilo-liq.com` is the authenticated app portal. It owns login, request-access status, billing status, settings, Fit Check, and protected product workflows.
+`app.karpilo-liq.com` is the web account-access portal for profile, settings, billing, Fit Check, access/request status, and related account-side flows. Its `/portal` routes are bridge routes between the website and account-side app services.
+
+The LoadIQ app project includes protected product application work and future Apple App Store / Google Play application surfaces. The website should link users into the account bridge when needed, not recreate those workflows or reduce the app project to the bridge.
 
 The website must not duplicate app business logic, billing authority, entitlement logic, operational data, dispatch workflows, calculator internals, reports, maps, AI insights, admin tools, Sentry, or PostHog as customer-facing features.
 
