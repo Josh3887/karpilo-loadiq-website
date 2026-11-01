@@ -1,0 +1,1657 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07080a">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Karpilo LoadIQ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Karpilo LoadIQ — Know more. Haul further. Interactive freight profitability demonstration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..700&family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a dusk-highway opener, then quiet matte instrument bays on warm graphite. Red is reserved for cost, loss, and the one primary action. */
+:root{
+  color-scheme:dark;
+  --ink:#0b0c0e;          /* night ground, warm-neutral */
+  --graphite:#121315;     /* section ground */
+  --plate:#17181b;        /* card surface */
+  --plate-2:#1e1f23;      /* raised control */
+  --rule:rgba(242,240,235,.08);
+  --rule-2:rgba(242,240,235,.14);
+  --fg:#f2f0eb;           /* warm white */
+  --muted:#a6a39c;
+  --dim:#75736d;
+  --signal:#e5484d;       /* signal red: costs, losses, primary action */
+  --crimson:#e5404b;      /* chart cost series (validated) */
+  --rev:#4f8fcf;          /* chart revenue series (validated) */
+  --profit:#c08418;       /* chart profit series (validated) */
+  --profit-ink:#e0a640;
+  --rev-ink:#8db6e0;
+  --cost-ink:#f08a8e;
+  --loss:#ff6369;
+  --ok:#6cc59a;
+  --f-display:"Instrument Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gut-l:max(16px,env(safe-area-inset-left,0px));
+  --gut-r:max(16px,env(safe-area-inset-right,0px));
+  --r:20px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --shadow:0 1px 0 rgba(255,255,255,.04) inset,0 24px 48px -28px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden}
+main,footer{overflow-x:clip}
+body{background:var(--ink);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.55;overflow-x:hidden;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px));-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--ink)}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--fg);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1160px;margin-inline:auto;padding-left:var(--gut-l);padding-right:var(--gut-r)}
+.num,.tab{font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0}
+p{margin:0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:1px;background:var(--signal)}
+.lede{color:var(--muted);max-width:60ch;font-size:1.04rem}
+.sample{display:inline-flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule-2);border-radius:999px;padding:4px 10px}
+.sample::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--profit)}
+
+/* ---------- Intro ---------- */
+#intro{position:fixed;inset:0;z-index:100;background:var(--ink);display:grid;place-items:center;transition:opacity .7s ease,visibility .7s;cursor:pointer}
+#intro.out{opacity:0;visibility:hidden}
+#intro .ib{display:grid;justify-items:center;gap:16px;padding:24px;text-align:center}
+#intro img{width:64px;height:64px;border-radius:16px;animation:fade 1s ease both}
+#intro .line{width:min(200px,60vw);height:1px;background:var(--rule-2);position:relative;overflow:hidden}
+#intro .line::after{content:"";position:absolute;inset:0;background:var(--fg);transform-origin:left;animation:draw 1.1s .2s var(--ease) both}
+#intro p{font-family:var(--f-display);font-weight:500;font-size:1.1rem;letter-spacing:-.01em;animation:fade .8s .4s ease both}
+#intro small{color:var(--dim);font-family:var(--f-mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* ---------- Header ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(11,12,14,.72);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);border-bottom:1px solid var(--rule)}
+.top .wrap{display:flex;align-items:center;gap:12px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+.brand img{width:30px;height:30px;border-radius:8px}
+.brand b{font-family:var(--f-display);font-weight:600;font-size:1.02rem;letter-spacing:-.01em;white-space:nowrap}
+.brand b i{font-style:normal;color:var(--muted);font-weight:500}
+.app-link{margin-left:auto;font-size:.86rem;font-weight:500;text-decoration:none;padding:8px 14px;border-radius:999px;border:1px solid var(--rule-2);white-space:nowrap}
+.chips{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1 1 100%;order:3;margin-inline:-4px;padding:2px 4px}
+.chips::-webkit-scrollbar{display:none}
+.chips a{flex:none;text-decoration:none;font-size:.88rem;font-weight:500;padding:6px 12px;border-radius:999px;color:var(--muted);transition:color .2s,background .2s}
+.chips a.on{color:var(--ink);background:var(--fg)}
+@media (min-width:880px){.chips{flex:0 1 auto;order:0;margin-left:18px}}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;isolation:isolate;overflow:hidden}
+.stage{position:relative;min-height:600px;display:flex;flex-direction:column}
+#road{position:absolute;inset:0;width:100%;height:100%;z-index:-2;display:block;background:#0b0d11}
+.stage::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(11,12,14,.5) 0%,rgba(11,12,14,.35) 50%,rgba(11,12,14,0) 72%,rgba(11,12,14,0) 90%,rgba(11,12,14,.7) 100%),
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero-copy{padding-block:48px clamp(250px,66vw,360px);display:grid;gap:20px;max-width:820px}
+.hero h1{font-size:clamp(3rem,13vw,6.4rem);line-height:.95;font-weight:600;letter-spacing:-.045em;font-stretch:88%}
+.hero h1 .l2{display:block;color:var(--muted)}
+.hero h1 .dot{color:var(--signal)}
+.thesis{display:grid;gap:0;font-size:clamp(1.05rem,4vw,1.25rem);line-height:1.4;font-weight:500;letter-spacing:-.01em}
+.thesis span{color:var(--muted)}
+.thesis span:nth-child(3){color:var(--fg)}
+.hero .lede{color:#c9c6bf}
+.ctas{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:999px;text-decoration:none;font-weight:500;font-size:.98rem;letter-spacing:-.005em;border:1px solid transparent;cursor:pointer;transition:transform .15s,background .2s,border-color .2s}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--fg);color:var(--ink)}
+.btn-primary::after{content:"→";transition:transform .2s}
+.btn-primary:hover::after{transform:translateX(3px)}
+.btn-ghost{background:rgba(242,240,235,.06);border-color:var(--rule-2);color:var(--fg);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.btn-sm{min-height:40px;padding:0 16px;font-size:.88rem}
+.btn-sm::after{content:none}
+
+/* Instrument cluster */
+.cluster-zone{perspective:1400px;margin-top:-28px;padding-bottom:40px;position:relative;z-index:2}
+.cluster{position:relative;border-radius:28px;padding:20px;background:rgba(23,24,27,.86);-webkit-backdrop-filter:blur(24px) saturate(140%);backdrop-filter:blur(24px) saturate(140%);
+  border:1px solid var(--rule-2);box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 40px 80px -40px rgba(0,0,0,.9);
+  transform:rotateX(var(--rx,6deg)) rotateY(var(--ry,0deg));transform-style:preserve-3d;transition:transform .6s var(--ease);max-width:760px;margin-inline:auto}
+.cl-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.cl-head b{font-size:.86rem;font-weight:500;color:var(--muted)}
+.gauges{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gauge{position:relative;text-align:center;min-width:0}
+.gauge svg{width:100%;height:auto;display:block;overflow:visible}
+.gauge .needle{transform-origin:100px 100px;transition:transform .9s var(--ease)}
+.gauge .val{font-family:var(--f-display);font-weight:600;font-size:clamp(1.7rem,8vw,2.4rem);letter-spacing:-.03em;line-height:1;margin-top:2px}
+.gauge .cap{font-size:.8rem;color:var(--muted);margin-top:6px;line-height:1.3}
+.truth{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-top:16px;padding:14px 16px;border-radius:16px;background:rgba(0,0,0,.25);border:1px solid var(--rule)}
+.truth .t{min-width:0}
+.truth .t small{display:block;font-size:.78rem;color:var(--muted)}
+.truth .t strong{font-family:var(--f-display);font-size:1.5rem;font-weight:600;letter-spacing:-.02em}
+.truth .arrow{color:var(--dim);font-size:1.1rem}
+.truth .t:last-child{text-align:right}
+.hero-slider{margin-top:16px}
+
+/* ---------- Ranges ---------- */
+.ctl{display:grid;gap:4px;min-width:0}
+.ctl .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.ctl label{font-size:.92rem;font-weight:500;color:#d8d5ce}
+.ctl output{font-family:var(--f-display);font-weight:600;font-size:1.12rem;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:36px;background:transparent;margin:0;touch-action:pan-y;--p:50%;--c:var(--fg)}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--c) var(--p),rgba(242,240,235,.14) var(--p))}
+input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:rgba(242,240,235,.14)}
+input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:var(--c)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;margin-top:-11px;border-radius:50%;background:#fbfaf7;border:0;box-shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.45)}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fbfaf7;border:0;box-shadow:0 4px 14px rgba(0,0,0,.45)}
+input[type=range].rev{--c:var(--rev)}
+input[type=range].cost{--c:var(--crimson)}
+
+/* ---------- Sections ---------- */
+section.ch{position:relative;padding-block:72px;scroll-margin-top:96px}
+section.ch:nth-of-type(odd){background:var(--graphite)}
+.ch-head{display:grid;gap:12px;margin-bottom:30px}
+.ch-head h2{font-size:clamp(2rem,8vw,3.4rem);font-weight:600;line-height:1.02;letter-spacing:-.04em;font-stretch:90%}
+.reveal{transition:transform .9s var(--ease),opacity .9s var(--ease)}
+.reveal.pre{transform:translateY(18px);opacity:.55}
+
+.bay{display:grid;gap:16px}
+@media (min-width:900px){.bay{grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:start}}
+.panel{background:var(--plate);border:1px solid var(--rule);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);min-width:0}
+.panel h3{font-size:1.05rem;font-weight:600;letter-spacing:-.01em;margin-bottom:12px}
+.ctls{display:grid;gap:14px}
+
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:14px;overflow:hidden}
+@media (min-width:560px){.stats.s3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.stat{background:var(--plate);padding:13px 14px;min-width:0}
+.stat small{display:block;font-size:.78rem;color:var(--muted);line-height:1.25}
+.stat strong{display:block;font-family:var(--f-display);font-weight:600;font-size:1.45rem;letter-spacing:-.02em;line-height:1.15;margin-top:4px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.stat em{font-style:normal;font-size:.76rem;color:var(--dim)}
+.k-rev{color:var(--rev-ink)}.k-cost{color:var(--cost-ink)}.k-profit{color:var(--profit-ink)}
+.neg{color:var(--loss)!important}
+.note{font-size:.85rem;color:var(--dim);margin-top:10px}
+.callout{margin-top:16px;padding:14px 16px;border-radius:14px;background:var(--plate-2);border:1px solid var(--rule);font-size:.95rem;color:#d4d1ca}
+.callout b{color:var(--fg);font-weight:600}
+
+/* charts */
+.chart{position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:ew-resize}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--f-body);fill:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:6px 0 6px;font-size:.82rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:14px;height:2px;border-radius:2px;display:inline-block}
+.hint{font-size:.78rem;color:var(--dim)}
+
+/* Intelligence index */
+.plates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;perspective:1200px}
+@media (min-width:760px){.plates{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.plate{position:relative;text-align:left;display:grid;gap:8px;align-content:start;padding:16px;border-radius:18px;cursor:pointer;min-width:0;
+  background:var(--plate);border:1px solid var(--rule);box-shadow:var(--shadow);
+  transform:rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg));transition:transform .4s var(--ease),border-color .2s,background .2s}
+.plate:hover,.plate:focus-visible{border-color:var(--rule-2);background:var(--plate-2)}
+.plate .ix{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.plate b{font-family:var(--f-display);font-weight:600;font-size:1.04rem;letter-spacing:-.015em;line-height:1.2}
+.plate .live{font-family:var(--f-display);font-size:1.4rem;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:6px}
+.plate .live small{display:block;font-family:var(--f-body);font-size:.74rem;letter-spacing:0;color:var(--dim);font-weight:400}
+.plate::after{content:"↗";position:absolute;right:14px;top:12px;color:var(--dim);font-size:.95rem;transition:transform .2s,color .2s}
+.plate:hover::after{transform:translate(2px,-2px);color:var(--fg)}
+
+/* Settlement convention */
+.conv{display:grid;gap:12px}
+.formula{font-family:var(--f-mono);font-size:.86rem;padding:12px 14px;border-radius:12px;background:var(--ink);border:1px solid var(--rule);overflow-x:auto;white-space:nowrap}
+.formula .r{color:var(--rev-ink)}.formula .c{color:var(--cost-ink)}.formula .p{color:var(--profit-ink)}
+
+/* Deadhead strip */
+.strip-stage{margin:10px 0 4px}
+.strip{position:relative;height:14px;border-radius:999px;display:flex;gap:3px;overflow:hidden}
+.seg{position:relative;height:100%;transition:flex-basis .4s var(--ease);min-width:0;border-radius:999px}
+.seg.dh{background:repeating-linear-gradient(90deg,rgba(242,240,235,.38) 0 6px,transparent 6px 10px)}
+.seg.ld{background:var(--crimson)}
+.strip-labels{display:flex;justify-content:space-between;gap:10px;font-size:.84rem;margin-top:8px}
+.strip-labels span:first-child{color:var(--muted)}.strip-labels span:last-child{color:var(--cost-ink);text-align:right}
+.trap{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.trap .card{padding:14px;border-radius:16px;border:1px solid var(--rule);background:var(--plate-2);min-width:0}
+.trap .card.win{border-color:rgba(224,166,64,.55)}
+.trap .card h4{margin:0 0 8px;font-size:.84rem;font-weight:500;color:var(--muted)}
+.trap .card dl{margin:0;display:grid;grid-template-columns:auto auto;gap:3px 8px;font-size:.86rem}
+.trap .card dt{color:var(--dim)}.trap .card dd{margin:0;text-align:right;font-weight:500;font-variant-numeric:tabular-nums}
+.trap .badge{display:inline-block;margin-top:10px;font-size:.74rem;font-weight:500;padding:3px 9px;border-radius:999px;background:rgba(224,166,64,.14);color:var(--profit-ink)}
+
+/* Waterfall */
+.wf{display:grid;gap:10px;position:relative}
+.wf-row{display:grid;grid-template-columns:minmax(0,1fr);gap:5px}
+.wf-row .lbl{display:flex;justify-content:space-between;gap:10px;font-size:.9rem;align-items:baseline}
+.wf-row .lbl span{color:#cfccc5;min-width:0}
+.wf-row .lbl b{font-family:var(--f-display);font-weight:600;font-size:1.02rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.wf-track{position:relative;height:12px;border-radius:999px;background:rgba(242,240,235,.04)}
+.wf-bar{position:absolute;top:0;bottom:0;border-radius:999px;transition:left .5s var(--ease),width .5s var(--ease),background .3s}
+.wf-bar.add{background:var(--rev)}
+.wf-bar.sub{background:var(--crimson)}
+.wf-bar.carrier{background:repeating-linear-gradient(90deg,#7a7770 0 6px,#5a5853 6px 10px)}
+.wf-bar.tot{background:var(--rev-ink)}
+.wf-bar.res{background:var(--profit)}
+.wf-bar.res.loss{background:var(--loss)}
+.wf-row.total .lbl span{font-weight:600;color:var(--fg)}
+.wf-row.total{padding-top:8px;border-top:1px solid var(--rule)}
+.wf-zero{position:absolute;top:-3px;bottom:-3px;width:1px;background:rgba(242,240,235,.5)}
+.stage-tags{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:.84rem;margin-bottom:16px;color:var(--muted)}
+.stage-tags b{color:var(--fg);font-weight:500}
+.stage-tags i{font-style:normal;color:var(--dim)}
+
+/* Route map */
+.map-stage{perspective:1400px;position:relative;overflow:hidden;border-radius:var(--r);padding:4px}
+.map-plane{transform:rotateX(var(--mt,20deg));transform-origin:50% 60%;transition:transform .9s var(--ease);border-radius:18px;overflow:hidden;background:#0f1012;border:1px solid var(--rule);box-shadow:0 30px 60px -30px rgba(0,0,0,.9)}
+.map-plane svg{display:block;width:100%;height:auto}
+.map-plane.flat{--mt:0deg}
+#map .state{fill:#16171a;stroke:#2b2c30;stroke-width:1.2}
+#map .state.on{fill:#1b1c20}
+#map .stl{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;fill:#4a4944;text-anchor:middle}
+#map .gulf{font-family:var(--f-body);font-size:15px;fill:#3e5568;font-style:italic}
+#map .water{fill:#0d1216}
+#map .seg-l{fill:none;stroke:var(--crimson);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;cursor:pointer}
+#map .seg-d{fill:none;stroke:#cfccc5;stroke-width:3.5;stroke-dasharray:.5 8;stroke-linecap:round;stroke-linejoin:round;cursor:pointer}
+#map .hit{fill:none;stroke:transparent;stroke-width:34;cursor:pointer;pointer-events:stroke}
+#map .city{fill:#cfccc5}
+#map .cl{font-family:var(--f-body);font-size:18px;font-weight:600;fill:#f2f0eb}
+#map .cl.sm{font-size:14px;fill:#8d8a83;font-weight:400}
+#map .shield text{font-family:var(--f-body);font-size:11px;font-weight:600;fill:#fff;text-anchor:middle}
+#map .pin-o{fill:var(--rev)}#map .pin-d{fill:var(--crimson)}#map .pin-s{fill:#cfccc5}
+.map-ctrls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
+.map-ctrls input[type=range]{flex:1 1 160px}
+.seg-panel{margin-top:14px;padding:14px 16px;border-radius:14px;border:1px solid var(--rule);background:var(--plate-2);font-size:.94rem;min-height:72px}
+.seg-panel b{font-weight:600}
+.legend-route{display:flex;flex-wrap:wrap;gap:16px;font-size:.84rem;color:var(--muted);margin-top:12px}
+.legend-route span{display:inline-flex;align-items:center;gap:8px}
+
+/* Calculator */
+.calc{display:grid;gap:16px}
+@media (min-width:980px){.calc{grid-template-columns:minmax(0,6fr) minmax(0,5fr);align-items:start}.calc .results{position:sticky;top:120px}}
+.fgroup{display:grid;gap:12px}
+.fgroup + .fgroup{margin-top:20px;padding-top:18px;border-top:1px solid var(--rule)}
+.fgroup h4{margin:0;font-family:var(--f-mono);font-weight:400;text-transform:uppercase;letter-spacing:.06em;font-size:.72rem;color:var(--muted)}
+.fields{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media (min-width:560px){.fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.field{display:grid;gap:6px;min-width:0}
+.field label{font-weight:500;font-size:.92rem}
+.field .help{font-size:.78rem;color:var(--dim);line-height:1.35}
+.stepper{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:stretch;border-radius:14px;border:1px solid var(--rule-2);background:var(--ink);overflow:hidden;transition:border-color .2s}
+.stepper button{border:0;background:transparent;color:var(--muted);font-size:1.2rem;cursor:pointer;min-height:48px}
+.stepper button:active{background:rgba(242,240,235,.08);color:var(--fg)}
+.stepper .in{position:relative;display:flex;align-items:center;min-width:0}
+.stepper .u{color:var(--dim);font-size:.84rem;padding:0 6px;white-space:nowrap}
+.stepper input{width:100%;min-width:0;border:0;background:transparent;color:var(--fg);font:500 17px/1 var(--f-body);font-variant-numeric:tabular-nums;padding:0 4px;text-align:center;height:48px;outline:none}
+.stepper:focus-within{border-color:var(--fg)}
+.field.bad .stepper{border-color:#e7a33c}
+.msg{font-size:.78rem;color:#efb75c}
+.results .big{display:grid;gap:4px;padding:18px;border-radius:18px;background:var(--plate-2);border:1px solid var(--rule);margin-bottom:12px}
+.results .big.loss{border-color:rgba(255,99,105,.5);background:linear-gradient(180deg,rgba(255,99,105,.08),transparent),var(--plate-2)}
+.results .big small{font-size:.82rem;color:var(--muted)}
+.results .big strong{font-family:var(--f-display);font-size:clamp(2.8rem,14vw,4rem);line-height:1;font-weight:600;letter-spacing:-.045em;color:var(--profit-ink);font-variant-numeric:tabular-nums}
+.results .big.loss strong{color:var(--loss)}
+.results .big .flag{font-size:.82rem;color:var(--muted)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.presets{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;margin-bottom:16px}
+.presets::-webkit-scrollbar{display:none}
+.presets button{flex:none;border-radius:999px;border:1px solid var(--rule-2);background:transparent;padding:8px 14px;font-size:.86rem;cursor:pointer;min-height:40px;color:#d8d5ce}
+.presets button:active{background:rgba(242,240,235,.08)}
+details.math{margin-top:12px;border:1px solid var(--rule);border-radius:14px;background:var(--ink)}
+details.math summary{cursor:pointer;padding:13px 16px;font-weight:500;font-size:.92rem;list-style:none;display:flex;justify-content:space-between}
+details.math summary::-webkit-details-marker{display:none}
+details.math summary::after{content:"+";color:var(--muted)}
+details.math[open] summary::after{content:"−"}
+.math-body{padding:0 16px 16px;overflow-x:auto}
+.math-body table{border-collapse:collapse;font-size:.84rem;width:100%;min-width:420px}
+.math-body td{padding:7px 4px;border-top:1px solid var(--rule);vertical-align:top}
+.math-body td:first-child{color:var(--muted);white-space:nowrap;padding-right:10px}
+.math-body td:last-child{text-align:right;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.math-body code{font-family:var(--f-mono);font-size:.8rem;color:#cfccc5}
+.cmp{margin-top:14px;overflow-x:auto}
+.cmp table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:320px}
+.cmp th,.cmp td{padding:8px 6px;border-bottom:1px solid var(--rule);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cmp th:first-child,.cmp td:first-child{text-align:left;color:var(--muted)}
+.cmp th{font-size:.78rem;color:var(--muted);font-weight:500}
+.up{color:var(--ok)}.dn{color:var(--loss)}
+
+/* Insights */
+.insights{display:grid;gap:10px}
+@media (min-width:760px){.insights{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ins{display:grid;gap:8px;padding:18px;border-radius:18px;border:1px solid var(--rule);background:var(--plate);min-width:0}
+.ins .tag{display:flex;gap:8px;align-items:center;font-size:.76rem;color:var(--muted)}
+.ins .tag i{font-style:normal;display:inline-flex;align-items:center;gap:6px}
+.ins .tag i::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--sev,var(--rev))}
+.ins h3{font-size:1.08rem;font-weight:600;letter-spacing:-.015em;line-height:1.3}
+.ins p{color:#c4c1ba;font-size:.94rem}
+.ins.warn{--sev:#e7a33c}.ins.bad{--sev:var(--loss)}.ins.good{--sev:var(--ok)}
+
+/* Honest section */
+.truths{display:grid;gap:10px}
+@media (min-width:760px){.truths{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.truths ul{margin:0;padding-left:18px;color:#c4c1ba;display:grid;gap:7px;font-size:.94rem}
+footer{padding-block:40px 28px;color:var(--dim);font-size:.86rem;border-top:1px solid var(--rule)}
+footer .wrap{display:grid;gap:8px}
+footer b{color:var(--fg);font-family:var(--f-display);font-weight:600;font-size:1.1rem;letter-spacing:-.01em}
+
+/* HUD */
+.hud{position:fixed;left:0;right:0;bottom:0;z-index:45;transform:translateY(110%);transition:transform .5s var(--ease);
+  background:rgba(18,19,21,.82);-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);border-top:1px solid var(--rule-2);
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+.hud.show{transform:none}
+.hud .wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:8px;align-items:center;padding-block:9px}
+.hud .m small{display:block;font-size:.68rem;color:var(--dim)}
+.hud .m strong{font-family:var(--f-display);font-size:1.12rem;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hud .chg{grid-column:1/-1;font-size:.78rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:1.1em}
+.hud .chg b{color:var(--fg);font-weight:600}
+.hud a{font-size:.84rem;font-weight:500;text-decoration:none;padding:9px 14px;border-radius:999px;background:var(--fg);color:var(--ink);white-space:nowrap}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal.pre{transform:none;opacity:1}
+}
+</style>
+
+</head>
+<body>
+<div id="intro" role="presentation" aria-hidden="true">
+  <div class="ib">
+    <img src="data:image/webp;base64,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" alt="">
+    <div class="line"></div>
+    <p>Every mile has a cost.</p>
+    <small>Tap to skip</small>
+  </div>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Karpilo LoadIQ home">
+      <img src="data:image/webp;base64,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" alt="" width="34" height="34">
+      <b>LoadIQ <i>by Karpilo</i></b>
+    </a>
+    <nav class="chips" id="chips" aria-label="Sections">
+      <a href="#fuel">Fuel</a>
+      <a href="#deadhead">Deadhead</a>
+      <a href="#profit">Profit</a>
+      <a href="#route">Route</a>
+      <a href="#calculator">Calculator</a>
+      <a href="#learn">Learn</a>
+    </nav>
+    <a class="app-link" href="https://app.karpilo-liq.com" target="_blank" rel="noopener">LoadIQ App</a>
+  </div>
+</header>
+
+<main id="top">
+<!-- ===================== HERO ===================== -->
+<section class="hero" aria-labelledby="h1">
+  <div class="stage" id="stage">
+    <canvas id="road" aria-hidden="true"></canvas>
+    <div class="wrap hero-copy">
+      <span class="eyebrow">Freight profitability intelligence</span>
+      <h1 id="h1">Know more<span class="dot">.</span><span class="l2">Haul further.</span></h1>
+      <div class="thesis"><span>Every mile has a cost.</span><span>Every load has a truth.</span><span>LoadIQ helps reveal it.</span></div>
+      <p class="lede">A load's advertised rate doesn't tell you what you'll keep. LoadIQ works through your settlement split, fuel surcharge, deadhead, fuel burn, and operating costs so you can see a load's estimated profit before you accept it.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="#calculator">Run the load calculator</a>
+        <a class="btn btn-ghost" href="#index">Explore the intelligence</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap cluster-zone">
+    <div class="cluster" id="cluster">
+      <div class="cl-head">
+        <b>Sample load · Cheyenne → Denver → Houston</b>
+        <span class="sample">Sample data</span>
+      </div>
+      <div class="gauges">
+        <div class="gauge">
+          <svg viewBox="0 0 200 150" aria-hidden="true"><g id="g1"></g></svg>
+          <div class="val k-rev num" data-out="linehaulPerLoaded"></div>
+          <div class="cap">Advertised linehaul<br>per loaded mile</div>
+        </div>
+        <div class="gauge">
+          <svg viewBox="0 0 200 150" aria-hidden="true"><g id="g2"></g></svg>
+          <div class="val k-profit num" data-out="profitPerMile" data-sign></div>
+          <div class="cap">Estimated profit<br>per total mile</div>
+        </div>
+      </div>
+      <div class="truth">
+        <div class="t"><small>Gross freight value</small><strong class="num" data-out="gross"></strong></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="t"><small>Estimated profit</small><strong class="num k-profit" data-out="profit" data-sign></strong></div>
+      </div>
+      <div class="ctl hero-slider">
+        <div class="row"><label for="h-dead">Try it: add deadhead</label><output data-show="dead"></output></div>
+        <input id="h-dead" class="cost" type="range" min="0" max="800" step="5" data-k="dead" aria-describedby="h-dead-n">
+        <p id="h-dead-n" class="note" style="margin-top:0">Empty miles add fuel and wear but no revenue. Watch the right gauge.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== INDEX ===================== -->
+<section class="ch" id="index" style="--lx:80%">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <span class="eyebrow">The intelligence</span>
+      <h2>One load. Six ways to read it.</h2>
+      <p class="lede">Every section below works on the same sample load. Change a number anywhere and the whole page recalculates, including the estimate pinned to the bottom of your screen.</p>
+    </div>
+    <div class="plates reveal" id="plates">
+      <button class="plate" data-go="fuel"><span class="ix">Fuel</span><b>Fuel surcharge vs. fuel burn</b><span class="live"><small>Net fuel position</small><span data-out="netFuel" data-sign></span></span></button>
+      <button class="plate" data-go="deadhead"><span class="ix">Deadhead</span><b>Empty miles, real costs</b><span class="live"><small>Share of miles unpaid</small><span data-out="dhShare"></span></span></button>
+      <button class="plate" data-go="profit"><span class="ix">Profit</span><b>From gross to what's left</b><span class="live"><small>Estimated profit</small><span data-out="profit" data-sign></span></span></button>
+      <button class="plate" data-go="route"><span class="ix">Route</span><b>Denver to Houston, mile by mile</b><span class="live"><small>Total trip miles</small><span data-out="total"></span></span></button>
+      <button class="plate" data-go="calculator"><span class="ix">Calculator</span><b>Every input, every formula</b><span class="live"><small>Profit per total mile</small><span data-out="profitPerMile" data-sign></span></span></button>
+      <button class="plate" data-go="learn"><span class="ix">Learn</span><b>What your numbers mean</b><span class="live"><small>Notes on this load</small><span id="insCount">—</span></span></button>
+    </div>
+
+    <div class="panel conv reveal" style="margin-top:22px">
+      <span class="eyebrow">Demonstration settlement convention</span>
+      <p>Carriers pay drivers and owner-operators differently. This page uses one stated convention so the math is transparent. It is an adjustable assumption for this demo, not a universal LoadIQ rule and not your carrier's formula.</p>
+      <div class="formula"><span class="r">Driver-attributable revenue</span> = linehaul × compensation % + fuel surcharge</div>
+      <div class="formula"><span class="p">Estimated profit</span> = <span class="r">driver-attributable revenue</span> − <span class="c">fuel</span> − <span class="c">maintenance reserve</span> − <span class="c">other trip expenses</span></div>
+      <p class="note" style="margin-top:0">Estimated profit is before income tax and before any costs you leave out. It is not take-home pay.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FUEL ===================== -->
+<section class="ch" id="fuel" style="--lx:12%">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <span class="eyebrow">Fuel intelligence</span>
+      <h2>Fuel surcharge offsets fuel. It isn't profit.</h2>
+      <p class="lede">Fuel expense scales with every mile you run, loaded or empty. Fuel surcharge is usually paid on the load. Where the two lines cross is the diesel price at which surcharge only just covers your fuel.</p>
+    </div>
+    <div class="bay">
+      <div class="panel ctls reveal">
+        <div class="ctl"><div class="row"><label for="f-price">Diesel price</label><output data-show="price"></output></div><input id="f-price" class="cost" type="range" min="2" max="7" step="0.01" data-k="price"></div>
+        <div class="ctl"><div class="row"><label for="f-mpg">Fuel economy</label><output data-show="mpg"></output></div><input id="f-mpg" type="range" min="4" max="10" step="0.1" data-k="mpg"></div>
+        <div class="ctl"><div class="row"><label for="f-loaded">Loaded miles</label><output data-show="loaded"></output></div><input id="f-loaded" type="range" min="0" max="3000" step="5" data-k="loaded"></div>
+        <div class="ctl"><div class="row"><label for="f-dead">Deadhead miles</label><output data-show="dead"></output></div><input id="f-dead" class="cost" type="range" min="0" max="800" step="5" data-k="dead"></div>
+        <div class="ctl"><div class="row"><label for="f-fsc">Fuel surcharge revenue</label><output data-show="fsc"></output></div><input id="f-fsc" class="rev" type="range" min="0" max="2000" step="5" data-k="fsc"></div>
+      </div>
+      <div class="panel reveal">
+        <div class="stats s3">
+          <div class="stat"><small>Fuel burned</small><strong class="num" data-out="gallons"></strong></div>
+          <div class="stat"><small>Fuel expense</small><strong class="num k-cost" data-out="fuel"></strong></div>
+          <div class="stat"><small>Fuel surcharge</small><strong class="num k-rev" data-out="fsc"></strong></div>
+          <div class="stat"><small>Net fuel position</small><strong class="num" data-out="netFuel" data-sign data-tone></strong></div>
+          <div class="stat"><small>Surcharge breaks even at</small><strong class="num" data-out="breakevenPrice"></strong><em>diesel per gallon</em></div>
+          <div class="stat"><small>Every 10¢ / gal moves profit</small><strong class="num k-cost" data-out="per10c"></strong></div>
+        </div>
+        <div class="legend" aria-hidden="true">
+          <span><i style="background:var(--crimson)"></i>Fuel expense</span>
+          <span><i style="background:var(--rev)"></i>Fuel surcharge</span>
+          <span><i style="background:var(--profit)"></i>Estimated profit</span>
+        </div>
+        <div class="chart" id="fuelChart" role="img" aria-label="Fuel expense, fuel surcharge and estimated profit across diesel prices"></div>
+        <p class="hint">Drag across the chart to change the diesel price</p>
+        <p class="callout" id="fuelSay"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DEADHEAD ===================== -->
+<section class="ch" id="deadhead" style="--lx:85%;--light:rgba(182,188,198,.07)">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <span class="eyebrow">Deadhead intelligence</span>
+      <h2>The rate is quoted on loaded miles. You pay for all of them.</h2>
+      <p class="lede">Deadhead is the empty run to the shipper. Revenue stays the same, so every empty mile spreads the same dollars across more road and adds fuel and wear on top.</p>
+    </div>
+    <div class="bay">
+      <div class="panel reveal">
+        <div class="ctl"><div class="row"><label for="d-dead">Deadhead miles</label><output data-show="dead"></output></div><input id="d-dead" class="cost" type="range" min="0" max="800" step="5" data-k="dead"></div>
+        <div class="strip-stage" aria-hidden="true">
+          <div class="strip"><div class="seg dh" id="segDh"></div><div class="seg ld" id="segLd"></div></div>
+        </div>
+        <div class="strip-labels"><span id="lblDh"></span><span id="lblLd"></span></div>
+        <div class="stats" style="margin-top:14px">
+          <div class="stat"><small>Total trip miles</small><strong class="num" data-out="total"></strong></div>
+          <div class="stat"><small>Fuel expense</small><strong class="num k-cost" data-out="fuel"></strong></div>
+          <div class="stat"><small>Revenue / total mile</small><strong class="num k-rev" data-out="revPerMile"></strong></div>
+          <div class="stat"><small>Profit / total mile</small><strong class="num k-profit" data-out="profitPerMile" data-sign data-tone></strong></div>
+          <div class="stat"><small>Estimated profit</small><strong class="num k-profit" data-out="profit" data-sign data-tone></strong></div>
+          <div class="stat"><small>Linehaul / loaded mile</small><strong class="num" data-out="linehaulPerLoaded"></strong></div>
+        </div>
+      </div>
+      <div class="panel reveal">
+        <div class="legend" aria-hidden="true">
+          <span><i style="background:#8a909a"></i>Linehaul per loaded mile (advertised)</span>
+          <span><i style="background:var(--rev)"></i>Your revenue per total mile</span>
+          <span><i style="background:var(--profit)"></i>Est. profit per total mile</span>
+        </div>
+        <div class="chart" id="dhChart" role="img" aria-label="Revenue and profit per total mile as deadhead increases"></div>
+        <p class="hint">Drag across the chart to change deadhead</p>
+        <h3 style="margin-top:18px">The rate trap</h3>
+        <p class="note" style="margin-top:-6px">Same loaded miles and the same costs you've set. Load B pays 8% more linehaul but starts 260 miles further from the truck.</p>
+        <div class="trap" id="trap"></div>
+        <p class="callout" id="trapSay"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROFIT ===================== -->
+<section class="ch" id="profit" style="--lx:20%;--light:rgba(192,132,24,.08)">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <span class="eyebrow">Profit intelligence</span>
+      <h2>From gross freight value to estimated profit.</h2>
+      <p class="lede">Gross freight value is what the load is worth. Driver-attributable revenue is your share under the settlement convention. Estimated profit is what's left after the trip's costs.</p>
+    </div>
+    <div class="bay">
+      <div class="panel ctls reveal">
+        <div class="ctl"><div class="row"><label for="p-lh">Linehaul revenue</label><output data-show="linehaul"></output></div><input id="p-lh" class="rev" type="range" min="0" max="8000" step="25" data-k="linehaul"></div>
+        <div class="ctl"><div class="row"><label for="p-fsc">Fuel surcharge</label><output data-show="fsc"></output></div><input id="p-fsc" class="rev" type="range" min="0" max="2000" step="5" data-k="fsc"></div>
+        <div class="ctl"><div class="row"><label for="p-pct">Compensation % of linehaul</label><output data-show="pct"></output></div><input id="p-pct" class="rev" type="range" min="0" max="100" step="1" data-k="pct"></div>
+        <div class="ctl"><div class="row"><label for="p-price">Diesel price <span style="text-transform:none;letter-spacing:0;color:var(--dim)">(drives fuel expense)</span></label><output data-show="price"></output></div><input id="p-price" class="cost" type="range" min="2" max="7" step="0.01" data-k="price"></div>
+        <div class="ctl"><div class="row"><label for="p-maint">Maintenance reserve / mile</label><output data-show="maint"></output></div><input id="p-maint" class="cost" type="range" min="0" max="0.6" step="0.01" data-k="maint"></div>
+        <div class="ctl"><div class="row"><label for="p-other">Other operating costs</label><output data-show="other"></output></div><input id="p-other" class="cost" type="range" min="0" max="2000" step="5" data-k="other"></div>
+        <p class="note">Fuel expense here is <span data-out="fuel"></span>: <span data-out="total"></span> ÷ <span data-show="mpg"></span> × <span data-show="price"></span>. Change MPG in Fuel or the Calculator.</p>
+      </div>
+      <div class="panel reveal">
+        <div class="stage-tags"><b>Gross freight value</b><i>→</i><b>Driver-attributable revenue</b><i>→</i><b>Estimated expenses</b><i>→</i><b>Estimated profit</b></div>
+        <div class="wf" id="wf"></div>
+        <div class="stats s3" style="margin-top:16px">
+          <div class="stat"><small>Profit margin</small><strong class="num" data-out="margin" data-tone></strong><em>of driver revenue</em></div>
+          <div class="stat"><small>Cost per total mile</small><strong class="num k-cost" data-out="costPerMile"></strong></div>
+          <div class="stat"><small>Break-even linehaul</small><strong class="num" data-out="breakevenLinehaul"></strong><em>at these costs</em></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ROUTE ===================== -->
+<section class="ch" id="route" style="--lx:70%">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <span class="eyebrow">Route intelligence</span>
+      <h2>Cheyenne empty. Denver to Houston loaded.</h2>
+      <p class="lede">Play the trip and watch the running estimate. It starts below zero on the empty leg, then climbs as loaded miles earn. The corridor is an illustrative US-287 / I-45 path, not navigation.</p>
+      <span class="sample">Sample route · illustrative geometry and mileage</span>
+    </div>
+    <div class="bay">
+      <div class="reveal" style="min-width:0">
+        <div class="map-stage"><div class="map-plane" id="mapPlane"><svg id="map" viewBox="0 0 534 612" role="img" aria-label="Map of the sample route: deadhead from Cheyenne to Denver, loaded from Denver to Houston"></svg></div></div>
+        <div class="legend-route" aria-hidden="true">
+          <span><svg width="34" height="8"><line x1="3" y1="4" x2="32" y2="4" stroke="#cfccc5" stroke-width="3" stroke-dasharray=".5 7" stroke-linecap="round"/></svg>Deadhead (no revenue)</span>
+          <span><svg width="34" height="8"><line x1="2" y1="4" x2="32" y2="4" stroke="#e5404b" stroke-width="4" stroke-linecap="round"/></svg>Loaded (revenue miles)</span>
+        </div>
+        <div class="map-ctrls">
+          <button class="btn btn-primary btn-sm" id="play" type="button">Play trip</button>
+          <label class="sr" for="scrub">Trip progress</label>
+          <input id="scrub" type="range" min="0" max="1000" step="1" value="0">
+          <button class="btn btn-ghost btn-sm" id="tilt" type="button" aria-pressed="false">Flat view</button>
+        </div>
+      </div>
+      <div class="panel reveal">
+        <div class="stats">
+          <div class="stat"><small>Trip mile</small><strong class="num" id="rMile">0</strong><em id="rLeg">Deadhead</em></div>
+          <div class="stat"><small>Revenue earned so far</small><strong class="num k-rev" id="rRev">$0</strong></div>
+          <div class="stat"><small>Costs so far</small><strong class="num k-cost" id="rCost">$0</strong></div>
+          <div class="stat"><small>Running estimate</small><strong class="num" id="rRun">$0</strong></div>
+        </div>
+        <div class="chart" id="runChart" style="margin-top:12px;cursor:ew-resize" role="img" aria-label="Running estimated profit across the trip"></div>
+        <p class="note">Revenue is spread evenly over loaded miles and costs over all miles, for illustration only. Sample drive time: <span id="rTime"></span> at a 60 mph average, before required breaks.</p>
+        <div class="seg-panel" id="segPanel" aria-live="polite"><b>Tap a route segment</b><br>Tap the dashed leg or the red leg on the map for its numbers.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CALCULATOR ===================== -->
+<section class="ch" id="calculator" style="--lx:30%">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <span class="eyebrow">Interactive calculator</span>
+      <h2>Run the whole load.</h2>
+      <p class="lede">Nine inputs, every formula shown. This is a marketing demonstration of how LoadIQ thinks. It's not the production LoadIQ calculator.</p>
+    </div>
+    <div class="presets" role="group" aria-label="Sample scenarios">
+      <button type="button" data-preset="base">Sample: Denver → Houston</button>
+      <button type="button" data-preset="trap">Higher rate, 360 mi deadhead</button>
+      <button type="button" data-preset="spike">Diesel at $4.95</button>
+      <button type="button" data-preset="winter">Winter: 5.6 MPG</button>
+      <button type="button" data-preset="split">65% split</button>
+    </div>
+    <div class="calc">
+      <form class="panel" id="calcForm" novalidate>
+        <div class="fgroup"><h4>Revenue &amp; settlement</h4><div class="fields" id="fRev"></div></div>
+        <div class="fgroup"><h4>Miles</h4><div class="fields" id="fMiles"></div></div>
+        <div class="fgroup"><h4>Fuel</h4><div class="fields" id="fFuel"></div></div>
+        <div class="fgroup"><h4>Operating costs</h4><div class="fields" id="fCost"></div></div>
+      </form>
+      <div class="panel results">
+        <div class="tools">
+          <button class="btn btn-ghost btn-sm" type="button" id="reset">Reset to sample</button>
+          <button class="btn btn-ghost btn-sm" type="button" id="pin">Pin as Load A</button>
+        </div>
+        <div class="big" id="bigBox">
+          <small>Estimated profit</small>
+          <strong data-out="profit" data-sign></strong>
+          <span class="flag" id="bigFlag"></span>
+        </div>
+        <div class="stats">
+          <div class="stat"><small>Total miles</small><strong class="num" data-out="total"></strong></div>
+          <div class="stat"><small>Driver-attributable revenue</small><strong class="num k-rev" data-out="rev"></strong></div>
+          <div class="stat"><small>Fuel gallons</small><strong class="num" data-out="gallons"></strong></div>
+          <div class="stat"><small>Fuel expense</small><strong class="num k-cost" data-out="fuel"></strong></div>
+          <div class="stat"><small>Maintenance reserve</small><strong class="num k-cost" data-out="maintC"></strong></div>
+          <div class="stat"><small>Est. operating expenses</small><strong class="num k-cost" data-out="exp"></strong></div>
+          <div class="stat"><small>Profit margin</small><strong class="num" data-out="margin" data-tone></strong></div>
+          <div class="stat"><small>Revenue / total mile</small><strong class="num k-rev" data-out="revPerMile"></strong></div>
+          <div class="stat"><small>Profit / total mile</small><strong class="num" data-out="profitPerMile" data-sign data-tone></strong></div>
+          <div class="stat"><small>Linehaul / loaded mile</small><strong class="num" data-out="linehaulPerLoaded"></strong></div>
+        </div>
+        <details class="math" id="math"><summary>Show the math</summary><div class="math-body" id="mathBody"></div></details>
+        <div class="cmp" id="cmp" hidden></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LEARN ===================== -->
+<section class="ch" id="learn" style="--lx:85%;--light:rgba(79,143,207,.08)">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <span class="eyebrow">Educational intelligence</span>
+      <h2>What this load is telling you.</h2>
+      <p class="lede">These notes are written by fixed rules on this page from the numbers you entered. No AI service or outside data is involved. They update as you change the scenario.</p>
+    </div>
+    <div class="insights" id="insights" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ===================== HONEST ===================== -->
+<section class="ch" id="about" style="--lx:50%">
+  <div class="wrap">
+    <div class="ch-head reveal">
+      <span class="eyebrow">Straight talk</span>
+      <h2>What LoadIQ is, and what it isn't.</h2>
+    </div>
+    <div class="truths">
+      <div class="panel reveal"><h3>LoadIQ is</h3><ul>
+        <li>A freight profitability calculator for drivers and owner-operators.</li>
+        <li>A way to compare loads by estimated profit, not the posted number.</li>
+        <li>Financial education: deadhead, fuel surcharge, settlement splits, reserves.</li>
+        <li>Built by an over-the-road flatbed driver who runs these numbers himself.</li>
+      </ul></div>
+      <div class="panel reveal"><h3>LoadIQ is not</h3><ul>
+        <li>A freight broker, dispatcher, load board, or load-matching service.</li>
+        <li>A source of live market rates or freight listings.</li>
+        <li>Turn-by-turn navigation or truck routing.</li>
+        <li>A guarantee of any financial outcome, or tax advice.</li>
+      </ul></div>
+      <div class="panel reveal"><h3>About this page</h3><ul>
+        <li>Every figure is sample data, editable by you, and stays on this page.</li>
+        <li>The settlement convention is a stated demo assumption.</li>
+        <li>Route geometry, mileage, and drive time are illustrative.</li>
+        <li>The LoadIQ app is in a controlled rollout at app.karpilo-liq.com. Available features and access may vary.</li>
+      </ul></div>
+    </div>
+    <div class="ctas" style="margin-top:22px">
+      <a class="btn btn-primary" href="https://app.karpilo-liq.com" target="_blank" rel="noopener">Visit app.karpilo-liq.com</a>
+      <a class="btn btn-ghost" href="#calculator">Back to the calculator</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>Karpilo LoadIQ</b>
+    <span>Know more. Haul further.</span>
+    <span>© 2026 Karpilo Endeavor Technologies LLC · karpilo-liq.com</span>
+    <span>Demonstration only. Estimates use sample data and a stated settlement convention. Not financial, tax, or legal advice.</span>
+  </div>
+</footer>
+
+<div class="hud" id="hud" aria-live="off">
+  <div class="wrap">
+    <div class="m"><small>Est. profit</small><strong data-out="profit" data-sign data-tone></strong></div>
+    <div class="m"><small>Per total mi</small><strong data-out="profitPerMile" data-sign data-tone></strong></div>
+    <div class="m"><small>Margin</small><strong data-out="margin" data-tone></strong></div>
+    <a href="#calculator">Calc</a>
+    <div class="chg" id="chg">Sample load · change any number to see what moves</div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var RM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------------- Scenario ---------------- */
+var DEF = {linehaul:2850, fsc:520, pct:70, loaded:1030, dead:100, price:3.85, mpg:6.5, maint:0.18, other:385};
+var PRESETS = {
+  base:{},
+  trap:{linehaul:3080, dead:360},
+  spike:{price:4.95},
+  winter:{mpg:5.6},
+  split:{pct:65}
+};
+var S = Object.assign({}, DEF);
+
+var META = {
+  linehaul:{label:"Linehaul revenue", help:"Freight pay before fuel surcharge.", unit:"$", pre:true, min:0, max:100000, step:25, dec:0},
+  fsc:{label:"Fuel surcharge", help:"Paid on the load. Passed through 100% in this demo.", unit:"$", pre:true, min:0, max:20000, step:5, dec:0},
+  pct:{label:"Compensation %", help:"Your share of linehaul under this demo convention.", unit:"%", min:0, max:100, step:1, dec:1},
+  loaded:{label:"Loaded miles", help:"Shipper to receiver. These earn revenue.", unit:"mi", min:0, max:10000, step:5, dec:0},
+  dead:{label:"Deadhead miles", help:"Empty miles to reach the shipper.", unit:"mi", min:0, max:5000, step:5, dec:0},
+  price:{label:"Diesel price", help:"Per gallon, your expected average.", unit:"$/gal", pre:true, min:0, max:20, step:0.05, dec:2},
+  mpg:{label:"Fuel economy", help:"Miles per gallon. Must be above 0.", unit:"MPG", min:0, max:30, step:0.1, dec:1, gt0:true},
+  maint:{label:"Maintenance reserve", help:"Set aside per mile for tires, repairs, PMs.", unit:"$/mi", pre:true, min:0, max:10, step:0.01, dec:2},
+  other:{label:"Other trip expenses", help:"Tolls, scales, parking, tarps, and any fixed-cost share you assign to this trip.", unit:"$", pre:true, min:0, max:100000, step:5, dec:0}
+};
+var GROUPS = {fRev:["linehaul","fsc","pct"], fMiles:["loaded","dead"], fFuel:["price","mpg"], fCost:["maint","other"]};
+
+function fin(x){ return typeof x==="number" && isFinite(x); }
+function calc(s){
+  var r = {};
+  r.total = s.loaded + s.dead;
+  r.gross = s.linehaul + s.fsc;
+  r.driverLinehaul = s.linehaul * s.pct/100;
+  r.carrierShare = s.linehaul - r.driverLinehaul;
+  r.rev = r.driverLinehaul + s.fsc;
+  r.gallons = s.mpg > 0 ? r.total / s.mpg : 0;
+  r.fuel = r.gallons * s.price;
+  r.maintC = r.total * s.maint;
+  r.other = s.other;
+  r.exp = r.fuel + r.maintC + s.other;
+  r.profit = r.rev - r.exp;
+  r.margin = r.rev > 0 ? r.profit / r.rev : null;
+  r.revPerMile = r.total > 0 ? r.rev / r.total : null;
+  r.profitPerMile = r.total > 0 ? r.profit / r.total : null;
+  r.costPerMile = r.total > 0 ? r.exp / r.total : null;
+  r.linehaulPerLoaded = s.loaded > 0 ? s.linehaul / s.loaded : null;
+  r.grossPerLoaded = s.loaded > 0 ? r.gross / s.loaded : null;
+  r.netFuel = s.fsc - r.fuel;
+  r.breakevenPrice = r.gallons > 0 ? s.fsc / r.gallons : null;
+  r.per10c = r.gallons * 0.10;
+  r.dhShare = r.total > 0 ? s.dead / r.total : null;
+  r.fuelPerMile = s.mpg > 0 ? s.price / s.mpg : 0;
+  r.breakevenLinehaul = s.pct > 0 ? Math.max(0, (r.exp - s.fsc) / (s.pct/100)) : null;
+  r.fsc = s.fsc;
+  return r;
+}
+
+/* ---------------- Formatting ---------------- */
+function money(v, d, sign){
+  if (v==null || !fin(v)) return "—";
+  d = d||0;
+  var a = Math.abs(v), s = a.toLocaleString("en-US",{minimumFractionDigits:d, maximumFractionDigits:d});
+  var zero = Number(a.toFixed(d)) === 0;
+  return (v<0 && !zero ? "−" : (sign && v>0 && !zero ? "+" : "")) + "$" + s;
+}
+function num(v, d){ if (v==null || !fin(v)) return "—"; return v.toLocaleString("en-US",{minimumFractionDigits:d||0, maximumFractionDigits:d||0}); }
+function pct(v, d){ if (v==null || !fin(v)) return "—"; return (v*100).toFixed(d==null?1:d).replace("-","−") + "%"; }
+var FMT = {
+  total:function(v){return num(v)+" mi";}, gross:money, carrierShare:money, rev:money,
+  gallons:function(v){return num(v,1)+" gal";}, fuel:money, maintC:money, other:money, exp:money,
+  profit:money, margin:function(v){return v==null?"—":pct(v);},
+  revPerMile:function(v){return money(v,2);}, profitPerMile:function(v,s){return money(v,2,s);},
+  costPerMile:function(v){return money(v,2);}, linehaulPerLoaded:function(v){return money(v,2);},
+  netFuel:money, breakevenPrice:function(v){return money(v,2);}, per10c:money,
+  dhShare:function(v){return pct(v);}, fsc:money, breakevenLinehaul:function(v){return v==null?"n/a":money(v);}
+};
+var SHOW = {
+  linehaul:function(v){return money(v);}, fsc:function(v){return money(v);}, pct:function(v){return num(v, v%1?1:0)+"%";},
+  loaded:function(v){return num(v)+" mi";}, dead:function(v){return num(v)+" mi";}, price:function(v){return money(v,2)+"/gal";},
+  mpg:function(v){return num(v,1)+" MPG";}, maint:function(v){return money(v,2)+"/mi";}, other:function(v){return money(v);}
+};
+
+/* ---------------- Tweened outputs ---------------- */
+var tweens = new Map();
+function setOut(el, key, v){
+  var signed = el.hasAttribute("data-sign");
+  var f = FMT[key] || money;
+  if (el.hasAttribute("data-tone")) el.classList.toggle("neg", fin(v) && v < 0);
+  else if (key==="profit"||key==="profitPerMile") el.classList.toggle("neg", fin(v) && v < 0);
+  var prev = el._v;
+  el._v = v;
+  if (RM || !fin(v) || !fin(prev) || prev===v || !el.isConnected){ el.textContent = f(v, signed && false); return; }
+  var t0 = performance.now(), dur = 380;
+  tweens.set(el, {from:prev, to:v, t0:t0, dur:dur, f:f});
+  if (!tweenRaf) tweenRaf = requestAnimationFrame(tweenTick);
+}
+var tweenRaf = 0;
+function tweenTick(now){
+  tweens.forEach(function(t, el){
+    var k = Math.min(1, (now - t.t0)/t.dur), e = 1 - Math.pow(1-k, 3);
+    el.textContent = t.f(t.from + (t.to - t.from)*e);
+    if (k>=1){ el.textContent = t.f(t.to); tweens.delete(el); }
+  });
+  tweenRaf = tweens.size ? requestAnimationFrame(tweenTick) : 0;
+}
+
+/* ---------------- Calculator fields ---------------- */
+function buildFields(){
+  Object.keys(GROUPS).forEach(function(gid){
+    var host = document.getElementById(gid);
+    GROUPS[gid].forEach(function(k){
+      var m = META[k];
+      var id = "c-"+k;
+      var d = document.createElement("div");
+      d.className = "field"; d.id = "fld-"+k;
+      d.innerHTML =
+        '<label for="'+id+'">'+m.label+'</label>'+
+        '<div class="stepper">'+
+          '<button type="button" data-step-k="'+k+'" data-dir="-1" aria-label="Decrease '+m.label+'">−</button>'+
+          '<div class="in">'+(m.pre?'<span class="u">'+(m.unit.charAt(0)==="$"?"$":"")+'</span>':'')+
+            '<input id="'+id+'" type="text" inputmode="decimal" autocomplete="off" data-k="'+k+'" data-text aria-describedby="h-'+k+' m-'+k+'">'+
+            '<span class="u">'+(m.pre? m.unit.replace(/^\$/,""):m.unit)+'</span></div>'+
+          '<button type="button" data-step-k="'+k+'" data-dir="1" aria-label="Increase '+m.label+'">+</button>'+
+        '</div>'+
+        '<span class="help" id="h-'+k+'">'+m.help+'</span>'+
+        '<span class="msg" id="m-'+k+'" role="status"></span>';
+      host.appendChild(d);
+    });
+  });
+}
+
+function fmtField(k, v){
+  var m = META[k];
+  return Number(v.toFixed(m.dec)).toLocaleString("en-US",{maximumFractionDigits:m.dec, useGrouping:k!=="pct"});
+}
+function setMsg(k, txt){
+  var el = document.getElementById("m-"+k), f = document.getElementById("fld-"+k);
+  if (!el) return;
+  el.textContent = txt || "";
+  f.classList.toggle("bad", !!txt);
+}
+
+/* parse & validate one raw value: returns {v, msg} */
+function validate(k, raw){
+  var m = META[k];
+  var str = String(raw).replace(/[$,%\s]/g,"").replace(/[−–]/g,"-");
+  if (str === "" || str === "-" || str === ".") return {v:null, msg:"Enter a number."};
+  var v = Number(str);
+  if (!fin(v)) return {v:null, msg:"That isn't a number. Use digits only, like 1250."};
+  if (m.gt0 && v <= 0) return {v:null, msg:"MPG has to be above 0 to estimate fuel."};
+  if (v < m.min) return {v:m.min, msg:m.label+" can't be negative here, so 0 is used."};
+  if (v > m.max) return {v:m.max, msg:"Capped at "+fmtField(k,m.max)+" for this demo."};
+  return {v:v, msg:""};
+}
+
+/* ---------------- State changes & narration ---------------- */
+var baseline = null, lastCommit = 0, chgTimer = 0;
+function commit(k, v, src){
+  if (!fin(v) || S[k] === v) { return; }
+  var now = performance.now();
+  if (!baseline || baseline.k !== k || now - lastCommit > 1500){
+    baseline = {k:k, v0:S[k], r0:calc(S)};
+  }
+  lastCommit = now;
+  S[k] = v;
+  render(src);
+  narrate(baseline.k, baseline.v0, v, baseline.r0, calc(S));
+}
+function narrate(k, v0, v1, r0, r1){
+  var dP = r1.profit - r0.profit;
+  var dM = (r1.profitPerMile!=null && r0.profitPerMile!=null) ? r1.profitPerMile - r0.profitPerMile : null;
+  var el = document.getElementById("chg");
+  el.innerHTML = "<b>"+META[k].label+"</b> "+SHOW[k](v0)+" → "+SHOW[k](v1)+": est. profit <b>"+money(dP,0,true)+"</b>"+(dM!=null?", per total mi <b>"+money(dM,2,true)+"</b>":"");
+}
+function applyScenario(obj, label){
+  var r0 = calc(S);
+  Object.keys(META).forEach(function(k){ S[k] = obj[k]; setMsg(k,""); });
+  baseline = null;
+  render(null);
+  var r1 = calc(S);
+  document.getElementById("chg").innerHTML = "<b>"+label+"</b>: est. profit "+money(r0.profit)+" → <b>"+money(r1.profit)+"</b>";
+}
+
+/* ---------------- Sync controls ---------------- */
+function syncControls(src){
+  document.querySelectorAll("[data-k]").forEach(function(el){
+    if (el === src) return;
+    var k = el.getAttribute("data-k"), v = S[k];
+    if (el.type === "range"){
+      el.value = v;
+      setFill(el);
+    } else if (el.hasAttribute("data-text")){
+      if (document.activeElement !== el) el.value = fmtField(k, v);
+    }
+  });
+  if (src && src.type === "range") setFill(src);
+  document.querySelectorAll("[data-show]").forEach(function(el){ var k = el.getAttribute("data-show"); el.textContent = SHOW[k](S[k]); });
+}
+function setFill(el){
+  var mn = +el.min, mx = +el.max, v = Math.min(mx, Math.max(mn, +el.value));
+  el.style.setProperty("--p", ((v-mn)/(mx-mn)*100).toFixed(2)+"%");
+}
+
+/* ---------------- Render all ---------------- */
+var R = calc(S);
+function render(src){
+  R = calc(S);
+  syncControls(src);
+  document.querySelectorAll("[data-out]").forEach(function(el){
+    var k = el.getAttribute("data-out");
+    var v = (k in R) ? R[k] : S[k];
+    setOut(el, k, v);
+  });
+  var box = document.getElementById("bigBox");
+  box.classList.toggle("loss", R.profit < 0);
+  document.getElementById("bigFlag").textContent = R.profit < 0 ? "Loss on this load, before tax" : (R.margin!=null && R.margin < 0.15 ? "Thin margin · before tax" : "Estimate · before income tax");
+  if (hero.redraw) hero.redraw();
+  drawGauges(); drawFuel(); drawDeadhead(); drawWaterfall(); drawTrap(); drawMath(); drawCompare(); drawInsights(); routeUpdate();
+}
+
+/* ---------------- Gauges ---------------- */
+function polar(cx, cy, r, a){ return [cx + r*Math.cos(a), cy + r*Math.sin(a)]; }
+function arcPath(cx, cy, r, a0, a1){
+  var p0 = polar(cx,cy,r,a0), p1 = polar(cx,cy,r,a1), large = (a1-a0) > Math.PI ? 1 : 0;
+  return "M"+p0[0].toFixed(2)+" "+p0[1].toFixed(2)+" A"+r+" "+r+" 0 "+large+" 1 "+p1[0].toFixed(2)+" "+p1[1].toFixed(2);
+}
+var A0 = Math.PI*0.8, A1 = Math.PI*2.2;
+function buildGauge(gid, lo, hi, ticks, color, zero){
+  var g = document.getElementById(gid), h = "";
+  h += '<path d="'+arcPath(100,100,80,A0,A1)+'" stroke="rgba(242,240,235,.1)" stroke-width="4" fill="none" stroke-linecap="round"/>';
+  if (zero!=null){
+    var az = A0 + (zero-lo)/(hi-lo)*(A1-A0);
+    h += '<path d="'+arcPath(100,100,80,A0,az)+'" stroke="rgba(229,64,75,.45)" stroke-width="4" fill="none"/>';
+  }
+  h += '<path class="fillarc" d="" stroke="'+color+'" stroke-width="4" fill="none" stroke-linecap="round"/>';
+  ticks.forEach(function(t){
+    var a = A0 + (t-lo)/(hi-lo)*(A1-A0), p0 = polar(100,100,66,a), p1 = polar(100,100,72,a), pl = polar(100,100,54,a);
+    h += '<line x1="'+p0[0].toFixed(1)+'" y1="'+p0[1].toFixed(1)+'" x2="'+p1[0].toFixed(1)+'" y2="'+p1[1].toFixed(1)+'" stroke="#55534e" stroke-width="1"/>';
+    h += '<text x="'+pl[0].toFixed(1)+'" y="'+(pl[1]+4).toFixed(1)+'" text-anchor="middle" font-size="9.5" fill="#75736d" font-family="Geist Mono, ui-monospace, monospace">'+(t<0?"−$"+Math.abs(t):"$"+t)+'</text>';
+  });
+  h += '<g class="needle"><path d="M100 98.6 L174 100 L100 101.4 Z" fill="#f2f0eb"/><circle cx="100" cy="100" r="5" fill="#f2f0eb"/></g>';
+  g.innerHTML = h;
+  g._lo = lo; g._hi = hi;
+}
+function setGauge(gid, v, base){
+  var g = document.getElementById(gid), lo = g._lo, hi = g._hi;
+  var cv = fin(v) ? Math.max(lo, Math.min(hi, v)) : lo;
+  var a = A0 + (cv-lo)/(hi-lo)*(A1-A0);
+  g.querySelector(".needle").style.transform = "rotate("+(a*180/Math.PI)+"deg)";
+  var ab = A0 + ((base==null?lo:base)-lo)/(hi-lo)*(A1-A0);
+  var from = Math.min(a, ab), to = Math.max(a, ab);
+  g.querySelector(".fillarc").setAttribute("d", to-from > 0.001 ? arcPath(100,100,80,from,to) : "");
+}
+function drawGauges(){
+  setGauge("g1", R.linehaulPerLoaded, 0);
+  setGauge("g2", R.profitPerMile, 0);
+}
+
+/* ---------------- Chart helpers ---------------- */
+function niceStep(range, n){
+  var raw = range/Math.max(1,n), mag = Math.pow(10, Math.floor(Math.log10(raw))), f = raw/mag;
+  return (f<1.5?1:f<3?2:f<7?5:10)*mag;
+}
+function ticks(lo, hi, n){
+  var st = niceStep(hi-lo, n), out = [], t = Math.ceil(lo/st)*st;
+  for (; t <= hi + st*1e-6; t += st) out.push(Math.abs(t)<1e-9?0:t);
+  return {list:out, step:st};
+}
+function svgEl(w, h){ return '<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMid meet">'; }
+function bindScrub(host, toValue){
+  var active = false;
+  function at(e){
+    var svg = host.querySelector("svg"); if (!svg) return;
+    var rc = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal;
+    var x = (e.clientX - rc.left) / rc.width * vb.width;
+    toValue(x);
+  }
+  host.addEventListener("pointerdown", function(e){ active = true; at(e); });
+  host.addEventListener("pointermove", function(e){ if (active) at(e); });
+  window.addEventListener("pointerup", function(){ active = false; });
+  host.addEventListener("pointercancel", function(){ active = false; });
+}
+
+/* ---------------- Fuel chart ---------------- */
+var FC = {w:600, h:340, l:62, r:90, t:20, b:36};
+function fuelDomain(){ return [Math.min(2.5, S.price-0.25), Math.max(6.5, S.price+0.25)]; }
+function drawFuel(){
+  var host = document.getElementById("fuelChart");
+  var dom = fuelDomain(), g = R.gallons, rest = R.rev - R.maintC - S.other;
+  var f = function(p){return g*p;}, pr = function(p){return rest - g*p;};
+  var vals = [f(dom[0]), f(dom[1]), S.fsc, pr(dom[0]), pr(dom[1]), 0];
+  var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+  if (hi - lo < 1) hi = lo + 100;
+  var tk = ticks(lo, hi, 5); lo = Math.min(lo, tk.list[0]); hi = Math.max(hi, tk.list[tk.list.length-1]);
+  var X = function(p){ return FC.l + (p-dom[0])/(dom[1]-dom[0])*(FC.w-FC.l-FC.r); };
+  var Y = function(v){ return FC.t + (hi-v)/(hi-lo)*(FC.h-FC.t-FC.b); };
+  var s = svgEl(FC.w, FC.h);
+  tk.list.forEach(function(t){
+    s += '<line x1="'+FC.l+'" x2="'+(FC.w-FC.r)+'" y1="'+Y(t).toFixed(1)+'" y2="'+Y(t).toFixed(1)+'" stroke="'+(t===0?"rgba(255,255,255,.35)":"rgba(255,255,255,.06)")+'"/>';
+    s += '<text x="'+(FC.l-8)+'" y="'+(Y(t)+4).toFixed(1)+'" text-anchor="end" font-size="16">'+money(t)+'</text>';
+  });
+  for (var p = Math.ceil(dom[0]*2)/2; p <= dom[1]+1e-9; p += 0.5){
+    s += '<text x="'+X(p).toFixed(1)+'" y="'+(FC.h-12)+'" text-anchor="middle" font-size="16">$'+p.toFixed(2)+'</text>';
+  }
+  // net fuel area between fuel and FSC lines
+  var be = g > 0 ? S.fsc/g : null;
+  function poly(a, b, cls){
+    if (b <= a) return "";
+    return '<polygon points="'+[X(a)+","+Y(f(a)), X(b)+","+Y(f(b)), X(b)+","+Y(S.fsc), X(a)+","+Y(S.fsc)].join(" ")+'" fill="'+cls+'"/>';
+  }
+  if (be!=null && be>dom[0] && be<dom[1]){ s += poly(dom[0], be, "rgba(79,143,207,.16)") + poly(be, dom[1], "rgba(229,64,75,.18)"); }
+  else if (be!=null && be>=dom[1]) s += poly(dom[0], dom[1], "rgba(79,143,207,.16)");
+  else s += poly(dom[0], dom[1], "rgba(229,64,75,.18)");
+  // lines
+  s += '<line x1="'+X(dom[0])+'" y1="'+Y(S.fsc)+'" x2="'+X(dom[1])+'" y2="'+Y(S.fsc)+'" stroke="var(--rev)" stroke-width="2.5"/>';
+  s += '<line x1="'+X(dom[0])+'" y1="'+Y(f(dom[0]))+'" x2="'+X(dom[1])+'" y2="'+Y(f(dom[1]))+'" stroke="var(--crimson)" stroke-width="2.5"/>';
+  s += '<line x1="'+X(dom[0])+'" y1="'+Y(pr(dom[0]))+'" x2="'+X(dom[1])+'" y2="'+Y(pr(dom[1]))+'" stroke="var(--profit)" stroke-width="2.5"/>';
+  // direct labels at right
+  var labs = [[Y(f(dom[1])),"Fuel","#ff8a91"],[Y(S.fsc),"Surcharge","#8fbbe6"],[Y(pr(dom[1])),"Profit","#e3a93f"]].sort(function(a,b){return a[0]-b[0];});
+  for (var i=1;i<labs.length;i++) if (labs[i][0]-labs[i-1][0] < 19) labs[i][0] = labs[i-1][0]+19;
+  labs.forEach(function(L){ s += '<text x="'+(FC.w-FC.r+8)+'" y="'+(L[0]+4).toFixed(1)+'" font-size="16" style="fill:'+L[2]+'">'+L[1]+'</text>'; });
+  // breakeven marker
+  if (be!=null && be>dom[0] && be<dom[1]){
+    s += '<circle cx="'+X(be).toFixed(1)+'" cy="'+Y(S.fsc).toFixed(1)+'" r="5" fill="#0b0c0e" stroke="#e9ebef" stroke-width="2"/>';
+  }
+  // current price
+  var cx = X(S.price);
+  s += '<line x1="'+cx+'" x2="'+cx+'" y1="'+FC.t+'" y2="'+(FC.h-FC.b)+'" stroke="#f2f0eb" stroke-opacity=".6" stroke-dasharray="2 4" stroke-width="1.2"/>';
+  [[f(S.price),"var(--crimson)"],[S.fsc,"var(--rev)"],[pr(S.price),"var(--profit)"]].forEach(function(d){
+    s += '<circle cx="'+cx+'" cy="'+Y(d[0]).toFixed(1)+'" r="6" fill="'+d[1]+'" stroke="#121316" stroke-width="2"/>';
+  });
+  var tx = Math.min(Math.max(cx, FC.l+40), FC.w-FC.r-40);
+  s += '<rect x="'+(tx-40)+'" y="0" width="80" height="20" rx="5" fill="#f2f0eb"/><text x="'+tx+'" y="15" text-anchor="middle" font-size="12" font-weight="500" style="fill:#0b0c0e">$'+S.price.toFixed(2)+'/gal</text>';
+  s += '</svg>';
+  host.innerHTML = s;
+  var say = document.getElementById("fuelSay");
+  if (S.mpg <= 0 || R.total === 0){ say.innerHTML = "Add miles and a fuel economy above 0 to project fuel."; return; }
+  if (R.netFuel >= 0){
+    say.innerHTML = "At <b>"+money(S.price,2)+"/gal</b> and <b>"+num(S.mpg,1)+" MPG</b>, this trip burns <b>"+num(R.gallons,0)+" gallons</b>. Surcharge covers fuel with <b>"+money(R.netFuel)+"</b> left over. Above <b>"+money(R.breakevenPrice,2)+"/gal</b> surcharge stops covering it. Either way, surcharge is paying for fuel you actually burn.";
+  } else {
+    say.innerHTML = "At <b>"+money(S.price,2)+"/gal</b> and <b>"+num(S.mpg,1)+" MPG</b>, this trip burns <b>"+num(R.gallons,0)+" gallons</b>. Surcharge falls <b>"+money(-R.netFuel)+"</b> short of fuel, so that gap comes out of your linehaul share. Surcharge would break even at <b>"+money(R.breakevenPrice,2)+"/gal</b>.";
+  }
+}
+
+/* ---------------- Deadhead chart ---------------- */
+var DC = {w:600, h:310, l:62, r:16, t:20, b:36};
+function dhMax(){ return Math.max(400, Math.ceil(S.dead*1.3/50)*50); }
+function perMileAt(d){
+  var tot = S.loaded + d; if (tot<=0) return {rev:null, prof:null};
+  var gal = S.mpg>0 ? tot/S.mpg : 0;
+  var prof = R.rev - gal*S.price - tot*S.maint - S.other;
+  return {rev:R.rev/tot, prof:prof/tot};
+}
+function drawDeadhead(){
+  var host = document.getElementById("dhChart"), dm = dhMax(), N = 48, pts = [];
+  for (var i=0;i<=N;i++){ var d = dm*i/N, m = perMileAt(d); pts.push([d, m.rev, m.prof]); }
+  var lh = R.linehaulPerLoaded;
+  var vals = [0]; pts.forEach(function(p){ if (fin(p[1])) vals.push(p[1]); if (fin(p[2])) vals.push(p[2]); }); if (fin(lh)) vals.push(lh);
+  var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals); if (hi-lo < 0.5) hi = lo+0.5;
+  var tk = ticks(lo, hi, 5); lo = Math.min(lo, tk.list[0]); hi = Math.max(hi, tk.list[tk.list.length-1]);
+  var X = function(d){ return DC.l + d/dm*(DC.w-DC.l-DC.r); };
+  var Y = function(v){ return DC.t + (hi-v)/(hi-lo)*(DC.h-DC.t-DC.b); };
+  var s = svgEl(DC.w, DC.h);
+  tk.list.forEach(function(t){
+    s += '<line x1="'+DC.l+'" x2="'+(DC.w-DC.r)+'" y1="'+Y(t).toFixed(1)+'" y2="'+Y(t).toFixed(1)+'" stroke="'+(t===0?"rgba(255,255,255,.35)":"rgba(255,255,255,.06)")+'"/>';
+    s += '<text x="'+(DC.l-8)+'" y="'+(Y(t)+4).toFixed(1)+'" text-anchor="end" font-size="16">'+money(t,2)+'</text>';
+  });
+  var xt = ticks(0, dm, 4);
+  xt.list.forEach(function(t){ s += '<text x="'+X(t).toFixed(1)+'" y="'+(DC.h-12)+'" text-anchor="middle" font-size="16">'+num(t)+' mi</text>'; });
+  function line(idx, col, w){
+    var d = ""; pts.forEach(function(p,i){ if (fin(p[idx])) d += (d?"L":"M")+X(p[0]).toFixed(1)+" "+Y(p[idx]).toFixed(1); });
+    return '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="'+(w||2.5)+'" stroke-linejoin="round"/>';
+  }
+  // area under profit to zero
+  var area = ""; pts.forEach(function(p,i){ if (fin(p[2])) area += (area?"L":"M")+X(p[0]).toFixed(1)+" "+Y(p[2]).toFixed(1); });
+  if (area) s += '<path d="'+area+"L"+X(dm)+" "+Y(0)+"L"+X(0)+" "+Y(0)+'Z" fill="rgba(192,132,24,.12)"/>';
+  if (fin(lh)) s += '<line x1="'+DC.l+'" x2="'+(DC.w-DC.r)+'" y1="'+Y(lh)+'" y2="'+Y(lh)+'" stroke="#8a909a" stroke-width="2" stroke-dasharray="6 5"/>';
+  s += line(1, "var(--rev)") + line(2, "var(--profit)");
+  var cur = perMileAt(S.dead), cx = X(Math.min(S.dead, dm));
+  s += '<line x1="'+cx+'" x2="'+cx+'" y1="'+DC.t+'" y2="'+(DC.h-DC.b)+'" stroke="#f2f0eb" stroke-opacity=".6" stroke-dasharray="2 4" stroke-width="1.2"/>';
+  if (fin(cur.rev)) s += '<circle cx="'+cx+'" cy="'+Y(cur.rev).toFixed(1)+'" r="6" fill="var(--rev)" stroke="#121316" stroke-width="2"/>';
+  if (fin(cur.prof)) s += '<circle cx="'+cx+'" cy="'+Y(cur.prof).toFixed(1)+'" r="6" fill="var(--profit)" stroke="#121316" stroke-width="2"/>';
+  var tx = Math.min(Math.max(cx, DC.l+44), DC.w-DC.r-44);
+  s += '<rect x="'+(tx-44)+'" y="0" width="88" height="20" rx="5" fill="#f2f0eb"/><text x="'+tx+'" y="15" text-anchor="middle" font-size="16" font-weight="700" style="fill:#0b0c0e">'+num(S.dead)+' mi empty</text>';
+  s += '</svg>';
+  host.innerHTML = s;
+  // strip
+  var tot = Math.max(1, R.total);
+  document.getElementById("segDh").style.flex = "0 0 "+(S.dead/tot*100)+"%";
+  document.getElementById("segLd").style.flex = "1 1 auto";
+  document.getElementById("lblDh").textContent = "Deadhead "+num(S.dead)+" mi · "+pct(R.dhShare||0,0)+" · $0 revenue";
+  document.getElementById("lblLd").textContent = "Loaded "+num(S.loaded)+" mi";
+}
+
+/* ---------------- Rate trap ---------------- */
+function drawTrap(){
+  var b = Object.assign({}, S, {linehaul:S.linehaul*1.08, dead:S.dead+260});
+  var ra = R, rb = calc(b), aWins = ra.profit >= rb.profit;
+  function card(name, s, r, win){
+    return '<div class="card'+(win?" win":"")+'"><h4>'+name+'</h4><dl>'+
+      '<dt>Linehaul</dt><dd>'+money(s.linehaul)+'</dd>'+
+      '<dt>Per loaded mi</dt><dd>'+money(r.linehaulPerLoaded,2)+'</dd>'+
+      '<dt>Deadhead</dt><dd>'+num(s.dead)+' mi</dd>'+
+      '<dt>Est. profit</dt><dd class="'+(r.profit<0?"neg":"k-profit")+'">'+money(r.profit)+'</dd>'+
+      '<dt>Per total mi</dt><dd>'+money(r.profitPerMile,2)+'</dd></dl>'+
+      (win?'<span class="badge">Leaves more</span>':'')+'</div>';
+  }
+  document.getElementById("trap").innerHTML = card("Load A · your scenario", S, ra, aWins) + card("Load B · higher rate", b, rb, !aWins);
+  var diff = Math.abs(ra.profit - rb.profit);
+  document.getElementById("trapSay").innerHTML = aWins
+    ? "Load B advertises <b>"+money(rb.linehaulPerLoaded,2)+"</b> per loaded mile against <b>"+money(ra.linehaulPerLoaded,2)+"</b>, yet leaves about <b>"+money(diff)+" less</b>. The extra 260 empty miles cost more than the higher rate adds to your share."
+    : "Here the higher rate still wins, by about <b>"+money(diff)+"</b>. Raise fuel price, lower MPG, or lower your compensation % and watch how fast that gap closes.";
+}
+
+/* ---------------- Waterfall ---------------- */
+function drawWaterfall(){
+  var lh = S.linehaul, steps = [
+    {l:"Linehaul revenue", a:0, b:lh, c:"add", v:lh},
+    {l:"+ Fuel surcharge", a:lh, b:lh+S.fsc, c:"add", v:S.fsc},
+    {l:"= Gross freight value", a:0, b:R.gross, c:"tot", v:R.gross, total:true},
+    {l:"− Retained by carrier ("+num(100-S.pct, (100-S.pct)%1?1:0)+"% of linehaul)", a:R.gross, b:R.rev, c:"carrier", v:-R.carrierShare},
+    {l:"= Driver-attributable revenue", a:0, b:R.rev, c:"tot", v:R.rev, total:true},
+    {l:"− Fuel expense", a:R.rev, b:R.rev-R.fuel, c:"sub", v:-R.fuel},
+    {l:"− Maintenance reserve", a:R.rev-R.fuel, b:R.rev-R.fuel-R.maintC, c:"sub", v:-R.maintC},
+    {l:"− Other operating costs", a:R.rev-R.fuel-R.maintC, b:R.profit, c:"sub", v:-S.other},
+    {l:"= Estimated profit", a:0, b:R.profit, c:"res"+(R.profit<0?" loss":""), v:R.profit, total:true}
+  ];
+  var lo = 0, hi = 1; steps.forEach(function(s){ lo = Math.min(lo, s.a, s.b); hi = Math.max(hi, s.a, s.b); });
+  var span = hi - lo, host = document.getElementById("wf");
+  if (!host._built){
+    var h = "";
+    steps.forEach(function(s,i){ h += '<div class="wf-row'+(s.total?" total":"")+'"><div class="lbl"><span></span><b class="num"></b></div><div class="wf-track"><div class="wf-bar"></div></div></div>'; });
+    host.innerHTML = h; host._built = true;
+  }
+  var rows = host.querySelectorAll(".wf-row");
+  steps.forEach(function(s,i){
+    var row = rows[i], bar = row.querySelector(".wf-bar");
+    row.querySelector("span").textContent = s.l;
+    var b = row.querySelector("b"); b.textContent = money(s.v); b.classList.toggle("neg", s.v<0 && s.total);
+    b.className = "num "+(s.total ? (s.c.indexOf("res")===0 ? (s.v<0?"neg":"k-profit") : "k-rev") : (s.v<0?"k-cost":"k-rev"));
+    var x0 = Math.min(s.a, s.b), x1 = Math.max(s.a, s.b);
+    bar.className = "wf-bar "+s.c;
+    bar.style.left = ((x0-lo)/span*100).toFixed(3)+"%";
+    bar.style.width = Math.max(0.4, (x1-x0)/span*100).toFixed(3)+"%";
+    var tr = row.querySelector(".wf-track"), z = tr.querySelector(".wf-zero");
+    if (lo < 0){ if (!z){ z = document.createElement("div"); z.className = "wf-zero"; tr.appendChild(z); } z.style.left = ((0-lo)/span*100)+"%"; }
+    else if (z) z.remove();
+  });
+}
+
+/* ---------------- Math table ---------------- */
+function drawMath(){
+  var rows = [
+    ["Total miles", "loaded + deadhead = "+num(S.loaded)+" + "+num(S.dead), num(R.total)+" mi"],
+    ["Driver-attributable revenue", "linehaul × comp % + FSC = "+money(S.linehaul)+" × "+num(S.pct,1)+"% + "+money(S.fsc), money(R.rev,2)],
+    ["Fuel gallons", S.mpg>0 ? "total miles ÷ MPG = "+num(R.total)+" ÷ "+num(S.mpg,1) : "MPG must be above 0", num(R.gallons,2)],
+    ["Fuel expense", "gallons × price = "+num(R.gallons,2)+" × "+money(S.price,2), money(R.fuel,2)],
+    ["Maintenance reserve", "total miles × reserve = "+num(R.total)+" × "+money(S.maint,2), money(R.maintC,2)],
+    ["Est. operating expenses", "fuel + maintenance + other = "+money(R.fuel,2)+" + "+money(R.maintC,2)+" + "+money(S.other,2), money(R.exp,2)],
+    ["Estimated profit", "revenue − expenses = "+money(R.rev,2)+" − "+money(R.exp,2), money(R.profit,2)],
+    ["Profit margin", R.rev>0 ? "profit ÷ revenue = "+money(R.profit,2)+" ÷ "+money(R.rev,2) : "Not shown when revenue is $0", R.margin==null?"—":pct(R.margin,2)],
+    ["Revenue / total mile", R.total>0 ? money(R.rev,2)+" ÷ "+num(R.total) : "No miles entered", money(R.revPerMile,3)],
+    ["Profit / total mile", R.total>0 ? money(R.profit,2)+" ÷ "+num(R.total) : "No miles entered", money(R.profitPerMile,3)]
+  ];
+  document.getElementById("mathBody").innerHTML = "<table><tbody>"+rows.map(function(r){return "<tr><td>"+r[0]+"</td><td><code>"+r[1]+"</code></td><td>"+r[2]+"</td></tr>";}).join("")+"</tbody></table>";
+}
+
+/* ---------------- Compare ---------------- */
+var PIN = null;
+function drawCompare(){
+  var host = document.getElementById("cmp");
+  if (!PIN){ host.hidden = true; return; }
+  host.hidden = false;
+  var a = PIN.s, ra = PIN.r;
+  function row(lbl, va, vb, f, better){
+    var d = vb - va, cls = Math.abs(d)<1e-9 ? "" : ((better>0 ? d>0 : d<0) ? "up" : "dn");
+    return "<tr><td>"+lbl+"</td><td>"+f(va)+"</td><td>"+f(vb)+"</td><td class='"+cls+"'>"+(Math.abs(d)<1e-9?"—":(d>0?"+":"−")+f(Math.abs(d)).replace(/^[−+]/,""))+"</td></tr>";
+  }
+  var m0 = function(v){return money(v);}, m2 = function(v){return money(v,2);}, mi = function(v){return num(v)+" mi";};
+  host.innerHTML = "<table><thead><tr><th>Pinned vs now</th><th>Load A</th><th>Now</th><th>Change</th></tr></thead><tbody>"+
+    row("Linehaul", a.linehaul, S.linehaul, m0, 1)+
+    row("Deadhead", a.dead, S.dead, mi, -1)+
+    row("Total miles", ra.total, R.total, mi, -1)+
+    row("Driver revenue", ra.rev, R.rev, m0, 1)+
+    row("Fuel expense", ra.fuel, R.fuel, m0, -1)+
+    row("Est. profit", ra.profit, R.profit, m0, 1)+
+    row("Profit / total mi", ra.profitPerMile||0, R.profitPerMile||0, m2, 1)+
+    "</tbody></table><p class='note'>Pinned snapshots stay on this page only and clear when you leave.</p>";
+}
+
+/* ---------------- Insights (rule-based) ---------------- */
+function drawInsights(){
+  var out = [], s = S, r = R;
+  if (r.total <= 0){
+    out.push({c:"warn", t:"Miles", h:"Enter miles to evaluate this load", p:"With zero total miles there's nothing to spread revenue or costs across, so per-mile figures aren't shown."});
+  } else {
+    if (s.dead > 0){
+      var noDh = perMileAt(0);
+      out.push({c: r.dhShare > 0.15 ? "warn" : "", t:"Deadhead", h:pct(r.dhShare,0)+" of your miles earn nothing",
+        p:num(s.dead)+" empty miles cost about "+money(s.dead*(r.fuelPerMile+s.maint))+" in fuel and reserve. Without them, revenue per total mile would be "+money(noDh.rev,2)+" instead of "+money(r.revPerMile,2)+", and profit per total mile "+money(noDh.prof,2)+" instead of "+money(r.profitPerMile,2)+"."});
+    } else {
+      out.push({c:"good", t:"Deadhead", h:"No deadhead on this load", p:"Every mile is a revenue mile, so revenue per total mile equals revenue per loaded mile: "+money(r.revPerMile,2)+"."});
+    }
+    if (s.loaded > 0) out.push({c:"", t:"Rate", h:"The posted rate isn't your rate", p:"Linehaul works out to "+money(r.linehaulPerLoaded,2)+" per loaded mile. After your "+num(s.pct,1)+"% share, surcharge, and deadhead, your revenue is "+money(r.revPerMile,2)+" per total mile and estimated profit is "+money(r.profitPerMile,2)+" per total mile."});
+  }
+  if (s.fsc > 0 && r.fuel > 0){
+    if (r.netFuel < 0) out.push({c:"warn", t:"Fuel surcharge", h:"Surcharge covers "+pct(s.fsc/r.fuel,0)+" of projected fuel", p:"The other "+money(-r.netFuel)+" of fuel comes out of your linehaul share. Surcharge offsets a real expense. It isn't extra money."});
+    else out.push({c:"", t:"Fuel surcharge", h:"Surcharge exceeds projected fuel by "+money(r.netFuel), p:"That cushion disappears above "+money(r.breakevenPrice,2)+"/gal. Treat surcharge as fuel money first. Counting it as profit overstates the load."});
+  } else if (s.fsc === 0 && r.fuel > 0){
+    out.push({c:"warn", t:"Fuel surcharge", h:"No fuel surcharge on this load", p:"All "+money(r.fuel)+" of fuel is paid from your linehaul share. Check whether the rate already includes fuel."});
+  }
+  if (r.gallons > 0){
+    var better = s.mpg + 0.5, saved = r.fuel - (r.total/better)*s.price;
+    out.push({c:"", t:"Fuel price & MPG", h:"Every 10¢ on diesel moves this load "+money(r.per10c), p:"At "+num(s.mpg,1)+" MPG the trip burns "+num(r.gallons,0)+" gallons. Running "+num(better,1)+" MPG instead would save about "+money(saved)+" on this trip alone. Lower MPG means more gallons for the same miles."});
+  }
+  if (s.pct < 100 && s.linehaul > 0){
+    out.push({c:"", t:"Settlement", h:money(r.gross)+" gross isn't what you're paid", p:"Under this demo convention, "+money(r.carrierShare)+" of linehaul ("+num(100-s.pct, (100-s.pct)%1?1:0)+"%) stays with the carrier. Your driver-attributable revenue is "+money(r.rev)+". Your agreement may treat surcharge and accessorials differently."});
+  }
+  if (r.breakevenLinehaul != null && s.loaded > 0){
+    out.push({c:"", t:"Break-even", h:"Break-even linehaul: "+money(r.breakevenLinehaul), p:"At these costs, the load needs at least "+money(r.breakevenLinehaul)+" linehaul ("+money(r.breakevenLinehaul/s.loaded,2)+" per loaded mile) before it stops losing money. Anything below that loses money even if the rate looks normal."});
+  }
+  if (s.maint > 0) out.push({c:"", t:"Reserve", h:"Your "+money(s.maint,2)+"/mi reserve sets aside "+money(r.maintC), p:"Skip the reserve and this load looks "+money(r.maintC)+" better than it is. The tires and repairs still come due."});
+  else out.push({c:"warn", t:"Reserve", h:"No maintenance reserve set", p:"Profit looks higher with no reserve, but wear on the truck is still a cost of every mile. Many owner-operators set aside a per-mile amount."});
+  if (r.profit < 0) out.unshift({c:"bad", t:"Result", h:"This load loses an estimated "+money(-r.profit), p:"Driver-attributable revenue of "+money(r.rev)+" doesn't cover "+money(r.exp)+" in estimated trip costs. This is before income tax."});
+  else if (r.margin != null && r.margin < 0.15) out.unshift({c:"warn", t:"Result", h:"Thin margin: "+pct(r.margin), p:"A fuel spike, a breakdown, or a slow unload could wipe out the "+money(r.profit)+" estimate."});
+  else if (r.margin != null) out.unshift({c:"good", t:"Result", h:"Estimated profit "+money(r.profit)+" ("+pct(r.margin)+" margin)", p:"This is before income tax and before any costs you haven't entered. It isn't take-home pay."});
+  document.getElementById("insights").innerHTML = out.map(function(o){
+    return '<article class="ins '+o.c+'"><div class="tag"><i>'+o.t+'</i></div><h3>'+o.h+'</h3><p>'+o.p+'</p></article>';
+  }).join("");
+  document.getElementById("insCount").textContent = out.length + " notes";
+}
+
+/* ---------------- Route map ---------------- */
+var LON0=-110.2, LAT0=43.6, KX=Math.cos(36*Math.PI/180)*40, KY=40;
+function P(lat, lon){ return [(lon-LON0)*KX, (LAT0-lat)*KY]; }
+function pts(arr){ return arr.map(function(a){ var p = P(a[0],a[1]); return p[0].toFixed(1)+","+p[1].toFixed(1); }).join(" "); }
+function pathD(arr){ return arr.map(function(a,i){ var p = P(a[0],a[1]); return (i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1); }).join(""); }
+var STATES = {
+  WY:[[45,-111.05],[45,-104.05],[41,-104.05],[41,-111.05]],
+  NE:[[43,-104.05],[43,-98.3],[42.7,-97],[42.5,-96.5],[41.5,-96.0],[40,-95.3],[40,-102.05],[41,-102.05],[41,-104.05]],
+  CO:[[41,-109.05],[41,-102.05],[37,-102.05],[37,-109.05]],
+  KS:[[40,-102.05],[40,-95.3],[39.1,-94.6],[37,-94.6],[37,-102.05]],
+  NM:[[37,-109.05],[37,-103.0],[36.5,-103.0],[32,-103.06],[32,-106.6],[31.78,-106.53],[31.78,-108.2],[31.33,-108.2],[31.33,-109.05]],
+  OK:[[37,-103.0],[37,-94.62],[35.4,-94.43],[33.64,-94.48],[33.9,-95.5],[33.85,-96.6],[33.7,-97.2],[33.85,-97.95],[34.15,-98.6],[34.4,-99.4],[34.56,-100.0],[36.5,-100.0],[36.5,-103.0]],
+  TX:[[36.5,-103.0],[36.5,-100.0],[34.56,-100.0],[34.4,-99.4],[34.15,-98.6],[33.85,-97.95],[33.7,-97.2],[33.85,-96.6],[33.9,-95.5],[33.64,-94.48],[33.55,-94.04],[31.99,-94.04],[31.0,-93.55],[29.7,-93.84],[29.35,-94.7],[28.9,-95.3],[28.3,-96.4],[27.8,-97.2],[27.0,-97.4],[26.0,-97.15],[26.05,-97.8],[26.4,-98.8],[27.5,-99.5],[28.6,-100.4],[29.4,-101.0],[29.77,-102.4],[29.0,-103.1],[29.4,-104.0],[30.6,-104.9],[31.78,-106.53],[32,-106.6],[32,-103.06]],
+  AR:[[36.5,-94.62],[36.5,-90],[33,-90],[33,-94.04],[33.55,-94.04],[33.64,-94.48],[35.4,-94.43]],
+  LA:[[33,-94.04],[33,-91],[29,-89],[29.7,-93.84],[31.0,-93.55],[31.99,-94.04]],
+  MO:[[40.6,-95.77],[40.6,-91],[36.5,-89.5],[36.5,-94.62],[37,-94.62],[39.1,-94.6],[40,-95.3]],
+  UT:[[42,-114],[42,-111.05],[41,-111.05],[41,-109.05],[37,-109.05],[37,-114]]
+};
+var STATE_LBL = {WY:[42.7,-107.6,"WYOMING"],NE:[41.6,-100,"NEBRASKA"],CO:[39.0,-106.9,"COLORADO"],KS:[38.4,-98.3,"KANSAS"],NM:[34.4,-106.3,"NEW MEXICO"],OK:[35.6,-97.4,"OKLAHOMA"],TX:[31.2,-99.7,"TEXAS"],AR:[34.9,-92.3,"ARK."],LA:[31.4,-92.4,"LA."]};
+var DH_PATH = [[41.14,-104.82],[40.59,-105.0],[40.17,-104.98],[39.74,-104.99]];
+var LD_PATH = [[39.74,-104.99],[39.60,-104.4],[39.26,-103.69],[38.76,-102.79],[38.48,-102.78],[38.09,-102.62],[37.41,-102.61],[36.73,-102.51],[36.06,-102.52],[35.87,-101.97],[35.22,-101.83],[35.11,-101.36],[34.94,-100.89],[34.72,-100.53],[34.43,-100.2],[34.15,-99.27],[33.91,-98.49],[33.56,-97.85],[33.23,-97.59],[32.75,-97.33],[32.6,-96.9],[32.33,-96.63],[32.1,-96.47],[31.72,-96.17],[31.46,-96.06],[30.95,-95.91],[30.72,-95.55],[30.31,-95.46],[29.76,-95.37]];
+var CITIES = [
+  [41.14,-104.82,"Cheyenne","pin-s",1,"Truck empty here (sample)"],
+  [39.74,-104.99,"Denver","pin-o",1,"Pickup · origin"],
+  [35.22,-101.83,"Amarillo","",0],
+  [33.91,-98.49,"Wichita Falls","",0],
+  [32.75,-97.33,"Fort Worth","",0],
+  [29.76,-95.37,"Houston","pin-d",1,"Delivery · destination"]
+];
+var routeEls = {};
+function buildMap(){
+  var svg = document.getElementById("map"), h = "";
+  h += '<defs><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="rgba(79,143,207,.12)" stroke-width="2"/></pattern>'+
+       '<radialGradient id="glow"><stop offset="0" stop-color="#ff2b3b" stop-opacity=".9"/><stop offset="1" stop-color="#ff2b3b" stop-opacity="0"/></radialGradient></defs>';
+  h += '<rect class="water" width="534" height="612"/>';
+  for (var lon=-110; lon<=-94; lon+=2){ var a=P(44,lon), b=P(27,lon); h += '<line class="grat" x1="'+a[0]+'" y1="0" x2="'+b[0]+'" y2="612"/>'; }
+  for (var lat=28; lat<=43; lat+=2){ var c=P(lat,-111); h += '<line class="grat" x1="0" y1="'+c[1]+'" x2="534" y2="'+c[1]+'"/>'; }
+  Object.keys(STATES).forEach(function(k){ h += '<polygon class="state'+(k==="CO"||k==="TX"||k==="OK"?" on":"")+'" points="'+pts(STATES[k])+'"/>'; });
+  Object.keys(STATE_LBL).forEach(function(k){ var L = STATE_LBL[k], p = P(L[0],L[1]); h += '<text class="stl" x="'+p[0].toFixed(0)+'" y="'+p[1].toFixed(0)+'">'+L[2]+'</text>'; });
+  var gp = P(28.1,-94.6); h += '<text class="gulf" x="'+gp[0]+'" y="'+gp[1]+'">Gulf of Mexico</text>';
+  h += '<path class="seg-d" id="pDh" d="'+pathD(DH_PATH)+'"/>';
+  h += '<path class="seg-l" id="pLd" d="'+pathD(LD_PATH)+'"/>';
+  h += '<path class="trail" id="trail" d=""/>';
+  h += '<path class="hit" data-seg="dh" d="'+pathD(DH_PATH)+'"/><path class="hit" data-seg="ld" d="'+pathD(LD_PATH)+'"/>';
+  [[40.4,-105.75,"I-25"],[37.75,-102.1,"US-287"],[34.75,-99.7,"US-287"],[31.1,-95.5,"I-45"]].forEach(function(s){
+    var p = P(s[0],s[1]), w = s[2].length*7.4+12;
+    h += '<g class="shield"><rect x="'+(p[0]-w/2).toFixed(1)+'" y="'+(p[1]-9).toFixed(1)+'" width="'+w.toFixed(1)+'" height="18" rx="4" fill="'+(s[2][0]==="I"?"#1d4e8f":"#3b3f46")+'" stroke="#e9ebef" stroke-width="1.2"/><text x="'+p[0].toFixed(1)+'" y="'+(p[1]+4).toFixed(1)+'">'+s[2]+'</text></g>';
+  });
+  CITIES.forEach(function(c){
+    var p = P(c[0],c[1]);
+    if (c[4]){
+      h += '<circle class="'+c[3]+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="7" stroke="#0f1012" stroke-width="3"/>';
+      var right = c[2]!=="Houston";
+      h += '<text class="cl" x="'+(p[0]+(right?14:-14)).toFixed(1)+'" y="'+(p[1]+6).toFixed(1)+'" text-anchor="'+(right?"start":"end")+'">'+c[2]+'</text>';
+      h += '<text class="cl sm" x="'+(p[0]+(right?14:-14)).toFixed(1)+'" y="'+(p[1]+24).toFixed(1)+'" text-anchor="'+(right?"start":"end")+'">'+c[5]+'</text>';
+    } else {
+      h += '<circle class="city" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.5"/><text class="cl sm" x="'+(p[0]+9).toFixed(1)+'" y="'+(p[1]+5).toFixed(1)+'">'+c[2]+'</text>';
+    }
+  });
+  h += '<g id="rig"><circle r="12" fill="rgba(242,240,235,.18)"/><circle r="6.5" fill="#f2f0eb" stroke="#0b0c0e" stroke-width="2.5"/></g>';
+  svg.innerHTML = h;
+  routeEls.dh = document.getElementById("pDh"); routeEls.ld = document.getElementById("pLd");
+  routeEls.dhLen = routeEls.dh.getTotalLength(); routeEls.ldLen = routeEls.ld.getTotalLength();
+  routeEls.rig = document.getElementById("rig"); routeEls.trail = document.getElementById("trail");
+  svg.querySelectorAll(".hit").forEach(function(el){ el.addEventListener("click", function(){ segInfo(el.getAttribute("data-seg")); }); });
+}
+function segInfo(which){
+  var p = document.getElementById("segPanel");
+  if (which==="dh"){
+    p.innerHTML = "<b>Deadhead · Cheyenne → Denver</b><br>"+num(S.dead)+" mi empty · $0 revenue · about "+money(S.dead*R.fuelPerMile)+" fuel and "+money(S.dead*S.maint)+" reserve. That's "+pct(R.dhShare||0,0)+" of the trip's miles.";
+  } else {
+    p.innerHTML = "<b>Loaded · Denver → Houston</b><br>"+num(S.loaded)+" mi loaded · "+money(R.rev)+" driver-attributable revenue · "+money(R.loaded? 0:0)+"".slice(0,0)+money(S.loaded>0?R.rev/S.loaded:null,2)+" per loaded mile to you, "+money(R.revPerMile,2)+" per total mile once deadhead is counted.";
+  }
+}
+var trip = {m:0, playing:false, last:0};
+function runAt(m){
+  var tot = R.total;
+  var revAcc = m <= S.dead ? 0 : (S.loaded>0 ? R.rev*(m-S.dead)/S.loaded : 0);
+  var costAcc = m*(R.fuelPerMile + S.maint) + (tot>0 ? S.other*m/tot : 0);
+  return {rev:revAcc, cost:costAcc, run:revAcc-costAcc};
+}
+function routeUpdate(){
+  if (!routeEls.dh) return;
+  var tot = R.total; if (trip.m > tot) trip.m = tot;
+  var m = trip.m, pt, trailD = "";
+  var dhFrac = tot>0 ? S.dead/tot : 0;
+  if (tot<=0){ pt = routeEls.ld.getPointAtLength(0); }
+  else if (m <= S.dead && S.dead>0){
+    var f = m/S.dead; pt = routeEls.dh.getPointAtLength(f*routeEls.dhLen);
+  } else {
+    var f2 = S.loaded>0 ? (m-S.dead)/S.loaded : 1; pt = routeEls.ld.getPointAtLength(f2*routeEls.ldLen);
+  }
+  routeEls.rig.setAttribute("transform","translate("+pt.x.toFixed(1)+" "+pt.y.toFixed(1)+")");
+  var r = runAt(m);
+  document.getElementById("rMile").textContent = num(m);
+  document.getElementById("rLeg").textContent = (m < S.dead ? "Deadhead leg" : (m >= tot && tot>0 ? "Delivered" : "Loaded leg"))+" · of "+num(tot)+" mi";
+  document.getElementById("rRev").textContent = money(r.rev);
+  document.getElementById("rCost").textContent = money(r.cost);
+  var rr = document.getElementById("rRun"); rr.textContent = money(r.run); rr.className = "num "+(r.run<0?"neg":"k-profit");
+  document.getElementById("scrub").value = tot>0 ? Math.round(m/tot*1000) : 0;
+  document.getElementById("rTime").textContent = num(tot/60,1)+" h";
+  drawRun(m);
+}
+var RC = {w:600, h:180, l:62, r:16, t:14, b:30};
+function drawRun(m){
+  var host = document.getElementById("runChart"), tot = Math.max(1, R.total), N = 60, P2 = [];
+  for (var i=0;i<=N;i++){ var mm = tot*i/N; P2.push([mm, runAt(mm).run]); }
+  if (S.dead>0) P2.push([S.dead, runAt(S.dead).run]);
+  P2.sort(function(a,b){return a[0]-b[0];});
+  var lo = 0, hi = 1; P2.forEach(function(p){ lo = Math.min(lo,p[1]); hi = Math.max(hi,p[1]); });
+  var tk = ticks(lo, hi, 3); lo = Math.min(lo, tk.list[0]); hi = Math.max(hi, tk.list[tk.list.length-1]);
+  var X = function(v){ return RC.l + v/tot*(RC.w-RC.l-RC.r); }, Y = function(v){ return RC.t + (hi-v)/(hi-lo)*(RC.h-RC.t-RC.b); };
+  var s = svgEl(RC.w, RC.h);
+  tk.list.forEach(function(t){ s += '<line x1="'+RC.l+'" x2="'+(RC.w-RC.r)+'" y1="'+Y(t).toFixed(1)+'" y2="'+Y(t).toFixed(1)+'" stroke="'+(t===0?"rgba(255,255,255,.35)":"rgba(255,255,255,.06)")+'"/><text x="'+(RC.l-8)+'" y="'+(Y(t)+4).toFixed(1)+'" text-anchor="end" font-size="16">'+money(t)+'</text>'; });
+  if (S.dead>0) s += '<rect x="'+RC.l+'" y="'+RC.t+'" width="'+(X(S.dead)-RC.l).toFixed(1)+'" height="'+(RC.h-RC.t-RC.b)+'" fill="rgba(182,188,198,.07)"/><text x="'+(RC.l+6)+'" y="'+(RC.h-RC.b-6)+'" font-size="12">DEADHEAD</text>';
+  var d = P2.map(function(p,i){ return (i?"L":"M")+X(p[0]).toFixed(1)+" "+Y(p[1]).toFixed(1); }).join("");
+  s += '<path d="'+d+'" fill="none" stroke="var(--profit)" stroke-width="2.5" stroke-linejoin="round"/>';
+  s += '<text x="'+(RC.w-RC.r)+'" y="'+(RC.h-8)+'" text-anchor="end" font-size="16">'+num(tot)+' mi</text><text x="'+RC.l+'" y="'+(RC.h-8)+'" font-size="16">0 mi</text>';
+  var cur = runAt(Math.min(m, tot));
+  s += '<line x1="'+X(m).toFixed(1)+'" x2="'+X(m).toFixed(1)+'" y1="'+RC.t+'" y2="'+(RC.h-RC.b)+'" stroke="#f2f0eb" stroke-opacity=".6" stroke-dasharray="2 4"/>';
+  s += '<circle cx="'+X(m).toFixed(1)+'" cy="'+Y(cur.run).toFixed(1)+'" r="6" fill="var(--profit)" stroke="#121316" stroke-width="2"/>';
+  s += '</svg>';
+  host.innerHTML = s;
+}
+function tripTick(now){
+  if (!trip.playing) return;
+  var dt = Math.min(0.1, (now - (trip.last||now))/1000); trip.last = now;
+  trip.m += R.total/12 * dt;
+  if (trip.m >= R.total){ trip.m = R.total; setPlaying(false); }
+  routeUpdate();
+  if (trip.playing) requestAnimationFrame(tripTick);
+}
+function setPlaying(on){
+  trip.playing = on; trip.last = 0;
+  var b = document.getElementById("play");
+  b.textContent = on ? "Pause" : (trip.m >= R.total && R.total>0 ? "Replay trip" : "Play trip");
+  if (on){ if (trip.m >= R.total) trip.m = 0; requestAnimationFrame(tripTick); }
+}
+
+/* ---------------- Hero highway (canvas, true perspective) ---------------- */
+function hero(){
+  var cv = document.getElementById("road"), ctx = cv.getContext("2d"), stage = document.getElementById("stage");
+  var W=0, H=0, dpr=1, visible=true, t0=performance.now(), par=0, parT=0, raf=0;
+  // deterministic ridgelines (Front Range silhouettes)
+  function ridge(seed, n){
+    var a = [];
+    for (var i=0;i<=n;i++){
+      var x = i/n;
+      a.push(Math.sin(x*6.1+seed)*.45 + Math.sin(x*13.7+seed*2.3)*.25 + Math.sin(x*29.3+seed*4.1)*.12 + Math.sin(x*57+seed)*.05);
+    }
+    return a;
+  }
+  var R1 = ridge(1.3, 160), R2 = ridge(4.7, 160), R3 = ridge(8.2, 160);
+  var stars = []; for (var i=0;i<46;i++) stars.push([Math.random(), Math.random()*0.42, Math.random()*0.8+0.2]);
+  function size(){
+    dpr = Math.min(2, window.devicePixelRatio||1);
+    var rc = cv.getBoundingClientRect(); W = rc.width; H = rc.height;
+    cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function range(arr, base, amp, shift, col){
+    ctx.beginPath(); ctx.moveTo(-20, H);
+    var n = arr.length-1;
+    for (var i=0;i<=n;i++){ var x = -20 + i/n*(W+40) + shift; ctx.lineTo(x, base - (arr[i]*.5+.55)*amp); }
+    ctx.lineTo(W+20, H); ctx.closePath(); ctx.fillStyle = col; ctx.fill();
+  }
+  function glow(x, y, r, rgb, a){
+    var g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, "rgba("+rgb+","+a+")"); g.addColorStop(1, "rgba("+rgb+",0)");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
+  }
+  function frame(now){
+    var t = (now - t0)/1000;
+    par += (parT - par)*0.05;
+    var win = Math.max(170, Math.min(H*0.3, 320)), hz = Math.round(H - win*0.72), vx = W/2 + par*W*0.025, F = Math.max(win*1.5, W*0.42), camH = 1.6;
+    function sx(X,z){ return vx + X/z*F; }
+    function sy(z){ return hz + camH/z*F; }
+    // sky: night blue overhead, last light of dusk at the horizon
+    var sk = ctx.createLinearGradient(0,0,0,hz);
+    sk.addColorStop(0,"#0a0c12"); sk.addColorStop(.55,"#131824"); sk.addColorStop(.86,"#2a2b33"); sk.addColorStop(1,"#4a3a36");
+    ctx.fillStyle = sk; ctx.fillRect(0,0,W,hz+2);
+    glow(W*0.72 + par*W*0.01, hz, W*0.55, "214,130,92", .22);
+    stars.forEach(function(s){ ctx.fillStyle = "rgba(242,240,235,"+(0.25*s[2]).toFixed(3)+")"; ctx.fillRect(s[0]*W, s[1]*hz*0.8, 1.2, 1.2); });
+    // mountain layers with atmospheric haze
+    range(R1, hz+2, win*0.42, par*-6, "#262a34");
+    range(R2, hz+2, win*0.28, par*-12, "#1b1e26");
+    range(R3, hz+2, win*0.15, par*-20, "#13151a");
+    // plains
+    var gr = ctx.createLinearGradient(0,hz,0,H);
+    gr.addColorStop(0,"#15161a"); gr.addColorStop(1,"#09090b");
+    ctx.fillStyle = gr; ctx.fillRect(0,hz,W,H-hz);
+    // asphalt
+    var zN = 0.8, zF = 400, RW = 3.7;
+    ctx.beginPath(); ctx.moveTo(sx(-RW,zN), sy(zN)); ctx.lineTo(sx(-RW,zF), sy(zF)); ctx.lineTo(sx(RW,zF), sy(zF)); ctx.lineTo(sx(RW,zN), sy(zN)); ctx.closePath();
+    var ag = ctx.createLinearGradient(0,hz,0,H); ag.addColorStop(0,"#25252a"); ag.addColorStop(1,"#121214");
+    ctx.fillStyle = ag; ctx.fill();
+    // painted edge lines (tapered quads)
+    function stripe(X, w, z1, z2, col){
+      ctx.beginPath();
+      ctx.moveTo(sx(X-w,z1), sy(z1)); ctx.lineTo(sx(X-w,z2), sy(z2)); ctx.lineTo(sx(X+w,z2), sy(z2)); ctx.lineTo(sx(X+w,z1), sy(z1));
+      ctx.closePath(); ctx.fillStyle = col; ctx.fill();
+    }
+    stripe(-RW+0.25, 0.06, zN, zF, "rgba(222,190,90,.55)");   // yellow left edge
+    stripe(RW-0.25, 0.06, zN, zF, "rgba(236,234,228,.55)");   // white right edge
+    // lane dashes, world-fixed, approaching the camera
+    var speed = 14, cam = t*speed, period = 12, dash = 3.6;
+    for (var j = Math.floor(cam/period); j < Math.floor(cam/period)+30; j++){
+      var z1 = j*period - cam, z2 = z1 + dash;
+      if (z2 < zN) continue; z1 = Math.max(z1, zN);
+      ctx.globalAlpha = Math.max(0, Math.min(1, 1.2 - z1/260));
+      stripe(0, 0.07, z1, z2, "rgba(236,234,228,.85)");
+    }
+    ctx.globalAlpha = 1;
+    // trailer ahead in our lane: dark doors, red tail and ID lights, soft reflections
+    var tz = 26 + Math.sin(t*0.35)*1.6, tX = 1.85, tw = 1.3, th = 4.1, tb = 0.9;
+    var lx = sx(tX - tw, tz), rx = sx(tX + tw, tz), yb = hz + (camH - tb)/tz*F, yt = hz + (camH - th)/tz*F, ground = sy(tz);
+    ctx.fillStyle = "#0c0c0e"; ctx.fillRect(lx, yt, rx-lx, yb-yt);
+    ctx.fillStyle = "rgba(242,240,235,.08)"; ctx.fillRect(lx, yt, rx-lx, 1); ctx.fillRect((lx+rx)/2-0.5, yt, 1, yb-yt);
+    ctx.fillStyle = "#08080a"; ctx.fillRect(lx+(rx-lx)*.08, yb, (rx-lx)*.84, (ground-yb)*.35); // under-ride guard
+    var lr = Math.max(1.4, 0.13/tz*F), ly = yb - (yb-yt)*0.08;
+    [lx + (rx-lx)*0.07, rx - (rx-lx)*0.07].forEach(function(x){
+      glow(x, ly, lr*7, "255,40,48", .35);
+      ctx.fillStyle = "#ff3b40"; ctx.beginPath(); ctx.arc(x, ly, lr, 0, 6.2832); ctx.fill();
+      // reflection on the asphalt
+      var rg = ctx.createLinearGradient(0, ground, 0, ground + (H-ground)*0.5);
+      rg.addColorStop(0,"rgba(255,50,56,.22)"); rg.addColorStop(1,"rgba(255,50,56,0)");
+      ctx.fillStyle = rg; ctx.fillRect(x - lr*1.2, ground, lr*2.4, (H-ground)*0.5);
+    });
+    for (var k=-1;k<=1;k++){ var ix = (lx+rx)/2 + k*(rx-lx)*0.09; ctx.fillStyle = "#ff4a4f"; ctx.fillRect(ix-lr*.5, yt + (yb-yt)*0.04, lr, lr*.7); glow(ix, yt+(yb-yt)*0.05, lr*3, "255,60,64", .25); }
+    // a second rig far ahead
+    var fz = 120, fx1 = sx(1.85-1.3,fz), fx2 = sx(1.85+1.3,fz), fy = hz + (camH-0.9)/fz*F;
+    glow(fx1, fy, 5, "255,40,48", .5); glow(fx2, fy, 5, "255,40,48", .5);
+    // oncoming headlights on the far carriageway
+    var oz = 200 - ((t*30) % 196), ox = -RW-4.2;
+    if (oz > 6){ var hx = sx(ox,oz), hy = sy(oz) - 0.9/oz*F, hr = Math.min(10, Math.max(2.5, 0.45/oz*F)); glow(hx, hy, hr, "255,246,226", .7); glow(sx(ox-1.6,oz), hy, hr, "255,246,226", .7); }
+    // green mile-marker signs on the shoulder, carrying this scenario's cost per mile
+    var cpm = R.fuelPerMile + S.maint, mp = 60;
+    for (var m = Math.floor(cam/mp)+1; m < Math.floor(cam/mp)+7; m++){
+      var z = m*mp - cam; if (z < 2.2) continue;
+      var X = RW + 1.6, x = sx(X, z), base = sy(z), postH = 2.6/z*F, sw = 1.9/z*F, sh = 1.15/z*F;
+      var a = Math.max(0, Math.min(1, 1.25 - z/300)); ctx.globalAlpha = a;
+      ctx.fillStyle = "#6c6a65"; ctx.fillRect(x - Math.max(.6,.05/z*F), base - postH, Math.max(1.2,.1/z*F), postH);
+      var top = base - postH - sh;
+      ctx.fillStyle = "#0f5a36"; ctx.fillRect(x - sw/2, top, sw, sh);
+      ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = Math.max(.5, .04/z*F); ctx.strokeRect(x - sw/2 + sw*.04, top + sh*.07, sw*.92, sh*.86);
+      if (sw > 30){
+        var mile = (m*25) % 1000 || 1000;
+        ctx.fillStyle = "#fff"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.font = "600 "+Math.round(sh*.3)+"px Geist, ui-sans-serif, system-ui, sans-serif";
+        ctx.fillText("MILE "+mile, x, top + sh*.34);
+        ctx.font = "500 "+Math.round(sh*.24)+"px Geist, ui-sans-serif, system-ui, sans-serif";
+        ctx.fillText("cost $"+Math.round(mile*cpm).toLocaleString("en-US"), x, top + sh*.7);
+      }
+    }
+    ctx.globalAlpha = 1;
+    // lens vignette
+    var vg = ctx.createRadialGradient(W/2, H*0.55, Math.min(W,H)*0.3, W/2, H*0.55, Math.max(W,H)*0.85);
+    vg.addColorStop(0,"rgba(0,0,0,0)"); vg.addColorStop(1,"rgba(0,0,0,.55)");
+    ctx.fillStyle = vg; ctx.fillRect(0,0,W,H);
+    if (!RM && visible) raf = requestAnimationFrame(frame);
+  }
+  size();
+  window.addEventListener("resize", function(){ size(); if (RM) frame(performance.now()); });
+  stage.addEventListener("pointermove", function(e){ var rc = stage.getBoundingClientRect(); parT = ((e.clientX - rc.left)/rc.width - .5)*2; });
+  if ("IntersectionObserver" in window){
+    new IntersectionObserver(function(es){ visible = es[0].isIntersecting; if (visible && !RM){ cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); } }).observe(stage);
+  }
+  document.addEventListener("visibilitychange", function(){ if (!document.hidden && visible && !RM){ cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); } });
+  raf = requestAnimationFrame(frame);
+  hero.redraw = function(){ if (RM) frame(performance.now()); };
+}
+
+/* ---------------- 3D tilt for cluster & plates ---------------- */
+function tilt(){
+  var cl = document.getElementById("cluster"), zone = cl.parentElement;
+  zone.addEventListener("pointermove", function(e){
+    var rc = cl.getBoundingClientRect();
+    var x = (e.clientX - rc.left)/rc.width - .5, y = (e.clientY - rc.top)/rc.height - .5;
+    cl.style.setProperty("--ry", (x*8).toFixed(2)+"deg"); cl.style.setProperty("--rx", (8 - y*6).toFixed(2)+"deg");
+  });
+  zone.addEventListener("pointerleave", function(){ cl.style.setProperty("--ry","0deg"); cl.style.setProperty("--rx","8deg"); });
+  // settle the cluster flat as it scrolls toward the middle of the screen
+  function onScroll(){
+    var rc = cl.getBoundingClientRect(), vh = window.innerHeight;
+    var k = Math.max(0, Math.min(1, (rc.top) / (vh*0.8)));
+    if (!zone.matches(":hover")) cl.style.setProperty("--rx", (k*10).toFixed(2)+"deg");
+    document.getElementById("hud").classList.toggle("show", rc.bottom < 0);
+  }
+  window.addEventListener("scroll", onScroll, {passive:true}); onScroll();
+  document.querySelectorAll(".plate").forEach(function(p){
+    p.addEventListener("pointermove", function(e){
+      var rc = p.getBoundingClientRect(), x = (e.clientX-rc.left)/rc.width-.5, y = (e.clientY-rc.top)/rc.height-.5;
+      p.style.setProperty("--ty", (x*10).toFixed(2)+"deg"); p.style.setProperty("--tx", (-y*10).toFixed(2)+"deg");
+    });
+    p.addEventListener("pointerleave", function(){ p.style.setProperty("--ty","0deg"); p.style.setProperty("--tx","0deg"); });
+    p.addEventListener("click", function(){ var t = document.getElementById(p.getAttribute("data-go")); if (t) t.scrollIntoView({behavior: RM?"auto":"smooth"}); });
+  });
+}
+
+/* ---------------- Section reveal & nav highlight ---------------- */
+function sections(){
+  if (!("IntersectionObserver" in window)) return;
+  var rv = document.querySelectorAll(".reveal");
+  if (!RM){
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.remove("pre"); io.unobserve(e.target); } }); }, {rootMargin:"0px 0px -8% 0px"});
+    rv.forEach(function(el){ var rc = el.getBoundingClientRect(); if (rc.top > window.innerHeight){ el.classList.add("pre"); io.observe(el); } });
+  }
+  var links = {}; document.querySelectorAll("#chips a").forEach(function(a){ links[a.getAttribute("href").slice(1)] = a; });
+  var nio = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if (e.isIntersecting){
+      Object.keys(links).forEach(function(k){ links[k].classList.toggle("on", k===e.target.id); });
+      var a = links[e.target.id]; if (a && a.scrollIntoView){ var c = a.parentElement; c.scrollTo({left: a.offsetLeft - 20, behavior: RM?"auto":"smooth"}); }
+    }});
+  }, {rootMargin:"-45% 0px -50% 0px"});
+  Object.keys(links).forEach(function(k){ var s = document.getElementById(k); if (s) nio.observe(s); });
+}
+
+/* ---------------- Wire up ---------------- */
+function wire(){
+  document.addEventListener("input", function(e){
+    var el = e.target, k = el.getAttribute && el.getAttribute("data-k"); if (!k) return;
+    if (el.type === "range"){ setFill(el); commit(k, Number(el.value), el); return; }
+    var res = validate(k, el.value);
+    setMsg(k, res.msg);
+    if (res.v != null) commit(k, res.v, el);
+  });
+  document.addEventListener("focusout", function(e){
+    var el = e.target; if (!el.hasAttribute || !el.hasAttribute("data-text")) return;
+    var k = el.getAttribute("data-k"); el.value = fmtField(k, S[k]);
+    var res = validate(k, el.value); if (!res.msg) setMsg(k, "");
+  });
+  document.addEventListener("click", function(e){
+    var b = e.target.closest && e.target.closest("[data-step-k]"); if (!b) return;
+    var k = b.getAttribute("data-step-k"), m = META[k], dir = +b.getAttribute("data-dir");
+    var v = Math.round((S[k] + dir*m.step)/m.step)*m.step;
+    v = Math.max(m.gt0 ? m.step : m.min, Math.min(m.max, Number(v.toFixed(4))));
+    setMsg(k, ""); commit(k, v, null);
+  });
+  document.getElementById("calcForm").addEventListener("submit", function(e){ e.preventDefault(); });
+  document.querySelectorAll("[data-preset]").forEach(function(b){
+    b.addEventListener("click", function(){ applyScenario(Object.assign({}, DEF, PRESETS[b.getAttribute("data-preset")]), b.textContent); });
+  });
+  document.getElementById("reset").addEventListener("click", function(){ applyScenario(Object.assign({}, DEF), "Reset to sample load"); });
+  document.getElementById("pin").addEventListener("click", function(){
+    PIN = {s:Object.assign({}, S), r:calc(S)};
+    this.textContent = "Re-pin Load A";
+    drawCompare();
+    document.getElementById("chg").innerHTML = "<b>Pinned Load A</b>: change inputs to compare against it";
+  });
+  document.getElementById("play").addEventListener("click", function(){ setPlaying(!trip.playing); });
+  document.getElementById("scrub").addEventListener("input", function(){ setPlaying(false); trip.m = R.total * (+this.value)/1000; routeUpdate(); });
+  document.getElementById("tilt").addEventListener("click", function(){
+    var pl = document.getElementById("mapPlane"), flat = pl.classList.toggle("flat");
+    this.textContent = flat ? "3D view" : "Flat view"; this.setAttribute("aria-pressed", flat?"true":"false");
+  });
+  bindScrub(document.getElementById("fuelChart"), function(x){
+    var dom = fuelDomain(), p = dom[0] + (x-FC.l)/(FC.w-FC.l-FC.r)*(dom[1]-dom[0]);
+    commit("price", Math.round(Math.max(2, Math.min(7, p))*100)/100, null);
+  });
+  bindScrub(document.getElementById("dhChart"), function(x){
+    var dm = dhMax(), d = (x-DC.l)/(DC.w-DC.l-DC.r)*dm;
+    commit("dead", Math.round(Math.max(0, Math.min(dm, d))/5)*5, null);
+  });
+  bindScrub(document.getElementById("runChart"), function(x){
+    setPlaying(false);
+    trip.m = Math.max(0, Math.min(R.total, (x-RC.l)/(RC.w-RC.l-RC.r)*R.total)); routeUpdate();
+  });
+  // auto-play route once when it first comes into view
+  if ("IntersectionObserver" in window && !RM){
+    var once = new IntersectionObserver(function(es){ if (es[0].isIntersecting){ once.disconnect(); if (trip.m===0) setPlaying(true); } }, {threshold:.4});
+    once.observe(document.getElementById("mapPlane"));
+  }
+}
+
+/* ---------------- Intro ---------------- */
+function intro(){
+  var el = document.getElementById("intro");
+  function out(){ el.classList.add("out"); setTimeout(function(){ el.hidden = true; }, 650); }
+  if (RM){ el.hidden = true; return; }
+  el.addEventListener("click", out);
+  setTimeout(out, 1700);
+}
+
+/* ---------------- Boot ---------------- */
+function boot(){
+  intro();
+  buildFields();
+  buildGauge("g1", 0, 5, [0,1,2,3,4,5], "#4f8fcf", null);
+  buildGauge("g2", -1, 3, [-1,0,1,2,3], "#c08418", 0);
+  buildMap();
+  wire();
+  render(null);
+  try { hero(); } catch(err){ /* canvas unavailable: static backdrop still shows */ }
+  tilt();
+  sections();
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+})();
+</script>
+
+</body>
+</html>
